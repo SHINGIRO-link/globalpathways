@@ -89,3 +89,25 @@
 - [x] Add staff notification handling for later paid or failed payment-status transitions
 - [x] Add automated coverage for the expanded seed catalog by region, category, and route count
 - [x] Capture mobile verification for the expanded opportunities page and updated RWF payment messaging
+
+## Notification center and verified opportunity library
+
+- [x] Add staff notification-center API with unread count, filters, mark-read, mark-all-read, and archive/delete management actions
+- [x] Add staff notification center route with unread badge, filters, bulk actions, and empty/loading/error states
+- [x] Add official source URL and source verification metadata to opportunity records and API responses
+- [x] Replace preview-only scholarship and job records with verified listings tied to official source pages and checked deadlines
+- [x] Keep source attribution and deadline freshness visible in opportunity cards and detail pages
+- [x] Add tests for notification filtering/read actions and verified opportunity source/deadline data
+- [x] Verify notification center and verified opportunity library at desktop and mobile widths
+
+## Verified catalog correction follow-up
+
+- [x] Replace all remaining preview-only backend seed records with official-source-backed opportunity entries and honest deadline or application-window notes
+- [x] Correct carried-over eligibility, status, and description fields for the verified UN Careers and EURES records
+- [x] Add automated assertions for source URL, verification date, deadline note, and exact checked deadline values in seeded records
+
+## Final verified-content correction
+
+- [x] Replace reused preview summaries, descriptions, eligibility, and document requirements in every seeded verified route with source-aligned guidance or clearly labeled portal guidance
+- [x] Correct the frontend fallback UN Careers and EURES records to match their verified backend status, eligibility, and descriptions
+- [x] Expand per-record test assertions for Chevening, MEXT, UN Careers, and EURES source and deadline metadata

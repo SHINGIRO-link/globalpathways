@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, SuccessStory
+from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
 
 
 class OpportunitySerializer(serializers.ModelSerializer):
@@ -8,7 +8,7 @@ class OpportunitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Opportunity
-        fields = ["id", "title", "slug", "category", "category_label", "status", "status_label", "country", "region", "deadline", "summary", "description", "eligibility", "required_documents", "featured"]
+        fields = ["id", "title", "slug", "category", "category_label", "status", "status_label", "country", "region", "deadline", "deadline_note", "source_name", "source_url", "source_verified_at", "summary", "description", "eligibility", "required_documents", "featured"]
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
@@ -58,6 +58,16 @@ class InquirySerializer(serializers.ModelSerializer):
         model = Inquiry
         fields = ["id", "full_name", "email", "topic", "message", "created_at", "resolved"]
         read_only_fields = ["id", "created_at", "resolved"]
+
+
+class StaffNotificationSerializer(serializers.ModelSerializer):
+    event_type_label = serializers.CharField(source="get_event_type_display", read_only=True)
+    application_name = serializers.CharField(source="application.full_name", read_only=True)
+
+    class Meta:
+        model = StaffNotification
+        fields = ["id", "event_type", "event_type_label", "title", "message", "application", "application_name", "is_read", "created_at"]
+        read_only_fields = ["id", "event_type_label", "application_name", "created_at"]
 
 
 class SuccessStorySerializer(serializers.ModelSerializer):

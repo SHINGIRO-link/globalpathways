@@ -7,8 +7,9 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .authentication import IsStaffUser
 from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
-from .serializers import ApplicationSerializer, ApplicationStatusEventSerializer, InquirySerializer, OpportunitySerializer, PaymentRecordSerializer, SavedOpportunitySerializer, SuccessStorySerializer
+from .serializers import ApplicationSerializer, ApplicationStatusEventSerializer, InquirySerializer, OpportunitySerializer, PaymentRecordSerializer, SavedOpportunitySerializer, StaffNotificationSerializer, SuccessStorySerializer
 
 
 class OpportunityListView(generics.ListAPIView):
@@ -130,6 +131,45 @@ class PaymentPrepareView(APIView):
         payment.save(update_fields=["provider", "status", "updated_at"])
         StaffNotification.objects.create(event_type="payment_status", title="Payment provider selected", message=f"{application.full_name} selected {payment.get_provider_display()} for the 2,000 RWF service fee.", application=application)
         return Response({"payment": PaymentRecordSerializer(payment).data, "message": "Provider integration is not enabled yet. Your application remains safely recorded and payment can be completed when the service is connected."}, status=status.HTTP_202_ACCEPTED)
+
+
+class StaffNotificationListView(APIView):
+    permission_classes = [IsAuthenticated, IsStaffUser]
+
+    def get(self, request):
+        queryset = StaffNotification.objects.select_related("application").all()
+        event_type = request.query_params.get("event_type")
+        read_filter = request.query_params.get("read", "all")
+        if event_type in {choice[0] for choice in StaffNotification.EVENT_CHOICES}:
+            queryset = queryset.filter(event_type=event_type)
+        if read_filter == "unread":
+            queryset = queryset.filter(is_read=False)
+        elif read_filter == "read":
+            queryset = queryset.filter(is_read=True)
+        return Response({"unread_count": StaffNotification.objects.filter(is_read=False).count(), "notifications": StaffNotificationSerializer(queryset[:100], many=True).data})
+
+
+class StaffNotificationReadView(APIView):
+    permission_classes = [IsAuthenticated, IsStaffUser]
+
+    def patch(self, request, notification_id):
+        notification = get_object_or_404(StaffNotification, id=notification_id)
+        notification.is_read = bool(request.data.get("is_read", True))
+        notification.save(update_fields=["is_read"])
+        return Response(StaffNotificationSerializer(notification).data)
+
+    def delete(self, request, notification_id):
+        notification = get_object_or_404(StaffNotification, id=notification_id)
+        notification.delete()
+        return Response({"deleted": True})
+
+
+class StaffNotificationMarkAllReadView(APIView):
+    permission_classes = [IsAuthenticated, IsStaffUser]
+
+    def post(self, request):
+        updated = StaffNotification.objects.filter(is_read=False).update(is_read=True)
+        return Response({"updated": updated, "unread_count": 0})
 
 
 class InquiryCreateView(generics.CreateAPIView):

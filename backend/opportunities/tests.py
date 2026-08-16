@@ -1,4 +1,6 @@
+import os
 from types import SimpleNamespace
+from unittest.mock import patch
 from django.core.management import call_command
 from django.test import TestCase
 from rest_framework.test import APIClient
@@ -65,9 +67,43 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual(seeded.count(), 10)
         self.assertEqual(seeded.filter(region="Europe").count(), 5)
         self.assertEqual(seeded.filter(region="Asia").count(), 5)
-        self.assertEqual(seeded.filter(category="scholarship").count(), 3)
-        self.assertEqual(seeded.filter(category="visa").count(), 4)
-        self.assertEqual(seeded.filter(category="job").count(), 3)
+        self.assertEqual(seeded.filter(category="scholarship").count(), 5)
+        self.assertEqual(seeded.filter(category="visa").count(), 0)
+        self.assertEqual(seeded.filter(category="job").count(), 5)
+        self.assertEqual(seeded.filter(source_url__isnull=False).exclude(source_url="").count(), 10)
+        self.assertEqual(seeded.filter(source_verified_at="2026-08-16").count(), 10)
+        chevening = seeded.get(title="Chevening Scholarship — 2027–2028")
+        self.assertEqual(chevening.deadline.isoformat(), "2026-10-06T11:00:00+00:00")
+        self.assertIn("Official deadline", chevening.deadline_note)
+        un_role = seeded.get(title="UN Human Rights Representative — P-5")
+        self.assertEqual(un_role.status, "open")
+        self.assertEqual(un_role.source_name, "UN Careers")
+        self.assertEqual(un_role.source_url, "https://careers.un.org/jobSearchDescription/281339")
+        self.assertEqual(un_role.deadline.isoformat(), "2026-09-10T23:59:00+00:00")
+        mext = seeded.get(title="MEXT Japanese Government Scholarship")
+        self.assertEqual(mext.source_url, "https://www.studyinjapan.go.jp/en/planning/scholarships/mext-scholarships/")
+        self.assertEqual(mext.source_verified_at.isoformat(), "2026-08-16")
+        self.assertIn("varies", mext.deadline_note)
+        eures = seeded.get(title="EURES Europe Job Search")
+        self.assertEqual(eures.source_url, "https://eures.europa.eu/index_en")
+        self.assertEqual(eures.source_verified_at.isoformat(), "2026-08-16")
+        self.assertIn("Dynamic portal", eures.deadline_note)
+
+    def test_staff_notification_center_filters_and_manages_alerts(self):
+        StaffNotification.objects.create(event_type="application_submitted", title="New application", message="Application received.", is_read=False)
+        StaffNotification.objects.create(event_type="payment_status", title="Payment update", message="Payment marked paid.", is_read=True)
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "test-user"}):
+            unread = self.client.get("/api/staff/notifications/?read=unread")
+            self.assertEqual(unread.status_code, 200)
+            self.assertEqual(unread.data["unread_count"], 1)
+            self.assertEqual(len(unread.data["notifications"]), 1)
+            notification_id = unread.data["notifications"][0]["id"]
+            marked = self.client.patch(f"/api/staff/notifications/{notification_id}/", {"is_read": True}, format="json")
+            self.assertEqual(marked.status_code, 200)
+            bulk = self.client.post("/api/staff/notifications/mark-all-read/")
+            self.assertEqual(bulk.status_code, 200)
+            archived = self.client.delete(f"/api/staff/notifications/{notification_id}/")
+            self.assertEqual(archived.status_code, 200)
 
     def test_application_status_endpoint_returns_history_and_payment(self):
         application = Application.objects.create(opportunity=self.opportunity, owner_open_id="test-user", full_name="Amina Test", email="amina@example.com", consent_to_contact=True, status="reviewing")

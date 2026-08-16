@@ -13,9 +13,20 @@ describe("Django REST client", () => {
 
   it("keeps the discovery experience useful when the API is temporarily unavailable", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
-    const result = await getOpportunity("global-excellence-scholarship");
+    const result = await getOpportunity("chevening-scholarship-2027-2028");
     expect(result.category).toBe("scholarship");
     expect(result.status).toBe("open");
+  });
+
+  it("keeps verified fallback metadata visible when the Django API is unavailable", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
+    const un = await getOpportunity("un-human-rights-representative-bishkek-281339");
+    const eures = await getOpportunity("eures-europe-job-search");
+    expect(un.source_url).toBe("https://careers.un.org/jobSearchDescription/281339");
+    expect(un.status).toBe("open");
+    expect(un.deadline_note).toContain("10 September 2026");
+    expect(eures.source_url).toBe("https://eures.europa.eu/index_en");
+    expect(eures.deadline_note).toContain("Dynamic portal");
   });
 
   it("surfaces strict list failures for the directory error state", async () => {

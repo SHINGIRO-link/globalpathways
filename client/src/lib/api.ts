@@ -17,6 +17,10 @@ export type Opportunity = {
   eligibility: string[];
   required_documents: string[];
   featured: boolean;
+  deadline_note?: string;
+  source_name?: string;
+  source_url?: string;
+  source_verified_at?: string;
 };
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
@@ -24,89 +28,105 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 const localOpportunities: Opportunity[] = [
   {
     id: 1,
-    title: "Global Excellence Scholarship",
-    slug: "global-excellence-scholarship",
+    title: "Chevening Scholarship — 2027–2028",
+    slug: "chevening-scholarship-2027-2028",
     category: "scholarship",
     category_label: "Scholarship",
     status: "open",
     status_label: "Open now",
-    country: "Netherlands",
+    country: "United Kingdom",
     region: "Europe",
-    deadline: "2026-10-28T23:59:00Z",
-    summary: "A merit-based award for ambitious international students building the next generation of ideas.",
-    description: "The Global Excellence Scholarship supports high-potential students pursuing a full-time master's degree in an international learning environment.",
+    deadline: "2026-10-06T11:00:00Z",
+    summary: "Official UK government-backed scholarship route for future leaders applying for postgraduate study.",
+    description: "Chevening supports one-year master's study in the UK and asks applicants to apply through their country or territory page.",
     eligibility: ["Bachelor's degree or equivalent", "Strong academic record", "Evidence of leadership or community impact"],
     required_documents: ["Passport or national ID", "Academic transcripts", "Statement of purpose", "One academic reference"],
     featured: true,
+    deadline_note: "Official deadline: 6 October 2026 at 11:00 UTC.",
+    source_name: "Chevening",
+    source_url: "https://www.chevening.org/scholarships/application-timeline/",
+    source_verified_at: "2026-08-16",
   },
   {
     id: 2,
-    title: "Japan Student Visa Guidance",
-    slug: "japan-student-visa-guidance",
-    category: "visa",
-    category_label: "Student visa",
+    title: "MEXT Japanese Government Scholarship",
+    slug: "mext-japanese-government-scholarship",
+    category: "scholarship",
+    category_label: "Scholarship",
     status: "open",
     status_label: "Open now",
     country: "Japan",
     region: "Asia",
     deadline: "2026-09-18T23:59:00Z",
-    summary: "Step-by-step support for preparing a confident student visa application for Japan.",
+    summary: "Official Japan scholarship route with embassy and university recommendation paths.",
     description: "Our advisors help you understand the required documents, timeline, financial evidence, and next steps for a Japan student visa application.",
     eligibility: ["Confirmed admission or application in progress", "Valid passport", "Proof of financial readiness"],
     required_documents: ["Passport", "Certificate of eligibility or school documents", "Financial evidence", "Accommodation plan"],
     featured: true,
+    deadline_note: "Deadline varies by country embassy or university; check the official source.",
+    source_name: "Study in Japan",
+    source_url: "https://www.studyinjapan.go.jp/en/planning/scholarships/mext-scholarships/",
+    source_verified_at: "2026-08-16",
   },
   {
     id: 3,
-    title: "Nordic Graduate Talent Route",
-    slug: "nordic-graduate-talent-route",
+    title: "UN Human Rights Representative — P-5",
+    slug: "un-human-rights-representative-bishkek-281339",
     category: "job",
     category_label: "Job opening",
-    status: "coming",
-    status_label: "Coming soon",
-    country: "Sweden",
-    region: "Europe",
-    deadline: "2026-12-02T23:59:00Z",
-    summary: "A curated route for early-career talent exploring graduate roles with global teams.",
-    description: "This upcoming opportunity route will connect eligible graduates with selected employers and practical relocation guidance.",
-    eligibility: ["Recent graduate or final-year student", "Relevant portfolio or experience", "Professional English"],
-    required_documents: ["CV", "Portfolio or work samples", "Degree certificate or expected graduation letter"],
+    status: "open",
+    status_label: "Open now",
+    country: "Kyrgyzstan",
+    region: "Asia",
+    deadline: "2026-09-10T23:59:00Z",
+    summary: "Official UN Careers vacancy with OHCHR in Bishkek, covering the Central Asia multi-country office.",
+    description: "This P-5 role is listed on the official UN Careers portal and includes responsibilities for the OHCHR Central Asia multi-country office.",
+    eligibility: ["P-5 level experience", "Human rights affairs expertise", "Required UN languages and qualifications"],
+    required_documents: ["UN Careers profile", "CV", "Qualification evidence", "Role-specific documents"],
     featured: false,
+    deadline_note: "Official UN Careers deadline: 10 September 2026.",
+    source_name: "UN Careers",
+    source_url: "https://careers.un.org/jobSearchDescription/281339",
+    source_verified_at: "2026-08-16",
   },
   {
     id: 4,
-    title: "South Korea Study Pathway",
-    slug: "south-korea-study-pathway",
-    category: "visa",
-    category_label: "Student visa",
-    status: "coming",
-    status_label: "Coming soon",
-    country: "South Korea",
-    region: "Asia",
-    deadline: "2027-01-14T23:59:00Z",
-    summary: "Prepare early for a focused study pathway in one of Asia's most dynamic education hubs.",
-    description: "Join the early interest list for upcoming South Korea study and visa support, including document preparation and timeline planning.",
-    eligibility: ["Planning to study in South Korea", "Academic profile aligned with the target institution", "Willingness to prepare early"],
-    required_documents: ["Passport", "Academic records", "Personal statement", "Financial plan"],
+    title: "EURES Europe Job Search",
+    slug: "eures-europe-job-search",
+    category: "job",
+    category_label: "Job opening",
+    status: "open",
+    status_label: "Open now",
+    country: "European Union",
+    region: "Europe",
+    deadline: "2026-12-31T23:59:00Z",
+    summary: "Official European employment portal with live country and region job searches.",
+    description: "EURES publishes changing vacancy listings and directs jobseekers to country and regional searches; always confirm the individual vacancy deadline on the official portal.",
+    eligibility: ["Jobseeker eligible for the target vacancy", "Role-specific qualifications", "Work authorization or mobility readiness"],
+    required_documents: ["CV", "Qualifications", "Work authorization details", "Role-specific documents"],
     featured: false,
+    deadline_note: "Dynamic portal: individual vacancy deadlines vary; check the official source.",
+    source_name: "EURES",
+    source_url: "https://eures.europa.eu/index_en",
+    source_verified_at: "2026-08-16",
   },
   {
-    id: 5, title: "France Campus Scholarship Route", slug: "france-campus-scholarship-route", category: "scholarship", category_label: "Scholarship", status: "open", status_label: "Open now", country: "France", region: "Europe", deadline: "2026-11-20T23:59:00Z", summary: "Editorial route preview for students preparing a competitive postgraduate application in France.", description: "A planning-led scholarship route preview focused on programme research, statement preparation, and a clear application calendar.", eligibility: ["Relevant undergraduate background", "Strong academic record", "Clear study plan"], required_documents: ["Passport", "Academic transcripts", "Statement of purpose", "Reference letter"], featured: false,
+    id: 5, title: "Erasmus Mundus Joint Masters", slug: "erasmus-mundus-joint-masters", category: "scholarship", category_label: "Scholarship", status: "open", status_label: "Open now", country: "European Union", region: "Europe", deadline: "2027-01-31T23:59:00Z", summary: "Official Erasmus+ scholarship catalogue for joint master's programmes across Europe and partner countries.", description: "Most Erasmus Mundus applications are submitted between October and January for programmes starting the following academic year; each programme publishes its own deadline.", eligibility: ["Relevant bachelor's degree", "Programme-specific eligibility", "International study readiness"], required_documents: ["Passport", "Academic transcripts", "Motivation statement", "Programme-specific documents"], featured: false, deadline_note: "Programme deadlines vary; official guidance says most applications fall between October and January.", source_name: "Erasmus+", source_url: "https://erasmus-plus.ec.europa.eu/opportunities/individuals/students/erasmus-mundus-joint-masters", source_verified_at: "2026-08-16",
   },
   {
-    id: 6, title: "Germany Study Preparation Route", slug: "germany-study-preparation-route", category: "visa", category_label: "Student visa", status: "open", status_label: "Open now", country: "Germany", region: "Europe", deadline: "2026-10-16T23:59:00Z", summary: "A practical route preview for students planning study, financial evidence, and visa preparation in Germany.", description: "Build an informed Germany study plan with a structured document checklist and timeline for the next stage of your application.", eligibility: ["Offer or active programme search", "Valid passport", "Evidence of financial planning"], required_documents: ["Passport", "Admission documents", "Financial evidence", "Accommodation plan"], featured: false,
+    id: 6, title: "DAAD Scholarship Database", slug: "daad-scholarship-database", category: "scholarship", category_label: "Scholarship", status: "open", status_label: "Open now", country: "Germany", region: "Europe", deadline: "2027-03-31T23:59:00Z", summary: "Official DAAD database for scholarship opportunities and funding guidance for international students.", description: "DAAD programmes publish their own eligibility rules and deadlines. Use the official database to identify the exact programme before preparing an application.", eligibility: ["International student or graduate", "Programme-specific eligibility", "Academic preparation"], required_documents: ["Passport", "Academic records", "Programme-specific documents", "Motivation statement"], featured: false, deadline_note: "Deadlines vary by programme; check each official DAAD listing.", source_name: "DAAD", source_url: "https://www.daad.de/en/studying-in-germany/scholarships/", source_verified_at: "2026-08-16",
   },
   {
-    id: 7, title: "Ireland Graduate Roles Route", slug: "ireland-graduate-roles-route", category: "job", category_label: "Job opening", status: "coming", status_label: "Coming soon", country: "Ireland", region: "Europe", deadline: "2027-01-30T23:59:00Z", summary: "A future-facing route preview for graduates exploring international roles with growing teams in Ireland.", description: "Join the early list for practical guidance on CV positioning, employer research, and relocation planning.", eligibility: ["Final-year student or recent graduate", "Relevant portfolio", "Professional communication skills"], required_documents: ["CV", "Portfolio", "Degree or expected graduation letter"], featured: false,
+    id: 7, title: "EURAXESS Research Jobs", slug: "euraxess-research-jobs", category: "job", category_label: "Job opening", status: "open", status_label: "Open now", country: "Europe", region: "Europe", deadline: "2026-12-31T23:59:00Z", summary: "Official European research job and funding portal for international researchers and early-career talent.", description: "EURAXESS vacancies and funding calls are dynamic. Open the official portal to confirm each individual closing date and eligibility requirements.", eligibility: ["Research or technical profile", "Role-specific qualifications", "International mobility interest"], required_documents: ["CV", "Research profile", "Qualifications", "Role-specific documents"], featured: false, deadline_note: "Dynamic portal: individual vacancy deadlines vary; check the official source.", source_name: "EURAXESS", source_url: "https://euraxess.ec.europa.eu/jobs", source_verified_at: "2026-08-16",
   },
   {
-    id: 8, title: "Malaysia Student Visa Route", slug: "malaysia-student-visa-route", category: "visa", category_label: "Student visa", status: "open", status_label: "Open now", country: "Malaysia", region: "Asia", deadline: "2026-11-08T23:59:00Z", summary: "A clear preparation route preview for students considering Malaysia as their next study destination.", description: "Understand the core preparation steps, documents, and timeline before moving forward with a Malaysia study application.", eligibility: ["Study plan aligned with a recognised institution", "Valid passport", "Financial readiness"], required_documents: ["Passport", "Admission or application evidence", "Academic records", "Financial plan"], featured: false,
+    id: 8, title: "JET Programme — Japan Exchange and Teaching", slug: "jet-programme-japan", category: "job", category_label: "Job opening", status: "open", status_label: "Open now", country: "Japan", region: "Asia", deadline: "2026-12-01T23:59:00Z", summary: "Official Japan exchange and teaching route with country-specific application windows.", description: "The JET Programme states that application deadlines vary by country, with applications generally accepted from October to late November or early December.", eligibility: ["Country-specific JET eligibility", "Bachelor's degree or equivalent", "Strong communication skills"], required_documents: ["Application form", "Degree evidence", "Statement of purpose", "Country-specific documents"], featured: false, deadline_note: "Deadline varies by country; official guidance indicates October to late November or early December windows.", source_name: "JET Programme", source_url: "https://jetprogramme.org/en/aspiring/howto/", source_verified_at: "2026-08-16",
   },
   {
-    id: 9, title: "Taiwan Research Scholarship Route", slug: "taiwan-research-scholarship-route", category: "scholarship", category_label: "Scholarship", status: "coming", status_label: "Coming soon", country: "Taiwan", region: "Asia", deadline: "2027-02-12T23:59:00Z", summary: "An upcoming route preview for research-minded students preparing an international academic profile.", description: "Prepare early with guidance on research fit, academic evidence, and a compelling statement of purpose.", eligibility: ["Research or postgraduate interest", "Relevant academic preparation", "Clear academic goals"], required_documents: ["Passport", "Transcripts", "Research statement", "Academic reference"], featured: false,
+    id: 9, title: "JASSO Scholarships for International Students", slug: "jasso-scholarships-japan", category: "scholarship", category_label: "Scholarship", status: "open", status_label: "Open now", country: "Japan", region: "Asia", deadline: "2027-03-31T23:59:00Z", summary: "Official Japan Student Services Organization scholarship information for privately financed international students.", description: "JASSO scholarship arrangements and timing depend on the programme and institution. Check the official page for the current route and requirements.", eligibility: ["Privately financed international student", "Institution and programme-specific eligibility", "Academic preparation"], required_documents: ["Passport", "Academic records", "Admission documents", "Programme-specific forms"], featured: false, deadline_note: "Deadline varies by programme or institution; check the official source.", source_name: "Study in Japan / JASSO", source_url: "https://www.studyinjapan.go.jp/en/planning/scholarships/jasso-scholarships/", source_verified_at: "2026-08-16",
   },
   {
-    id: 10, title: "Singapore Early-Career Roles Route", slug: "singapore-early-career-roles-route", category: "job", category_label: "Job opening", status: "coming", status_label: "Coming soon", country: "Singapore", region: "Asia", deadline: "2027-03-05T23:59:00Z", summary: "An upcoming route preview for early-career talent building a focused international job search.", description: "Join the early list for support with role research, application positioning, and practical relocation questions.", eligibility: ["Recent graduate or early-career professional", "Relevant skills or portfolio", "Professional English"], required_documents: ["CV", "Portfolio or work samples", "Qualification evidence"], featured: false,
+    id: 10, title: "Singapore Careers Portal", slug: "singapore-careers-portal", category: "job", category_label: "Job opening", status: "open", status_label: "Open now", country: "Singapore", region: "Asia", deadline: "2026-12-31T23:59:00Z", summary: "Official Singapore public-service careers portal for current roles and application guidance.", description: "Vacancies are published with role-specific closing dates. Open the official portal to confirm the current listing and deadline before applying.", eligibility: ["Role-specific eligibility", "Relevant qualifications", "Professional communication"], required_documents: ["CV", "Qualifications", "Role-specific documents"], featured: false, deadline_note: "Dynamic portal: individual vacancy deadlines vary; check the official source.", source_name: "Careers@Gov", source_url: "https://www.careers.gov.sg/", source_verified_at: "2026-08-16",
   },
 ];
 
@@ -188,4 +208,36 @@ export async function getApplicationStatus(email: string, applicationId: number)
 
 export async function preparePayment(email: string, application: number, provider: "momo" | "airtel") {
   return request<{ payment: { amount: number; currency: string; provider: string; status: string }; message: string }>("/payments/prepare/", { method: "POST", headers: { "Content-Type": "application/json", ...dashboardHeaders(email) }, body: JSON.stringify({ email, application, provider }) });
+}
+
+
+export type StaffNotification = {
+  id: number;
+  event_type: string;
+  event_type_label: string;
+  title: string;
+  message: string;
+  application: number | null;
+  application_name?: string;
+  is_read: boolean;
+  created_at: string;
+};
+
+export async function getStaffNotifications(filters: { read?: "all" | "unread" | "read"; event_type?: string } = {}) {
+  const params = new URLSearchParams();
+  if (filters.read && filters.read !== "all") params.set("read", filters.read);
+  if (filters.event_type && filters.event_type !== "all") params.set("event_type", filters.event_type);
+  return request<{ unread_count: number; notifications: StaffNotification[] }>(`/staff/notifications/${params.toString() ? `?${params.toString()}` : ""}`);
+}
+
+export async function markStaffNotificationRead(id: number, is_read = true) {
+  return request<StaffNotification>(`/staff/notifications/${id}/`, { method: "PATCH", body: JSON.stringify({ is_read }) });
+}
+
+export async function markAllStaffNotificationsRead() {
+  return request<{ updated: number; unread_count: number }>("/staff/notifications/mark-all-read/", { method: "POST" });
+}
+
+export async function archiveStaffNotification(id: number) {
+  return request<{ deleted: boolean }>(`/staff/notifications/${id}/`, { method: "DELETE" });
 }

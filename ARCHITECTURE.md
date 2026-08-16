@@ -55,3 +55,12 @@ Live MoMo and Airtel Money integration is intentionally deferred. Before enablin
 ## Session ownership
 
 Personalized endpoints now require the shared `app_session_id` Manus session or a bearer token validated with `JWT_SECRET` by `backend/opportunities/authentication.py`. The React dashboard sends the signed-in email as a consistency check, but the Django permission boundary first requires a validated authenticated session. Public discovery and application submission remain available without dashboard access; personalized reads, saves, status history, and payment-provider selection require authentication.
+
+
+## Staff notification center
+
+Authenticated staff can use `/staff/notifications` in the React app. The Django API exposes `GET /api/staff/notifications/` with `read` and `event_type` filters, `PATCH /api/staff/notifications/<id>/` to toggle read state, `POST /api/staff/notifications/mark-all-read/` for bulk management, and `DELETE /api/staff/notifications/<id>/` to archive an alert. Access is limited to the verified owner/staff identity from the shared session.
+
+## Verified opportunity catalog
+
+Opportunity records now expose `source_name`, `source_url`, `source_verified_at`, and `deadline_note`. The seed command contains ten Europe and Asia scholarship/job routes backed by official portals including Chevening, Study in Japan, UN Careers, EURES, Erasmus+, DAAD, EURAXESS, MYFutureJobs, Taiwan Scholarship, and Careers@Gov. Fixed deadlines are shown only where a specific official listing or published date was verified; dynamic portals use an explicit application-window or individual-vacancy caveat. Students are directed to the official source before applying.

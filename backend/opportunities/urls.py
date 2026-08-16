@@ -3,6 +3,7 @@ from .views import (
     ApplicationCreateView, ApplicationStatusView, DashboardView, HealthView,
     InquiryCreateView, OpportunityDetailView, OpportunityListView,
     PaymentPrepareView, SavedOpportunityDeleteView, SavedOpportunityListCreateView,
+    StaffNotificationListView, StaffNotificationMarkAllReadView, StaffNotificationReadView,
     SuccessStoryListView,
 )
 
@@ -18,4 +19,7 @@ urlpatterns = [
     path("payments/prepare/", PaymentPrepareView.as_view(), name="payment-prepare"),
     path("inquiries/", InquiryCreateView.as_view(), name="inquiry-create"),
     path("success-stories/", SuccessStoryListView.as_view(), name="success-story-list"),
+    path("staff/notifications/", StaffNotificationListView.as_view(), name="staff-notifications"),
+    path("staff/notifications/mark-all-read/", StaffNotificationMarkAllReadView.as_view(), name="staff-notifications-mark-all-read"),
+    path("staff/notifications/<int:notification_id>/", StaffNotificationReadView.as_view(), name="staff-notification-detail"),
 ]

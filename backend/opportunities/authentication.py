@@ -7,6 +7,7 @@ import time
 from types import SimpleNamespace
 
 from rest_framework.authentication import BaseAuthentication, get_authorization_header
+from rest_framework.permissions import BasePermission
 from rest_framework.exceptions import AuthenticationFailed
 
 
@@ -47,3 +48,11 @@ class ManusSessionAuthentication(BaseAuthentication):
 
     def authenticate_header(self, request):
         return "Bearer"
+
+
+class IsStaffUser(BasePermission):
+    def has_permission(self, request, view):
+        owner_open_id = os.environ.get("OWNER_OPEN_ID", "")
+        if not request.user or not getattr(request.user, "is_authenticated", False):
+            return False
+        return bool(owner_open_id and getattr(request.user, "open_id", "") == owner_open_id)
