@@ -162,6 +162,10 @@
 
 ## Homepage tRPC parsing error
 
-- [ ] Diagnose and fix the tRPC query receiving HTML instead of JSON on the homepage
-- [ ] Add regression coverage for the corrected tRPC response path and preserve Django REST `/api` forwarding
-- [ ] Verify homepage rendering and save a bug-fix checkpoint
+- [x] Diagnose and fix the tRPC query receiving HTML instead of JSON on the homepage
+- [x] Add regression coverage for the corrected tRPC response path and preserve Django REST `/api` forwarding
+- [x] Verify homepage rendering and save a bug-fix checkpoint
+
+## tRPC end-to-end regression follow-up
+
+- [x] Add and execute an end-to-end route test proving `/api/trpc/auth.me` returns JSON while non-tRPC `/api/*` remains Django-backed
