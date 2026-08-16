@@ -153,4 +153,9 @@
 
 - [x] Make the documented application submission access model explicit and support signed-out submissions safely
 - [x] Add and execute regression coverage for public submission success, proxy routing, and controlled failures
-- [ ] Capture the actual application form at desktop and mobile widths, including a successful submission state, and save a new checkpoint
+- [x] Capture the actual application form at desktop and mobile widths, including a successful submission state, and save a new checkpoint
+
+## Public application form alignment
+
+- [ ] Remove the frontend sign-in requirement from the public application form so it matches the Django access model and can reach the success state
+- [ ] Verify the public form success state after a real 201 response and save the final checkpoint
