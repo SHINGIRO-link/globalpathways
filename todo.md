@@ -202,4 +202,9 @@
 ## Final verification gaps for submission fix
 
 - [x] Capture desktop-width verification for the categorized multi-document upload form
-- [ ] Save a new checkpoint after the live submission repair and additional-document changes
+- [x] Save a new checkpoint after the live submission repair and additional-document changes
+
+## Product and engineering audit
+
+- [x] Complete and save the comprehensive product, security, operations, accessibility, performance, and functionality-gap audit
+- [x] Prioritize the next implementation phase: payments, authorization hardening, abuse protection, staff review, and secure document access
