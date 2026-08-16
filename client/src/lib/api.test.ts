@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getOpportunities, getOpportunity, submitApplication } from "./api";
+import { getOpportunities, getOpportunity, submitApplication, uploadEducationDocument } from "./api";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -28,5 +28,12 @@ describe("Django REST client", () => {
   it("surfaces a controlled error when application submission is rejected", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, json: async () => ({ detail: "Invalid application" }) }));
     await expect(submitApplication({ opportunity: 10 })).rejects.toThrow("temporarily unavailable");
+  });
+
+  it("uploads an education certificate through the storage-backed endpoint", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ name: "diploma.pdf", content_type: "application/pdf", size: 12, key: "education-documents/diploma.pdf", url: "/manus-storage/education-documents/diploma.pdf" }) }));
+    const result = await uploadEducationDocument(new File(["certificate"], "diploma.pdf", { type: "application/pdf" }));
+    expect(result.url).toContain("/manus-storage/");
+    expect(fetch).toHaveBeenCalledWith("/api/uploads/education-document", expect.objectContaining({ method: "POST", body: expect.any(FormData) }));
   });
 });

@@ -1,5 +1,9 @@
 import "dotenv/config";
 import express from "express";
+import type { NextFunction, Request, Response } from "express";
+import multer from "multer";
+import crypto from "crypto";
+import { storagePut } from "../storage";
 import { createServer } from "http";
 import net from "net";
 import { createDjangoProxyHandler } from "./djangoProxy";
@@ -11,6 +15,18 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 
 const proxyDjangoApi = createDjangoProxyHandler(process.env.DJANGO_API_URL || "http://127.0.0.1:8000/api");
+const educationUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, file, callback) => {
+    const allowed = ["application/pdf", "image/jpeg", "image/png", "image/webp"].includes(file.mimetype);
+    if (!allowed) {
+      callback(new Error("Only PDF, JPG, PNG, or WebP files are accepted."));
+      return;
+    }
+    callback(null, true);
+  },
+});
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -39,6 +55,25 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  app.post("/api/uploads/education-document", educationUpload.single("file"), async (req, res) => {
+    if (!req.file) {
+      res.status(400).json({ detail: "Please attach a PDF or education-document photo." });
+      return;
+    }
+    try {
+      const safeName = req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, "-").slice(-120) || "education-document";
+      const stored = await storagePut(`education-documents/${crypto.randomUUID()}-${safeName}`, req.file.buffer, req.file.mimetype);
+      res.status(201).json({ name: req.file.originalname, content_type: req.file.mimetype, size: req.file.size, ...stored });
+    } catch (error) {
+      console.error("[Education upload] Storage upload failed", error);
+      res.status(503).json({ detail: "Document storage is temporarily unavailable. Please try again." });
+    }
+  });
+  app.use("/api/uploads", (error: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (!error || !req.path) { next(error); return; }
+    const message = error instanceof Error ? error.message : "The uploaded document could not be processed.";
+    res.status(400).json({ detail: message });
+  });
   // tRPC must be mounted before the broad Django proxy. Otherwise `/api/trpc/*`
   // is forwarded to Django and the client receives an HTML 404 page instead of JSON.
   app.use(

@@ -31,13 +31,16 @@ class ErrorBoundary extends Component<Props, State> {
               className="text-destructive mb-6 flex-shrink-0"
             />
 
-            <h2 className="text-xl mb-4">An unexpected error occurred.</h2>
+            <h2 className="text-xl mb-4">Service Unavailable</h2>
 
-            <div className="p-4 w-full rounded bg-muted overflow-auto mb-6">
-              <pre className="text-sm text-muted-foreground whitespace-break-spaces">
+            <p className="text-center text-muted-foreground mb-6">We could not reach Global Pathways right now. Your information is safe. Please retry the request or reload the page.</p>
+
+            <details className="p-4 w-full rounded bg-muted overflow-auto mb-6">
+              <summary className="cursor-pointer text-sm">Technical details</summary>
+              <pre className="text-sm text-muted-foreground whitespace-break-spaces mt-3">
                 {this.state.error?.stack}
               </pre>
-            </div>
+            </details>
 
             <button
               onClick={() => window.location.reload()}
@@ -48,7 +51,7 @@ class ErrorBoundary extends Component<Props, State> {
               )}
             >
               <RotateCcw size={16} />
-              Reload Page
+              Retry loading
             </button>
           </div>
         </div>

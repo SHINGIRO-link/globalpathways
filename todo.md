@@ -169,3 +169,25 @@
 ## tRPC end-to-end regression follow-up
 
 - [x] Add and execute an end-to-end route test proving `/api/trpc/auth.me` returns JSON while non-tRPC `/api/*` remains Django-backed
+
+## Education documents and resilience improvements
+
+- [x] Add secure education certificate and diploma photo/PDF uploads using server-side storage and application metadata
+- [x] Add upload validation, progress/error feedback, and safe document references in the application flow
+- [x] Show a friendly Service Unavailable state when API requests fail
+- [x] Add homepage loading skeletons while opportunity data is fetched
+- [x] Add retry actions to the error boundary and relevant API error states
+- [x] Improve initial loading performance without weakening accessibility or API behavior
+- [x] Add regression tests, run Django/Vitest/build checks, verify responsive UI, and save a checkpoint
+
+## Resilience hardening follow-up
+
+- [x] Persist and validate server-issued education-document metadata with each application
+- [x] Restrict application document references to safe upload-issued records rather than arbitrary external links
+- [x] Add retry controls to Dashboard and Staff Notifications API error states
+- [x] Reduce the initial homepage bundle further and re-check production chunk output
+- [x] Add Django regression tests for document upload/application handling and save a new checkpoint after all validations
+
+## Final resilience checkpoint confirmation
+
+- [ ] Save the completed document-upload and resilience-hardening checkpoint

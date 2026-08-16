@@ -35,6 +35,28 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertTrue(PaymentRecord.objects.filter(application=application, amount=2000, currency="RWF", status="integration_pending").exists())
         self.assertTrue(StaffNotification.objects.filter(application=application, event_type="application_submitted").exists())
 
+    def test_application_persists_server_issued_document_metadata(self):
+        payload = {
+            "opportunity": self.opportunity.id, "full_name": "Document Applicant", "email": "documents@example.com",
+            "statement": "I want to study abroad.", "consent_to_contact": True,
+            "documents": [{"name": "diploma.pdf", "content_type": "application/pdf", "size": 1200, "key": "education-documents/abc-diploma.pdf", "url": "/manus-storage/education-documents/abc-diploma.pdf"}],
+        }
+        response = self.client.post("/api/applications/", payload, format="json")
+        self.assertEqual(response.status_code, 201)
+        application = Application.objects.get(email="documents@example.com")
+        self.assertEqual(application.document_links, ["/manus-storage/education-documents/abc-diploma.pdf"])
+        self.assertEqual(application.document_metadata[0]["content_type"], "application/pdf")
+
+    def test_application_rejects_external_document_references(self):
+        payload = {
+            "opportunity": self.opportunity.id, "full_name": "Unsafe Applicant", "email": "unsafe@example.com",
+            "statement": "I want to study abroad.", "consent_to_contact": True,
+            "documents": [{"name": "diploma.pdf", "content_type": "application/pdf", "size": 1200, "key": "external/diploma.pdf", "url": "https://example.com/diploma.pdf"}],
+        }
+        response = self.client.post("/api/applications/", payload, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("secure document uploader", str(response.data))
+
     def test_application_creates_payment_required_state_and_dashboard_data(self):
         payload = {
             "opportunity": self.opportunity.id, "full_name": "Amina Test", "email": "amina@example.com",

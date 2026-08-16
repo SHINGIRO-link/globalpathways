@@ -25,6 +25,14 @@ export type Opportunity = {
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
 
+export class ServiceUnavailableError extends Error {
+  readonly code = "SERVICE_UNAVAILABLE";
+  constructor(message = "Service Unavailable: the service is temporarily unavailable. Please try again in a moment.") {
+    super(message);
+    this.name = "ServiceUnavailableError";
+  }
+}
+
 const localOpportunities: Opportunity[] = [
   {
     id: 1,
@@ -131,9 +139,34 @@ const localOpportunities: Opportunity[] = [
 ];
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, { headers: { "Content-Type": "application/json" }, ...options });
-  if (!response.ok) throw new Error("The service is temporarily unavailable.");
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, { headers: { "Content-Type": "application/json" }, ...options });
+  } catch (error) {
+    const detail = error instanceof Error ? ` (${error.message})` : "";
+    throw new ServiceUnavailableError(`Service Unavailable: the service is temporarily unavailable${detail}.`);
+  }
+  const contentType = response.headers?.get?.("content-type") || "application/json";
+  if (!response.ok || !contentType.includes("application/json")) {
+    throw new ServiceUnavailableError();
+  }
   return response.json() as Promise<T>;
+}
+
+export type UploadedEducationDocument = { name: string; content_type: string; size: number; key: string; url: string };
+
+export async function uploadEducationDocument(file: File): Promise<UploadedEducationDocument> {
+  const body = new FormData();
+  body.append("file", file);
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}/uploads/education-document`, { method: "POST", body });
+  } catch {
+    throw new ServiceUnavailableError("Document upload is unavailable right now. Please try again.");
+  }
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.detail || "We could not upload that document. Please try again.");
+  return payload as UploadedEducationDocument;
 }
 
 export async function getOpportunities(options: { fallback?: boolean } = {}): Promise<Opportunity[]> {

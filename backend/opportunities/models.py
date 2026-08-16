@@ -50,6 +50,7 @@ class Application(models.Model):
     education_level = models.CharField(max_length=120, blank=True)
     statement = models.TextField(blank=True)
     document_links = models.JSONField(default=list, blank=True)
+    document_metadata = models.JSONField(default=list, blank=True)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="payment_required")
     consent_to_contact = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
