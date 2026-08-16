@@ -27,7 +27,7 @@ describe("Django REST client", () => {
 
   it("surfaces a controlled error when application submission is rejected", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, json: async () => ({ detail: "Invalid application" }) }));
-    await expect(submitApplication({ opportunity: 10 })).rejects.toThrow("temporarily unavailable");
+    await expect(submitApplication({ opportunity: 10 })).rejects.toThrow("Invalid application");
   });
 
   it("uploads an education certificate through the storage-backed endpoint", async () => {

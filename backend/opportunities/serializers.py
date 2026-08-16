@@ -23,11 +23,12 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
     def validate_documents(self, value):
         allowed_types = {"application/pdf", "image/jpeg", "image/png", "image/webp"}
+        allowed_categories = {"certificate", "passport", "transcript", "cv", "supporting"}
         for document in value:
             key = document.get("key", "")
             url = document.get("url", "")
             content_type = document.get("content_type", "")
-            if not key.startswith("education-documents/") or not url.startswith("/manus-storage/") or content_type not in allowed_types:
+            if not key.startswith("education-documents/") or not url.startswith("/manus-storage/") or content_type not in allowed_types or document.get("category") not in allowed_categories:
                 raise serializers.ValidationError("Each education document must be uploaded through the secure document uploader.")
             if not document.get("name") or not isinstance(document.get("size"), int) or document["size"] > 10 * 1024 * 1024:
                 raise serializers.ValidationError("Each education document must include a valid name and size under 10 MB.")
@@ -36,7 +37,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         documents = validated_data.pop("documents", [])
         validated_data["document_links"] = [document["url"] for document in documents]
-        validated_data["document_metadata"] = documents
+        validated_data["document_metadata"] = documents or []
         return super().create(validated_data)
 
     def validate_consent_to_contact(self, value):

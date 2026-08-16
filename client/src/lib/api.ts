@@ -147,17 +147,22 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     throw new ServiceUnavailableError(`Service Unavailable: the service is temporarily unavailable${detail}.`);
   }
   const contentType = response.headers?.get?.("content-type") || "application/json";
+  const payload = contentType.includes("application/json") ? await response.json().catch(() => ({})) : {};
   if (!response.ok || !contentType.includes("application/json")) {
-    throw new ServiceUnavailableError();
+    if (response.status >= 500 || !contentType.includes("application/json")) throw new ServiceUnavailableError();
+    const detail = typeof payload?.detail === "string" ? payload.detail : "Please review the highlighted information and try again.";
+    throw new Error(detail);
   }
-  return response.json() as Promise<T>;
+  return payload as T;
 }
 
-export type UploadedEducationDocument = { name: string; content_type: string; size: number; key: string; url: string };
+export type EducationDocumentCategory = "certificate" | "passport" | "transcript" | "cv" | "supporting";
+export type UploadedEducationDocument = { name: string; content_type: string; size: number; key: string; url: string; category: EducationDocumentCategory };
 
-export async function uploadEducationDocument(file: File): Promise<UploadedEducationDocument> {
+export async function uploadEducationDocument(file: File, category: EducationDocumentCategory = "certificate"): Promise<UploadedEducationDocument> {
   const body = new FormData();
   body.append("file", file);
+  body.append("category", category);
   let response: Response;
   try {
     response = await fetch(`${API_BASE}/uploads/education-document`, { method: "POST", body });
@@ -165,7 +170,10 @@ export async function uploadEducationDocument(file: File): Promise<UploadedEduca
     throw new ServiceUnavailableError("Document upload is unavailable right now. Please try again.");
   }
   const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload.detail || "We could not upload that document. Please try again.");
+  if (!response.ok) {
+    if (response.status >= 500) throw new ServiceUnavailableError(payload.detail || "Document storage is temporarily unavailable. Please try again.");
+    throw new Error(payload.detail || "We could not upload that document. Please try again.");
+  }
   return payload as UploadedEducationDocument;
 }
 

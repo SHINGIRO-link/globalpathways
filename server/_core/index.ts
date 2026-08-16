@@ -61,9 +61,11 @@ async function startServer() {
       return;
     }
     try {
-      const safeName = req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, "-").slice(-120) || "education-document";
-      const stored = await storagePut(`education-documents/${crypto.randomUUID()}-${safeName}`, req.file.buffer, req.file.mimetype);
-      res.status(201).json({ name: req.file.originalname, content_type: req.file.mimetype, size: req.file.size, ...stored });
+      const categories = new Set(["certificate", "passport", "transcript", "cv", "supporting"]);
+      const category = typeof req.body.category === "string" && categories.has(req.body.category) ? req.body.category : "supporting";
+      const safeName = req.file.originalname.replace(/[^a-zA-Z0-9._-]/g, "-").slice(-120) || "application-document";
+      const stored = await storagePut(`education-documents/${category}/${crypto.randomUUID()}-${safeName}`, req.file.buffer, req.file.mimetype);
+      res.status(201).json({ name: req.file.originalname, content_type: req.file.mimetype, size: req.file.size, category, ...stored });
     } catch (error) {
       console.error("[Education upload] Storage upload failed", error);
       res.status(503).json({ detail: "Document storage is temporarily unavailable. Please try again." });

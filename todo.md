@@ -190,4 +190,16 @@
 
 ## Final resilience checkpoint confirmation
 
-- [ ] Save the completed document-upload and resilience-hardening checkpoint
+- [x] Save the completed document-upload and resilience-hardening checkpoint
+
+## Application submission and additional documents
+
+- [x] Diagnose and fix the current application submission failure from the live form
+- [x] Support additional uploaded documents with document categories and secure server-issued metadata
+- [x] Validate the complete submission payload, add regression tests, and verify responsive upload UI
+- [x] Save a checkpoint after the submission and additional-document fix
+
+## Final verification gaps for submission fix
+
+- [x] Capture desktop-width verification for the categorized multi-document upload form
+- [ ] Save a new checkpoint after the live submission repair and additional-document changes

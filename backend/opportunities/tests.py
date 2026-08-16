@@ -39,12 +39,12 @@ class DashboardAndPaymentApiTests(TestCase):
         payload = {
             "opportunity": self.opportunity.id, "full_name": "Document Applicant", "email": "documents@example.com",
             "statement": "I want to study abroad.", "consent_to_contact": True,
-            "documents": [{"name": "diploma.pdf", "content_type": "application/pdf", "size": 1200, "key": "education-documents/abc-diploma.pdf", "url": "/manus-storage/education-documents/abc-diploma.pdf"}],
+            "documents": [{"name": "diploma.pdf", "content_type": "application/pdf", "size": 1200, "category": "certificate", "key": "education-documents/certificate/abc-diploma.pdf", "url": "/manus-storage/education-documents/certificate/abc-diploma.pdf"}],
         }
         response = self.client.post("/api/applications/", payload, format="json")
         self.assertEqual(response.status_code, 201)
         application = Application.objects.get(email="documents@example.com")
-        self.assertEqual(application.document_links, ["/manus-storage/education-documents/abc-diploma.pdf"])
+        self.assertEqual(application.document_links, ["/manus-storage/education-documents/certificate/abc-diploma.pdf"])
         self.assertEqual(application.document_metadata[0]["content_type"], "application/pdf")
 
     def test_application_rejects_external_document_references(self):
