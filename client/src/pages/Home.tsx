@@ -53,8 +53,8 @@ function OpportunityCard({ item }: { item: Opportunity }) {
       <p>{item.summary}</p>
       <div className="card-footer"><span className="category-label">{item.category_label}</span><Countdown deadline={item.deadline} status={item.status} /><ArrowRight className="card-arrow" size={18} /></div>
     </Link>
-    {item.source_url && <div className="source-note"><span>{item.source_name} · verified {item.source_verified_at}</span><a href={item.source_url} target="_blank" rel="noreferrer">Official source</a></div>}
-    <button className={saved ? "save-opportunity saved" : "save-opportunity"} onClick={toggleSave} aria-label={saved ? "Saved opportunity" : "Save opportunity"}><Bookmark size={15} fill={saved ? "currentColor" : "none"} /></button>
+    {item.source_url && <div className="source-note"><span>{item.source_name} · verified {item.source_verified_at}</span><a className="source-link" href={item.source_url} target="_blank" rel="noreferrer" data-tooltip="Open official source in a new tab" aria-label={`Open official source for ${item.title}`}>Official source</a></div>}
+    <button className={saved ? "save-opportunity saved" : "save-opportunity"} onClick={toggleSave} aria-label={saved ? `Remove ${item.title} from saved opportunities` : `Save ${item.title} to dashboard`} data-tooltip={saved ? "Saved — click to save again" : "Save to dashboard"}><Bookmark size={15} fill={saved ? "currentColor" : "none"} /></button>
   </article>;
 }
 

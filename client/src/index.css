@@ -101,3 +101,14 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 @media (max-width: 680px) { .staff-notifications-page { padding-top: 2rem; } .staff-heading { display: block; } .unread-card { margin-top: 1.5rem; width: max-content; } .notification-toolbar { align-items: flex-start; } .filter-label { width: 100%; } .notification-filters { flex-basis: 100%; } .notification-item { grid-template-columns: auto 1fr; } .notification-actions { grid-column: 2; justify-content: flex-end; } .notification-meta { display: block; } .notification-meta time { display: block; margin-top: .3rem; } }
 
 .opportunity-card-link { display: block; color: inherit; text-decoration: none; }
+
+/* Accessible action feedback for opportunity cards */
+.opportunity-card { position: relative; }
+.opportunity-card-link:focus-visible { outline: 3px solid var(--gold, #e6bd59); outline-offset: 5px; border-radius: 8px; }
+.source-link, .save-opportunity { position: relative; transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, transform 160ms ease; }
+.source-link:hover, .source-link:focus-visible { color: var(--forest, #174f43); text-decoration: underline; text-underline-offset: 3px; }
+.save-opportunity:hover, .save-opportunity:focus-visible { color: var(--forest, #174f43); background: rgba(224, 190, 91, 0.18); transform: translateY(-1px); }
+.source-link:focus-visible, .save-opportunity:focus-visible { outline: 3px solid var(--gold, #e6bd59); outline-offset: 3px; }
+.source-link[data-tooltip]::after, .save-opportunity[data-tooltip]::after { content: attr(data-tooltip); position: absolute; z-index: 4; left: 50%; bottom: calc(100% + 8px); transform: translate(-50%, 4px); opacity: 0; pointer-events: none; white-space: nowrap; padding: 6px 8px; border-radius: 6px; background: #143f36; color: #fffdf7; font-size: 11px; line-height: 1.2; transition: opacity 160ms ease, transform 160ms ease; }
+.source-link[data-tooltip]:hover::after, .source-link[data-tooltip]:focus-visible::after, .save-opportunity[data-tooltip]:hover::after, .save-opportunity[data-tooltip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .source-link, .save-opportunity, .source-link[data-tooltip]::after, .save-opportunity[data-tooltip]::after { transition: none; } }

@@ -124,3 +124,21 @@
 - [x] Refactor opportunity cards so the save button is not nested inside the card anchor
 - [x] Re-run homepage verification after removing all interactive-content nesting warnings
 - [x] Save a new checkpoint for the corrected markup
+
+## Accessibility and interaction audit
+
+- [x] Audit dashboard cards for nested links, buttons, and ambiguous interactive regions
+- [x] Audit staff notification cards and management actions for valid interactive markup and accessible labels
+- [x] Verify opportunity-card keyboard focus order across card navigation, source link, and save button
+- [x] Add visible hover and keyboard-focus feedback or tooltips to opportunity-card save and official-source actions
+- [x] Add or update automated coverage for accessible labels and interaction structure where practical
+- [x] Run checks and responsive visual verification, then save the accessibility checkpoint
+
+## Accessibility verification follow-up
+
+- [x] Capture mobile-width screenshots for opportunities, dashboard, and staff notifications after the accessibility changes
+- [x] Save a new checkpoint after the accessibility audit changes are validated
+
+## Checkpoint confirmation
+
+- [ ] Save the successful accessibility-audit checkpoint after desktop and mobile validation
