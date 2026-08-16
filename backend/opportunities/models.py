@@ -133,6 +133,8 @@ class PaymentRecord(models.Model):
         super().save(*args, **kwargs)
         if previous_status and previous_status != self.status:
             StaffNotification.objects.create(event_type="payment_status", title="Payment status changed", message=f"Payment for {self.application.full_name} moved from {previous_status.replace('_', ' ')} to {self.status.replace('_', ' ')}.", application=self.application)
+            from .email_notifications import notify_internal_payment_status
+            notify_internal_payment_status(self.application, previous_status, self.status)
 
 
 class Inquiry(models.Model):

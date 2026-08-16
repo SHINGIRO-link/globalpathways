@@ -2,11 +2,14 @@ import os
 from types import SimpleNamespace
 from unittest.mock import patch
 from django.core.management import call_command
-from django.test import TestCase
+from django.core import mail
+from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
+from opportunities.email_notifications import notify_application_status, notify_internal_payment_status, notify_internal_status
 from opportunities.models import Application, ApplicationStatusEvent, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification
 
 
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 class DashboardAndPaymentApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -34,6 +37,28 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual(application.owner_open_id, "")
         self.assertTrue(PaymentRecord.objects.filter(application=application, amount=2000, currency="RWF", status="integration_pending").exists())
         self.assertTrue(StaffNotification.objects.filter(application=application, event_type="application_submitted").exists())
+
+    def test_submission_sends_internal_and_consented_applicant_emails(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.post("/api/applications/", {"opportunity": self.opportunity.id, "full_name": "Email Applicant", "email": "email@example.com", "statement": "I want to study abroad.", "consent_to_contact": True, "document_links": []}, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(mail.outbox), 2)
+        recipients = {recipient for message in mail.outbox for recipient in message.to}
+        self.assertEqual(recipients, {"globalopportunityconnect@gmail.com", "email@example.com"})
+
+    def test_internal_status_and_payment_emails_are_addressed_to_staff(self):
+        application = Application.objects.create(opportunity=self.opportunity, full_name="Staff Update", email="staff-update@example.com", consent_to_contact=False, status="reviewing")
+        self.assertTrue(notify_internal_status(application, "received"))
+        self.assertTrue(notify_internal_payment_status(application, "integration_pending", "paid"))
+        self.assertEqual([message.to for message in mail.outbox], [["globalopportunityconnect@gmail.com"], ["globalopportunityconnect@gmail.com"]])
+
+    def test_status_email_requires_contact_consent(self):
+        application = Application.objects.create(opportunity=self.opportunity, full_name="No Consent", email="no-consent@example.com", consent_to_contact=False, status="reviewing")
+        self.assertFalse(notify_application_status(application))
+        self.assertEqual(len(mail.outbox), 0)
+        application.consent_to_contact = True
+        self.assertTrue(notify_application_status(application))
+        self.assertEqual(mail.outbox[0].to, ["no-consent@example.com"])
 
     def test_application_persists_server_issued_document_metadata(self):
         payload = {

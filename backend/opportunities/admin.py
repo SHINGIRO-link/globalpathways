@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .email_notifications import notify_application_status, notify_internal_status
 from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
 
 
@@ -29,6 +30,8 @@ class ApplicationAdmin(admin.ModelAdmin):
                 message=f"{obj.full_name}'s application moved from {previous_status.replace('_', ' ')} to {obj.status.replace('_', ' ')}.",
                 application=obj,
             )
+            notify_internal_status(obj, previous_status)
+            notify_application_status(obj)
 
 
 @admin.register(ApplicationStatusEvent)

@@ -214,9 +214,17 @@
 - [x] Research and verify 20 additional Europe and Asia opportunities from official source pages
 - [x] Add the 20 verified opportunities to Django seed/catalog data and frontend fallback coverage
 - [x] Add regression coverage for the expanded catalog and verify discovery/filtering at desktop and mobile widths
-- [ ] Save the expanded opportunity catalog checkpoint
+- [x] Save the expanded opportunity catalog checkpoint
 
 ## Catalog verification follow-up
 
 - [x] Open or directly inspect all 20 new official source URLs and record source-backed timing or portal notes
 - [x] Add frontend regression coverage or manual verification for category and search filtering at desktop and mobile widths
+
+## SMTP email notifications
+
+- [ ] Rotate the exposed Gmail app password in Google and update SMTP_PASSWORD with the replacement secret
+- [x] Send an internal notification after each new application submission
+- [x] Send applicant notifications when application status changes, using consent and a safe failure path
+- [x] Add email regression tests and verify notification behavior without exposing credentials
+- [ ] Save a validated email-notification checkpoint (SMTP credential rotation remains pending)

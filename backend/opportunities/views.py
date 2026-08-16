@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .authentication import IsStaffUser
+from .email_notifications import notify_new_application
 from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
 from .serializers import ApplicationSerializer, ApplicationStatusEventSerializer, InquirySerializer, OpportunitySerializer, PaymentRecordSerializer, SavedOpportunitySerializer, StaffNotificationSerializer, SuccessStorySerializer
 
@@ -45,6 +46,7 @@ class ApplicationCreateView(generics.CreateAPIView):
         ApplicationStatusEvent.objects.create(application=application, status="payment_required", note="Application submitted. Payment integration will be enabled here.")
         PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
         StaffNotification.objects.create(event_type="application_submitted", title="New application submitted", message=f"{application.full_name} submitted an application for {application.opportunity.title}.", application=application)
+        notify_new_application(application)
 
 
 class DashboardView(APIView):
