@@ -159,3 +159,9 @@
 
 - [x] Remove the frontend sign-in requirement from the public application form so it matches the Django access model and can reach the success state
 - [x] Verify the public form success state after a real 201 response and save the final checkpoint
+
+## Homepage tRPC parsing error
+
+- [ ] Diagnose and fix the tRPC query receiving HTML instead of JSON on the homepage
+- [ ] Add regression coverage for the corrected tRPC response path and preserve Django REST `/api` forwarding
+- [ ] Verify homepage rendering and save a bug-fix checkpoint

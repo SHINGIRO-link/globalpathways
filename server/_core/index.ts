@@ -39,10 +39,8 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
-  // Same-origin bridge for the Django REST API. This must run before Vite/static fallback,
-  // otherwise `/api/*` is incorrectly answered with the frontend HTML shell.
-  app.use("/api", proxyDjangoApi);
-  // tRPC API
+  // tRPC must be mounted before the broad Django proxy. Otherwise `/api/trpc/*`
+  // is forwarded to Django and the client receives an HTML 404 page instead of JSON.
   app.use(
     "/api/trpc",
     createExpressMiddleware({
@@ -50,6 +48,9 @@ async function startServer() {
       createContext,
     })
   );
+  // Same-origin bridge for the Django REST API. This runs before Vite/static fallback
+  // so remaining `/api/*` requests reach Django instead of the frontend HTML shell.
+  app.use("/api", proxyDjangoApi);
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
