@@ -23,7 +23,14 @@ export type Opportunity = {
   source_verified_at?: string;
 };
 
+import { additionalLocalOpportunities } from "./additionalOpportunities";
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "/api";
+
+export function filterOpportunities(opportunities: Opportunity[], category: string, search: string): Opportunity[] {
+  const query = search.trim().toLowerCase();
+  return opportunities.filter(item => (category === "all" || item.category === category) && `${item.title} ${item.country} ${item.summary}`.toLowerCase().includes(query));
+}
 
 export class ServiceUnavailableError extends Error {
   readonly code = "SERVICE_UNAVAILABLE";
@@ -136,6 +143,7 @@ const localOpportunities: Opportunity[] = [
   {
     id: 10, title: "Singapore Careers Portal", slug: "singapore-careers-portal", category: "job", category_label: "Job opening", status: "open", status_label: "Open now", country: "Singapore", region: "Asia", deadline: "2026-12-31T23:59:00Z", summary: "Official Singapore public-service careers portal for current roles and application guidance.", description: "Vacancies are published with role-specific closing dates. Open the official portal to confirm the current listing and deadline before applying.", eligibility: ["Role-specific eligibility", "Relevant qualifications", "Professional communication"], required_documents: ["CV", "Qualifications", "Role-specific documents"], featured: false, deadline_note: "Dynamic portal: individual vacancy deadlines vary; check the official source.", source_name: "Careers@Gov", source_url: "https://www.careers.gov.sg/", source_verified_at: "2026-08-16",
   },
+  ...additionalLocalOpportunities,
 ];
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {

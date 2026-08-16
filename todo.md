@@ -208,3 +208,15 @@
 
 - [x] Complete and save the comprehensive product, security, operations, accessibility, performance, and functionality-gap audit
 - [x] Prioritize the next implementation phase: payments, authorization hardening, abuse protection, staff review, and secure document access
+
+## Opportunity catalog expansion
+
+- [x] Research and verify 20 additional Europe and Asia opportunities from official source pages
+- [x] Add the 20 verified opportunities to Django seed/catalog data and frontend fallback coverage
+- [x] Add regression coverage for the expanded catalog and verify discovery/filtering at desktop and mobile widths
+- [ ] Save the expanded opportunity catalog checkpoint
+
+## Catalog verification follow-up
+
+- [x] Open or directly inspect all 20 new official source URLs and record source-backed timing or portal notes
+- [x] Add frontend regression coverage or manual verification for category and search filtering at desktop and mobile widths

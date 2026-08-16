@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getOpportunities, getOpportunity, submitApplication, uploadEducationDocument } from "./api";
+import { filterOpportunities, getOpportunities, getOpportunity, submitApplication, uploadEducationDocument } from "./api";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -28,6 +28,16 @@ describe("Django REST client", () => {
   it("surfaces a controlled error when application submission is rejected", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, json: async () => ({ detail: "Invalid application" }) }));
     await expect(submitApplication({ opportunity: 10 })).rejects.toThrow("Invalid application");
+  });
+
+  it("filters the expanded catalog by category and keyword", () => {
+    const opportunities = [
+      { id: 1, title: "Global Korea Scholarship", slug: "gks", category: "scholarship", country: "South Korea", summary: "Government scholarship route", region: "Asia" },
+      { id: 2, title: "EU Careers", slug: "eu-careers", category: "job", country: "European Union", summary: "Official public service roles", region: "Europe" },
+    ] as any;
+    expect(filterOpportunities(opportunities, "scholarship", "korea").map(item => item.slug)).toEqual(["gks"]);
+    expect(filterOpportunities(opportunities, "job", "european").map(item => item.slug)).toEqual(["eu-careers"]);
+    expect(filterOpportunities(opportunities, "all", "missing")).toEqual([]);
   });
 
   it("uploads an education certificate through the storage-backed endpoint", async () => {

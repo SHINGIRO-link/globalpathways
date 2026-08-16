@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 
 from django.core.management.base import BaseCommand
 from opportunities.models import Opportunity
+from .additional_routes import ADDITIONAL_ROUTES
 
 
 ROUTES = [
@@ -17,6 +18,8 @@ ROUTES = [
     {"title": "Singapore Early-Career Roles Route", "slug": "singapore-early-career-roles-route", "category": "job", "status": "coming", "country": "Singapore", "region": "Asia", "deadline": "2027-03-05T23:59:00Z", "summary": "An upcoming route preview for early-career talent building a focused international job search.", "description": "Join the early list for support with role research, application positioning, and relocation questions.", "eligibility": ["Recent graduate or early-career professional", "Relevant skills or portfolio", "Professional English"], "required_documents": ["CV", "Portfolio or work samples", "Qualification evidence"], "featured": False},
 ]
 
+
+ROUTES.extend(ADDITIONAL_ROUTES)
 
 VERIFIED_OVERRIDES = {
     "global-excellence-scholarship": {"title": "Chevening Scholarship — 2027–2028", "country": "United Kingdom", "deadline": datetime(2026, 10, 6, 11, 0, tzinfo=timezone.utc), "summary": "Official UK government-backed scholarship route for future leaders applying for postgraduate study.", "description": "Chevening supports one-year master's study in the UK and asks applicants to apply through their country or territory page.", "deadline_note": "Official deadline: 6 October 2026 at 11:00 UTC.", "source_name": "Chevening", "source_url": "https://www.chevening.org/scholarships/application-timeline/", "source_verified_at": "2026-08-16"},
