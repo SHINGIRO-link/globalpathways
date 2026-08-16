@@ -132,3 +132,42 @@ export async function getSuccessStories() {
     return [];
   }
 }
+
+
+export type ApplicationStatus = "payment_required" | "received" | "reviewing" | "needs_info" | "approved" | "rejected";
+export type DashboardApplication = {
+  id: number;
+  opportunity: number;
+  opportunity_title: string;
+  status: ApplicationStatus;
+  status_label: string;
+  created_at: string;
+  updated_at: string;
+};
+export type DashboardData = {
+  email: string;
+  applications: DashboardApplication[];
+  saved_opportunities: Array<{ id: number; opportunity: number; opportunity_detail: Opportunity; created_at: string }>;
+};
+
+const dashboardHeaders = (email: string) => ({ "X-Dashboard-Email": email });
+
+export async function getDashboard(email: string): Promise<DashboardData> {
+  return request<DashboardData>(`/dashboard/?email=${encodeURIComponent(email)}`, { headers: { "Content-Type": "application/json", ...dashboardHeaders(email) } });
+}
+
+export async function saveOpportunity(email: string, opportunity: number) {
+  return request(`/saved-opportunities/`, { method: "POST", headers: { "Content-Type": "application/json", ...dashboardHeaders(email) }, body: JSON.stringify({ email, opportunity }) });
+}
+
+export async function removeSavedOpportunity(email: string, opportunity: number) {
+  return request(`/saved-opportunities/${opportunity}/?email=${encodeURIComponent(email)}`, { method: "DELETE", headers: { "Content-Type": "application/json", ...dashboardHeaders(email) } });
+}
+
+export async function getApplicationStatus(email: string, applicationId: number) {
+  return request<{ application: DashboardApplication; events: Array<{ id: number; status: ApplicationStatus; status_label: string; note: string; created_at: string }>; payment: { amount: number; currency: string; provider: string; status: string; status_label: string } | null }>(`/applications/${applicationId}/status/?email=${encodeURIComponent(email)}`, { headers: { "Content-Type": "application/json", ...dashboardHeaders(email) } });
+}
+
+export async function preparePayment(email: string, application: number, provider: "momo" | "airtel") {
+  return request<{ payment: { amount: number; currency: string; provider: string; status: string }; message: string }>("/payments/prepare/", { method: "POST", headers: { "Content-Type": "application/json", ...dashboardHeaders(email) }, body: JSON.stringify({ email, application, provider }) });
+}

@@ -34,3 +34,24 @@ The managed project preview remains available through its existing Node process.
 ## Trust and content policy
 
 The opportunity cards use clearly labeled sample discovery content for the interface and data model. The success-story UI does not invent testimonials or ratings. Django only exposes stories when both `published=True` and `consent_confirmed=True`, so editorial approval and permission are required before publication.
+
+
+## Dashboard and deferred payment extension
+
+The personalized workspace is available at `/dashboard`. It uses the signed-in user email as the current dashboard key and can also be previewed by entering an application email. The dashboard reads application summaries, saved opportunities, status history, and payment-ready records from Django.
+
+| Area | Endpoint or model | Behavior |
+| --- | --- | --- |
+| Dashboard overview | `GET /api/dashboard/?email=...` | Returns applications and saved opportunities for the requested email |
+| Saved opportunities | `POST /api/saved-opportunities/`, `DELETE /api/saved-opportunities/<opportunity_id>/?email=...` | Saves and removes opportunity shortlist entries |
+| Application status | `GET /api/applications/<id>/status/?email=...` | Returns the current application, status events, and payment record |
+| Payment-ready preparation | `POST /api/payments/prepare/` | Records MoMo/Airtel provider selection as `integration_pending`; it does not charge or claim payment |
+| Application lifecycle | `Application.status` plus `ApplicationStatusEvent` | Starts at `payment_required`, then can move through received, reviewing, needs information, approved, or not approved |
+| Payment record | `PaymentRecord` | Stores the 2,000 service-fee amount, provider selection, currency placeholder, status, and later provider reference |
+
+Live MoMo and Airtel Money integration is intentionally deferred. Before enabling collection, configure the operating country, currency, merchant onboarding, server-side credentials, provider callback/status reconciliation, refund handling, and the final customer-facing fee terms. The current UI is explicit that no money has been received while integration is pending.
+
+
+## Session ownership
+
+Personalized endpoints now require the shared `app_session_id` Manus session or a bearer token validated with `JWT_SECRET` by `backend/opportunities/authentication.py`. The React dashboard sends the signed-in email as a consistency check, but the Django permission boundary first requires a validated authenticated session. Public discovery and application submission remain available without dashboard access; personalized reads, saves, status history, and payment-provider selection require authentication.
