@@ -1,7 +1,8 @@
 from types import SimpleNamespace
+from django.core.management import call_command
 from django.test import TestCase
 from rest_framework.test import APIClient
-from opportunities.models import Application, ApplicationStatusEvent, Opportunity, PaymentRecord, SavedOpportunity
+from opportunities.models import Application, ApplicationStatusEvent, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification
 
 
 class DashboardAndPaymentApiTests(TestCase):
@@ -28,7 +29,8 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual(response.status_code, 201)
         application = Application.objects.get(email="amina@example.com")
         self.assertEqual(application.status, "payment_required")
-        self.assertTrue(PaymentRecord.objects.filter(application=application, amount=2000, status="integration_pending").exists())
+        self.assertTrue(PaymentRecord.objects.filter(application=application, amount=2000, currency="RWF", status="integration_pending").exists())
+        self.assertTrue(StaffNotification.objects.filter(application=application, event_type="application_submitted").exists())
         self.assertTrue(ApplicationStatusEvent.objects.filter(application=application, status="payment_required").exists())
         dashboard = self.client.get("/api/dashboard/?email=amina@example.com", HTTP_X_DASHBOARD_EMAIL="amina@example.com")
         self.assertEqual(dashboard.status_code, 200)
@@ -43,17 +45,35 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual(removed.data["deleted"], True)
         self.assertFalse(SavedOpportunity.objects.filter(email="amina@example.com", opportunity=self.opportunity).exists())
         application = Application.objects.create(opportunity=self.opportunity, owner_open_id="test-user", full_name="Amina Test", email="amina@example.com", consent_to_contact=True)
-        PaymentRecord.objects.create(application=application, amount=2000, currency="TBD", status="integration_pending")
+        PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
         payment = self.client.post("/api/payments/prepare/", {"email": "amina@example.com", "application": application.id, "provider": "momo"}, HTTP_X_DASHBOARD_EMAIL="amina@example.com", format="json")
         self.assertEqual(payment.status_code, 202)
         self.assertEqual(payment.data["payment"]["provider"], "momo")
         self.assertEqual(payment.data["payment"]["status"], "integration_pending")
+        self.assertTrue(StaffNotification.objects.filter(application=application, event_type="payment_status").exists())
+
+    def test_later_payment_status_change_creates_staff_notification(self):
+        application = Application.objects.create(opportunity=self.opportunity, owner_open_id="test-user", full_name="Amina Test", email="amina@example.com", consent_to_contact=True)
+        payment = PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
+        payment.status = "paid"
+        payment.save()
+        self.assertTrue(StaffNotification.objects.filter(application=application, event_type="payment_status", message__icontains="paid").exists())
+
+    def test_expanded_seed_catalog_covers_europe_and_asia(self):
+        call_command("seed_opportunities")
+        seeded = Opportunity.objects.exclude(slug="test-scholarship")
+        self.assertEqual(seeded.count(), 10)
+        self.assertEqual(seeded.filter(region="Europe").count(), 5)
+        self.assertEqual(seeded.filter(region="Asia").count(), 5)
+        self.assertEqual(seeded.filter(category="scholarship").count(), 3)
+        self.assertEqual(seeded.filter(category="visa").count(), 4)
+        self.assertEqual(seeded.filter(category="job").count(), 3)
 
     def test_application_status_endpoint_returns_history_and_payment(self):
         application = Application.objects.create(opportunity=self.opportunity, owner_open_id="test-user", full_name="Amina Test", email="amina@example.com", consent_to_contact=True, status="reviewing")
         ApplicationStatusEvent.objects.create(application=application, status="payment_required", note="Submitted")
         ApplicationStatusEvent.objects.create(application=application, status="reviewing", note="Advisor review started")
-        PaymentRecord.objects.create(application=application, amount=2000, currency="TBD", status="integration_pending")
+        PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
         response = self.client.get(f"/api/applications/{application.id}/status/?email=amina@example.com", HTTP_X_DASHBOARD_EMAIL="amina@example.com")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["application"]["status"], "reviewing")

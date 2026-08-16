@@ -85,13 +85,33 @@ class SavedOpportunity(models.Model):
         return f"{self.email} — {self.opportunity.title}"
 
 
+class StaffNotification(models.Model):
+    EVENT_CHOICES = [
+        ("application_submitted", "Application submitted"),
+        ("application_status", "Application status changed"),
+        ("payment_status", "Payment status changed"),
+    ]
+    event_type = models.CharField(max_length=40, choices=EVENT_CHOICES)
+    title = models.CharField(max_length=180)
+    message = models.TextField()
+    application = models.ForeignKey("Application", on_delete=models.CASCADE, null=True, blank=True, related_name="staff_notifications")
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title
+
+
 class PaymentRecord(models.Model):
     PROVIDER_CHOICES = [("momo", "MoMo"), ("airtel", "Airtel Money")]
     STATUS_CHOICES = [("pending", "Pending"), ("integration_pending", "Integration pending"), ("paid", "Paid"), ("failed", "Failed")]
 
     application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name="payment")
     amount = models.PositiveIntegerField(default=2000)
-    currency = models.CharField(max_length=8, default="TBD")
+    currency = models.CharField(max_length=8, default="RWF")
     provider = models.CharField(max_length=20, choices=PROVIDER_CHOICES, blank=True)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="integration_pending")
     provider_reference = models.CharField(max_length=160, blank=True)
@@ -100,6 +120,14 @@ class PaymentRecord(models.Model):
 
     def __str__(self):
         return f"{self.application_id} — {self.amount} {self.currency}"
+
+    def save(self, *args, **kwargs):
+        previous_status = None
+        if self.pk:
+            previous_status = type(self).objects.filter(pk=self.pk).values_list("status", flat=True).first()
+        super().save(*args, **kwargs)
+        if previous_status and previous_status != self.status:
+            StaffNotification.objects.create(event_type="payment_status", title="Payment status changed", message=f"Payment for {self.application.full_name} moved from {previous_status.replace('_', ' ')} to {self.status.replace('_', ' ')}.", application=self.application)
 
 
 class Inquiry(models.Model):

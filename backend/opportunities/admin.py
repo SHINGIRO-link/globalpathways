@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, SuccessStory
+from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
 
 
 @admin.register(Opportunity)
@@ -16,6 +16,19 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_filter = ("status", "created_at", "updated_at")
     search_fields = ("full_name", "email", "opportunity__title")
     readonly_fields = ("created_at", "updated_at")
+
+    def save_model(self, request, obj, form, change):
+        previous_status = None
+        if change and obj.pk:
+            previous_status = Application.objects.get(pk=obj.pk).status
+        super().save_model(request, obj, form, change)
+        if change and previous_status and previous_status != obj.status:
+            StaffNotification.objects.create(
+                event_type="application_status",
+                title="Application status changed",
+                message=f"{obj.full_name}'s application moved from {previous_status.replace('_', ' ')} to {obj.status.replace('_', ' ')}.",
+                application=obj,
+            )
 
 
 @admin.register(ApplicationStatusEvent)
@@ -44,6 +57,13 @@ class InquiryAdmin(admin.ModelAdmin):
     list_display = ("full_name", "email", "topic", "resolved", "created_at")
     list_filter = ("resolved", "created_at")
     search_fields = ("full_name", "email", "message")
+
+
+@admin.register(StaffNotification)
+class StaffNotificationAdmin(admin.ModelAdmin):
+    list_display = ("title", "event_type", "is_read", "created_at", "application")
+    list_filter = ("event_type", "is_read")
+    search_fields = ("title", "message")
 
 
 @admin.register(SuccessStory)

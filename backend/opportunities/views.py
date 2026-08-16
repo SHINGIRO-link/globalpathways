@@ -7,7 +7,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, SuccessStory
+from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
 from .serializers import ApplicationSerializer, ApplicationStatusEventSerializer, InquirySerializer, OpportunitySerializer, PaymentRecordSerializer, SavedOpportunitySerializer, SuccessStorySerializer
 
 
@@ -41,7 +41,8 @@ class ApplicationCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         application = serializer.save(status="payment_required", owner_open_id=self.request.user.open_id)
         ApplicationStatusEvent.objects.create(application=application, status="payment_required", note="Application submitted. Payment integration will be enabled here.")
-        PaymentRecord.objects.create(application=application, amount=2000, currency="TBD", status="integration_pending")
+        PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
+        StaffNotification.objects.create(event_type="application_submitted", title="New application submitted", message=f"{application.full_name} submitted an application for {application.opportunity.title}.", application=application)
 
 
 class DashboardView(APIView):
@@ -123,10 +124,11 @@ class PaymentPrepareView(APIView):
         if provider not in {"momo", "airtel"}:
             return Response({"detail": "Choose MoMo or Airtel Money."}, status=status.HTTP_400_BAD_REQUEST)
         application = get_object_or_404(Application, id=application_id, owner_open_id=request.user.open_id)
-        payment, _ = PaymentRecord.objects.get_or_create(application=application, defaults={"amount": 2000, "currency": "TBD"})
+        payment, _ = PaymentRecord.objects.get_or_create(application=application, defaults={"amount": 2000, "currency": "RWF"})
         payment.provider = provider
         payment.status = "integration_pending"
         payment.save(update_fields=["provider", "status", "updated_at"])
+        StaffNotification.objects.create(event_type="payment_status", title="Payment provider selected", message=f"{application.full_name} selected {payment.get_provider_display()} for the 2,000 RWF service fee.", application=application)
         return Response({"payment": PaymentRecordSerializer(payment).data, "message": "Provider integration is not enabled yet. Your application remains safely recorded and payment can be completed when the service is connected."}, status=status.HTTP_202_ACCEPTED)
 
 

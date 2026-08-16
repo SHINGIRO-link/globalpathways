@@ -90,6 +90,24 @@ const localOpportunities: Opportunity[] = [
     required_documents: ["Passport", "Academic records", "Personal statement", "Financial plan"],
     featured: false,
   },
+  {
+    id: 5, title: "France Campus Scholarship Route", slug: "france-campus-scholarship-route", category: "scholarship", category_label: "Scholarship", status: "open", status_label: "Open now", country: "France", region: "Europe", deadline: "2026-11-20T23:59:00Z", summary: "Editorial route preview for students preparing a competitive postgraduate application in France.", description: "A planning-led scholarship route preview focused on programme research, statement preparation, and a clear application calendar.", eligibility: ["Relevant undergraduate background", "Strong academic record", "Clear study plan"], required_documents: ["Passport", "Academic transcripts", "Statement of purpose", "Reference letter"], featured: false,
+  },
+  {
+    id: 6, title: "Germany Study Preparation Route", slug: "germany-study-preparation-route", category: "visa", category_label: "Student visa", status: "open", status_label: "Open now", country: "Germany", region: "Europe", deadline: "2026-10-16T23:59:00Z", summary: "A practical route preview for students planning study, financial evidence, and visa preparation in Germany.", description: "Build an informed Germany study plan with a structured document checklist and timeline for the next stage of your application.", eligibility: ["Offer or active programme search", "Valid passport", "Evidence of financial planning"], required_documents: ["Passport", "Admission documents", "Financial evidence", "Accommodation plan"], featured: false,
+  },
+  {
+    id: 7, title: "Ireland Graduate Roles Route", slug: "ireland-graduate-roles-route", category: "job", category_label: "Job opening", status: "coming", status_label: "Coming soon", country: "Ireland", region: "Europe", deadline: "2027-01-30T23:59:00Z", summary: "A future-facing route preview for graduates exploring international roles with growing teams in Ireland.", description: "Join the early list for practical guidance on CV positioning, employer research, and relocation planning.", eligibility: ["Final-year student or recent graduate", "Relevant portfolio", "Professional communication skills"], required_documents: ["CV", "Portfolio", "Degree or expected graduation letter"], featured: false,
+  },
+  {
+    id: 8, title: "Malaysia Student Visa Route", slug: "malaysia-student-visa-route", category: "visa", category_label: "Student visa", status: "open", status_label: "Open now", country: "Malaysia", region: "Asia", deadline: "2026-11-08T23:59:00Z", summary: "A clear preparation route preview for students considering Malaysia as their next study destination.", description: "Understand the core preparation steps, documents, and timeline before moving forward with a Malaysia study application.", eligibility: ["Study plan aligned with a recognised institution", "Valid passport", "Financial readiness"], required_documents: ["Passport", "Admission or application evidence", "Academic records", "Financial plan"], featured: false,
+  },
+  {
+    id: 9, title: "Taiwan Research Scholarship Route", slug: "taiwan-research-scholarship-route", category: "scholarship", category_label: "Scholarship", status: "coming", status_label: "Coming soon", country: "Taiwan", region: "Asia", deadline: "2027-02-12T23:59:00Z", summary: "An upcoming route preview for research-minded students preparing an international academic profile.", description: "Prepare early with guidance on research fit, academic evidence, and a compelling statement of purpose.", eligibility: ["Research or postgraduate interest", "Relevant academic preparation", "Clear academic goals"], required_documents: ["Passport", "Transcripts", "Research statement", "Academic reference"], featured: false,
+  },
+  {
+    id: 10, title: "Singapore Early-Career Roles Route", slug: "singapore-early-career-roles-route", category: "job", category_label: "Job opening", status: "coming", status_label: "Coming soon", country: "Singapore", region: "Asia", deadline: "2027-03-05T23:59:00Z", summary: "An upcoming route preview for early-career talent building a focused international job search.", description: "Join the early list for support with role research, application positioning, and practical relocation questions.", eligibility: ["Recent graduate or early-career professional", "Relevant skills or portfolio", "Professional English"], required_documents: ["CV", "Portfolio or work samples", "Qualification evidence"], featured: false,
+  },
 ];
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {

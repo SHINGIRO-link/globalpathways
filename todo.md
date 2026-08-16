@@ -73,3 +73,19 @@
 - [x] Bind dashboard ownership to the authenticated session on the server using a session-linked identity rather than trusting client-supplied email/header values
 - [x] Capture or automate the dashboard unsave interaction and confirm the card disappears after deletion
 - [x] Add React-level tests for dashboard loading, populated data, and error rendering
+
+## RWF fee, staff notifications, and opportunity expansion
+
+- [x] Change the deferred application fee from 2,000 TBD to 2,000 RWF across Django records, API responses, admin, and React messaging
+- [x] Add staff notification events when applications are submitted or status changes
+- [x] Add staff notification events when payment provider selection or payment status changes
+- [x] Expose staff notification records in Django admin with read/unread state
+- [x] Expand the opportunity library with additional Europe and Asia scholarship, visa, and job routes using clearly labeled editorial/sample content
+- [x] Add coverage for the RWF amount, notification creation, and expanded opportunity records
+- [x] Verify expanded opportunity discovery and notification/status messaging on desktop and mobile
+
+## Final RWF verification follow-up
+
+- [x] Add staff notification handling for later paid or failed payment-status transitions
+- [x] Add automated coverage for the expanded seed catalog by region, category, and route count
+- [x] Capture mobile verification for the expanded opportunities page and updated RWF payment messaging
