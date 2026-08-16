@@ -157,5 +157,5 @@
 
 ## Public application form alignment
 
-- [ ] Remove the frontend sign-in requirement from the public application form so it matches the Django access model and can reach the success state
-- [ ] Verify the public form success state after a real 201 response and save the final checkpoint
+- [x] Remove the frontend sign-in requirement from the public application form so it matches the Django access model and can reach the success state
+- [x] Verify the public form success state after a real 201 response and save the final checkpoint

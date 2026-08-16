@@ -26,4 +26,12 @@ describe("interactive card markup", () => {
     expect(staffSource).toContain("aria-label={notification.is_read ? `Mark ${notification.title} unread` : `Mark ${notification.title} read`}");
     expect(staffSource).toContain("aria-label={`Archive ${notification.title}`}");
   });
+
+  it("keeps the public apply form aligned with the API and success state", () => {
+    const applySource = homeSource.slice(homeSource.indexOf("function Apply"), homeSource.indexOf("export default function Home"));
+    expect(applySource).not.toContain("Please sign in before submitting");
+    expect(applySource).toContain("const result = await submitApplication");
+    expect(applySource).toContain("setApplicationId(result.id); setSent(true)");
+    expect(applySource).toContain("Application received");
+  });
 });
