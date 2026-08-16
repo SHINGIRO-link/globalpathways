@@ -2,12 +2,15 @@ import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
+import { createDjangoProxyHandler } from "./djangoProxy";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+
+const proxyDjangoApi = createDjangoProxyHandler(process.env.DJANGO_API_URL || "http://127.0.0.1:8000/api");
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -36,6 +39,9 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  // Same-origin bridge for the Django REST API. This must run before Vite/static fallback,
+  // otherwise `/api/*` is incorrectly answered with the frontend HTML shell.
+  app.use("/api", proxyDjangoApi);
   // tRPC API
   app.use(
     "/api/trpc",

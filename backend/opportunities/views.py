@@ -2,7 +2,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -36,11 +36,12 @@ class OpportunityDetailView(generics.RetrieveAPIView):
 class ApplicationCreateView(generics.CreateAPIView):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     @transaction.atomic
     def perform_create(self, serializer):
-        application = serializer.save(status="payment_required", owner_open_id=self.request.user.open_id)
+        owner_open_id = getattr(self.request.user, "open_id", "") if getattr(self.request.user, "is_authenticated", False) else ""
+        application = serializer.save(status="payment_required", owner_open_id=owner_open_id)
         ApplicationStatusEvent.objects.create(application=application, status="payment_required", note="Application submitted. Payment integration will be enabled here.")
         PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
         StaffNotification.objects.create(event_type="application_submitted", title="New application submitted", message=f"{application.full_name} submitted an application for {application.opportunity.title}.", application=application)

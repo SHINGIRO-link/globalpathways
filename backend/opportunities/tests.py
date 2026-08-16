@@ -22,6 +22,19 @@ class DashboardAndPaymentApiTests(TestCase):
         response = self.client.get("/api/dashboard/?email=amina@example.com", HTTP_X_DASHBOARD_EMAIL="amina@example.com")
         self.assertEqual(response.status_code, 401)
 
+    def test_public_application_submission_creates_payment_and_notification(self):
+        self.client.force_authenticate(user=None)
+        payload = {
+            "opportunity": self.opportunity.id, "full_name": "Public Applicant", "email": "public@example.com",
+            "statement": "I want to study abroad.", "consent_to_contact": True, "document_links": [],
+        }
+        response = self.client.post("/api/applications/", payload, format="json")
+        self.assertEqual(response.status_code, 201)
+        application = Application.objects.get(email="public@example.com")
+        self.assertEqual(application.owner_open_id, "")
+        self.assertTrue(PaymentRecord.objects.filter(application=application, amount=2000, currency="RWF", status="integration_pending").exists())
+        self.assertTrue(StaffNotification.objects.filter(application=application, event_type="application_submitted").exists())
+
     def test_application_creates_payment_required_state_and_dashboard_data(self):
         payload = {
             "opportunity": self.opportunity.id, "full_name": "Amina Test", "email": "amina@example.com",

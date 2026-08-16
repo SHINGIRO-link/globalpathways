@@ -141,4 +141,16 @@
 
 ## Checkpoint confirmation
 
-- [ ] Save the successful accessibility-audit checkpoint after desktop and mobile validation
+- [x] Save the successful accessibility-audit checkpoint after desktop and mobile validation
+
+## Application submission failure
+
+- [x] Diagnose and fix the error shown when submitting an application from the live preview
+- [x] Add regression coverage for the corrected application-submission request and response handling
+- [x] Verify the application flow at desktop and mobile widths and save a bug-fix checkpoint
+
+## Application submission verification follow-up
+
+- [x] Make the documented application submission access model explicit and support signed-out submissions safely
+- [x] Add and execute regression coverage for public submission success, proxy routing, and controlled failures
+- [ ] Capture the actual application form at desktop and mobile widths, including a successful submission state, and save a new checkpoint
