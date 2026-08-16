@@ -99,3 +99,5 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .source-note { display: flex; flex-wrap: wrap; gap: .5rem .9rem; align-items: center; margin-top: 1rem; padding-top: .8rem; border-top: 1px solid rgba(16,47,40,.1); color: var(--muted); font-size: .78rem; }
 .source-note a { color: var(--forest); text-decoration: underline; text-underline-offset: .2rem; }
 @media (max-width: 680px) { .staff-notifications-page { padding-top: 2rem; } .staff-heading { display: block; } .unread-card { margin-top: 1.5rem; width: max-content; } .notification-toolbar { align-items: flex-start; } .filter-label { width: 100%; } .notification-filters { flex-basis: 100%; } .notification-item { grid-template-columns: auto 1fr; } .notification-actions { grid-column: 2; justify-content: flex-end; } .notification-meta { display: block; } .notification-meta time { display: block; margin-top: .3rem; } }
+
+.opportunity-card-link { display: block; color: inherit; text-decoration: none; }

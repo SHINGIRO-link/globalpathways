@@ -111,3 +111,16 @@
 - [x] Replace reused preview summaries, descriptions, eligibility, and document requirements in every seeded verified route with source-aligned guidance or clearly labeled portal guidance
 - [x] Correct the frontend fallback UN Careers and EURES records to match their verified backend status, eligibility, and descriptions
 - [x] Expand per-record test assertions for Chevening, MEXT, UN Careers, and EURES source and deadline metadata
+
+## Bug fix: nested anchor warning
+
+- [x] Trace the homepage nested `<a>` composition and identify the ancestor/descendant link pair
+- [x] Replace the nested anchor with valid accessible markup while preserving navigation and source-link behavior
+- [x] Run tests, type checks, and homepage visual verification after the fix
+- [x] Save the bug-fix checkpoint
+
+## Nested interactive-content follow-up
+
+- [x] Refactor opportunity cards so the save button is not nested inside the card anchor
+- [x] Re-run homepage verification after removing all interactive-content nesting warnings
+- [x] Save a new checkpoint for the corrected markup

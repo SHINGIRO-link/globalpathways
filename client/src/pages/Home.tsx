@@ -45,14 +45,17 @@ function OpportunityCard({ item }: { item: Opportunity }) {
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   async function toggleSave(event: React.MouseEvent) { event.preventDefault(); event.stopPropagation(); if (!user?.email) { toast("Sign in from My dashboard to save opportunities."); return; } try { await saveOpportunity(user.email, item.id); setSaved(true); toast("Saved to your dashboard."); } catch { toast("We could not save this opportunity yet."); } }
-  return <Link href={`/opportunities/${item.slug}`} className="opportunity-card">
-    <div className="card-topline"><span className={`status-pill ${item.status}`}>{item.status === "open" ? <span className="status-dot" /> : <Clock3 size={13} />}{item.status_label}</span><span className="country">{item.country}</span></div>
-    <div className="category-icon"><CategoryIcon category={item.category} /></div>
-    <h3>{item.title}</h3>
-    <p>{item.summary}</p>
-    {item.source_url && <div className="source-note"><span>{item.source_name} · verified {item.source_verified_at}</span><a href={item.source_url} target="_blank" rel="noreferrer" onClick={event => event.stopPropagation()}>Official source</a></div>}
-    <div className="card-footer"><span className="category-label">{item.category_label}</span><Countdown deadline={item.deadline} status={item.status} /><button className={saved ? "save-opportunity saved" : "save-opportunity"} onClick={toggleSave} aria-label={saved ? "Saved opportunity" : "Save opportunity"}><Bookmark size={15} fill={saved ? "currentColor" : "none"} /></button><ArrowRight className="card-arrow" size={18} /></div>
-  </Link>;
+  return <article className="opportunity-card">
+    <Link href={`/opportunities/${item.slug}`} className="opportunity-card-link">
+      <div className="card-topline"><span className={`status-pill ${item.status}`}>{item.status === "open" ? <span className="status-dot" /> : <Clock3 size={13} />}{item.status_label}</span><span className="country">{item.country}</span></div>
+      <div className="category-icon"><CategoryIcon category={item.category} /></div>
+      <h3>{item.title}</h3>
+      <p>{item.summary}</p>
+      <div className="card-footer"><span className="category-label">{item.category_label}</span><Countdown deadline={item.deadline} status={item.status} /><ArrowRight className="card-arrow" size={18} /></div>
+    </Link>
+    {item.source_url && <div className="source-note"><span>{item.source_name} · verified {item.source_verified_at}</span><a href={item.source_url} target="_blank" rel="noreferrer">Official source</a></div>}
+    <button className={saved ? "save-opportunity saved" : "save-opportunity"} onClick={toggleSave} aria-label={saved ? "Saved opportunity" : "Save opportunity"}><Bookmark size={15} fill={saved ? "currentColor" : "none"} /></button>
+  </article>;
 }
 
 function InquiryDialog({ onClose }: { onClose: () => void }) {
