@@ -408,3 +408,8 @@
 
 - [ ] Remove the Vite production chunk cycle that prevents React from mounting on PythonAnywhere
 - [ ] Rebuild, validate, push, and redeploy the corrected frontend bundle
+
+## Live template asset synchronization
+
+- [ ] Update the Django frontend template to reference the current Vite-built hashed assets instead of stale bundle names
+- [ ] Rebuild or collect static assets, reload PythonAnywhere, and verify the live homepage mounts
