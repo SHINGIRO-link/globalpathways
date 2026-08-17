@@ -413,3 +413,15 @@
 
 - [x] Update the Django frontend template to reference the current Vite-built hashed assets instead of stale bundle names
 - [x] Rebuild or collect static assets, reload PythonAnywhere, and verify the live homepage mounts
+
+## Production catalogue and SMTP activation
+
+- [x] Seed the verified 30-route opportunity catalogue into the PythonAnywhere production SQLite database
+- [x] Verify live opportunity counts, regions, categories, and representative official-source records
+- [x] Configure production SMTP variables on PythonAnywhere without exposing credentials
+- [x] Test guest status/claim delivery and staff/application-status notification paths
+- [x] Record production verification results and save a checkpoint
+
+## Production secret rotation follow-up
+
+- [x] Rotate the Django secret key exposed during PythonAnywhere SMTP configuration, update the private environment file, and reload the web app
