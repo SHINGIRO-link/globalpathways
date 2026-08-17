@@ -33,6 +33,9 @@ describe("interactive card markup", () => {
     expect(appSource).toContain('const StaffApplications = lazy(() => import("@/pages/StaffApplications"));');
     expect(appSource).toContain('<Route path="/staff/applications" component={StaffApplications} />');
     expect(staffApplicationsSource).toContain("user.role !== \"admin\"");
+    expect(staffApplicationsSource).toContain('type="search"');
+    expect(staffApplicationsSource).toContain("Search applicant name or email");
+    expect(staffApplicationsSource).toContain("Clear applicant search");
     expect(staffApplicationsSource).toContain("Download CSV");
     expect(staffApplicationsSource).toContain("Download all documents");
     expect(staffApplicationsSource).toContain("getStaffDocumentsExportUrl");

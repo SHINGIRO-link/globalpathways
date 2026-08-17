@@ -214,6 +214,13 @@ class StaffApplicationsApiTests(TestCase):
         self.assertEqual(response.data["applications"][0]["documents"][0]["download_url"], f"/api/staff/applications/{self.application.id}/documents/0/download/")
         self.assertEqual(response.data["summary"]["pending_payments"], 1)
 
+    def test_staff_can_search_applications_by_name_or_email(self):
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "staff-user"}):
+            by_name = self.client.get("/api/staff/applications/?q=Review%20Applicant")
+            by_email = self.client.get("/api/staff/applications/?q=review@example.com")
+        self.assertEqual([item["id"] for item in by_name.data["applications"]], [self.application.id])
+        self.assertEqual([item["id"] for item in by_email.data["applications"]], [self.application.id])
+
     def test_non_staff_cannot_review_or_export_applications(self):
         with patch.dict(os.environ, {"OWNER_OPEN_ID": "another-user"}):
             self.assertEqual(self.client.get("/api/staff/applications/").status_code, 403)

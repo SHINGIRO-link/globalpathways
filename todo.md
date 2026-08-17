@@ -297,3 +297,11 @@
 - [x] Add regression coverage for filter combinations, archive contents, invalid dates, and authorization
 - [x] Verify desktop/mobile filter presentation and save a checkpoint
 
+
+## Staff applicant search
+
+- [x] Add a protected staff search query for applicant name or email
+- [x] Wire the dashboard search bar to the API with clear loading, empty, and retry behavior
+- [x] Add regression coverage for name/email matching and verify responsive presentation
+- [x] Save a checkpoint after validation
+

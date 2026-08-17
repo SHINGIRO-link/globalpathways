@@ -227,3 +227,6 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .staff-date-filter span { font-size: 0.6875rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
 .staff-date-filter input { border: none; outline: none; background: transparent; color: var(--foreground); font-size: 0.8125rem; min-width: 8.5rem; }
 @media (max-width: 700px) { .staff-date-filter { flex: 1; min-width: 140px; } .staff-date-filter input { min-width: 0; width: 100%; } }
+
+.staff-search-clear { display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border: 0; border-radius: 999px; color: var(--muted); background: transparent; cursor: pointer; }
+.staff-search-clear:hover, .staff-search-clear:focus-visible { color: var(--foreground); background: var(--background); outline: none; }
