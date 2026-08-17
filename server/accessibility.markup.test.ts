@@ -27,6 +27,13 @@ describe("interactive card markup", () => {
     expect(staffSource).toContain("aria-label={`Archive ${notification.title}`}");
   });
 
+  it("resets the viewport on route changes and syncs category links", () => {
+    expect(homeSource).toContain('window.scrollTo({ top: 0, left: 0, behavior: "auto" })');
+    expect(homeSource).toContain('href="/opportunities?category=scholarship"');
+    expect(homeSource).toContain('href="/opportunities?category=job"');
+    expect(homeSource).toContain("setCategory(queryCategory)");
+  });
+
   it("keeps the public apply form aligned with the API and success state", () => {
     const applySource = homeSource.slice(homeSource.indexOf("function Apply"), homeSource.indexOf("export default function Home"));
     expect(applySource).not.toContain("Please sign in before submitting");

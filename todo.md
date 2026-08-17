@@ -245,3 +245,10 @@
 - [x] Add separate Applicant Responsibility page for the A clear promise content and link to it from the footer
 - [x] Verify all navigation targets, accessibility, responsive layouts, tests, and save a checkpoint
 
+
+## Navigation scroll reset fix
+
+- [x] Reset scroll position to the top after navigating through the Global Pathways brand, footer pages, Scholarships, Jobs, How it works, and Why us links
+- [x] Verify filtered category navigation preserves the filter while resetting scroll position
+- [x] Run tests and responsive navigation verification, then save a checkpoint
+
