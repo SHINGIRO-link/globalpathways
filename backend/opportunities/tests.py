@@ -8,7 +8,8 @@ from django.core import mail
 from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 from opportunities.email_notifications import notify_application_status, notify_internal_payment_status, notify_internal_status
-from opportunities.models import Application, ApplicationStatusEvent, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification
+from opportunities.models import Application, ApplicationStatusEvent, GuestAccessToken, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification
+from opportunities.guest_access import create_guest_access
 
 
 @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
@@ -44,9 +45,28 @@ class DashboardAndPaymentApiTests(TestCase):
         self.client.force_authenticate(user=None)
         response = self.client.post("/api/applications/", {"opportunity": self.opportunity.id, "full_name": "Email Applicant", "email": "email@example.com", "statement": "I want to study abroad.", "consent_to_contact": True, "document_links": []}, format="json")
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(len(mail.outbox), 3)
+        self.assertIn("/guest/verify?token=", mail.outbox[2].body)
+        self.assertIn("/guest/status?token=", mail.outbox[2].body)
         recipients = {recipient for message in mail.outbox for recipient in message.to}
         self.assertEqual(recipients, {"globalopportunityconnect@gmail.com", "email@example.com"})
+
+    def test_guest_access_links_verify_status_and_claim_once(self):
+        application = Application.objects.create(opportunity=self.opportunity, full_name="Guest Applicant", email="guest@example.com", consent_to_contact=False, status="reviewing")
+        access = create_guest_access(application)
+        verify_response = self.client.get(f"/api/guest/verify/?token={access['verification_token']}")
+        self.assertEqual(verify_response.status_code, 200)
+        claim_token = verify_response.data["claim_token"]
+        self.assertEqual(self.client.get(f"/api/guest/verify/?token={access['verification_token']}").status_code, 410)
+        status_response = self.client.get(f"/api/guest/status/?token={access['status_token']}")
+        self.assertEqual(status_response.status_code, 200)
+        self.client.force_authenticate(user=None)
+        self.assertEqual(self.client.post("/api/guest/claim/", {"claim_token": claim_token}, format="json").status_code, 401)
+        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="claimed-user", app_id="test-app", name="Claimed User"))
+        claim_response = self.client.post("/api/guest/claim/", {"claim_token": claim_token}, format="json")
+        self.assertEqual(claim_response.status_code, 200)
+        self.assertEqual(Application.objects.get(pk=application.pk).owner_open_id, "claimed-user")
+        self.assertEqual(self.client.post("/api/guest/claim/", {"claim_token": claim_token}, format="json").status_code, 410)
 
     def test_internal_status_and_payment_emails_are_addressed_to_staff(self):
         application = Application.objects.create(opportunity=self.opportunity, full_name="Staff Update", email="staff-update@example.com", consent_to_contact=False, status="reviewing")

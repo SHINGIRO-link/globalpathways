@@ -205,7 +205,23 @@ export async function getOpportunity(slug: string): Promise<Opportunity> {
 }
 
 export async function submitApplication(payload: Record<string, unknown>) {
-  return request<{ id: number }>("/applications/", { method: "POST", body: JSON.stringify(payload) });
+  return request<{ id: number; guest_access?: { email_sent: boolean } }>("/applications/", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export type GuestApplicationSummary = { id: number; full_name: string; email?: string; status: string; status_label: string; opportunity_title: string; created_at?: string; updated_at?: string };
+export type GuestVerificationResponse = { verified: boolean; claim_token: string; application: GuestApplicationSummary };
+export type GuestStatusResponse = { application: GuestApplicationSummary; events: Array<{ id: number; status: string; status_label: string; note: string; created_at: string }> };
+
+export async function verifyGuestEmail(token: string) {
+  return request<GuestVerificationResponse>(`/guest/verify/?token=${encodeURIComponent(token)}`);
+}
+
+export async function getGuestStatus(token: string) {
+  return request<GuestStatusResponse>(`/guest/status/?token=${encodeURIComponent(token)}`);
+}
+
+export async function claimGuestApplication(claimToken: string) {
+  return request<{ claimed: boolean; application_id: number }>("/guest/claim/", { method: "POST", body: JSON.stringify({ claim_token: claimToken }) });
 }
 
 export async function submitInquiry(payload: Record<string, unknown>) {

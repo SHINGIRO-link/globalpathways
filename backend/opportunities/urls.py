@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    ApplicationCreateView, ApplicationStatusView, DashboardView, HealthView,
+    ApplicationCreateView, ApplicationStatusView, DashboardView, GuestClaimApplicationView, GuestStatusView, GuestVerifyView, HealthView,
     InquiryCreateView, OpportunityDetailView, OpportunityListView,
     PaymentPrepareView, SavedOpportunityDeleteView, SavedOpportunityListCreateView,
     StaffNotificationListView, StaffNotificationMarkAllReadView, StaffNotificationReadView,
@@ -16,6 +16,9 @@ urlpatterns = [
     path("opportunities/", OpportunityListView.as_view(), name="opportunity-list"),
     path("opportunities/<slug:slug>/", OpportunityDetailView.as_view(), name="opportunity-detail"),
     path("applications/", ApplicationCreateView.as_view(), name="application-create"),
+    path("guest/verify/", GuestVerifyView.as_view(), name="guest-verify"),
+    path("guest/status/", GuestStatusView.as_view(), name="guest-status"),
+    path("guest/claim/", GuestClaimApplicationView.as_view(), name="guest-claim"),
     path("applications/<int:application_id>/status/", ApplicationStatusView.as_view(), name="application-status"),
     path("dashboard/", DashboardView.as_view(), name="dashboard"),
     path("saved-opportunities/", SavedOpportunityListCreateView.as_view(), name="saved-opportunities"),

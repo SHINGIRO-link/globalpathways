@@ -345,3 +345,14 @@
 - [x] Add safe optional applicant access guidance without treating an email address alone as account proof
 - [x] Add regression coverage for guest and authenticated application paths, responsive verification, and save a checkpoint
 
+
+## Guest verification, account creation, and application claiming
+
+- [x] Audit current application ownership, email notification, account, and token infrastructure
+- [x] Add secure expiring email-verification tokens and guest status-tracking links
+- [x] Add optional post-submission account creation after email verification
+- [x] Add secure claim-this-application flow that links verified guest submissions to the account
+- [x] Add frontend success, verification, claim, and status-tracking states
+- [x] Add regression coverage for token expiry, one-time use, authorization, email delivery, and claim behavior
+- [x] Verify desktop/mobile flows and save a checkpoint
+

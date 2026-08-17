@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 from .models import Application
+from .guest_access import create_guest_access
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,24 @@ def notify_internal_payment_status(application: Application, previous_status: st
         "Review the payment record in the Global Pathways staff workspace."
     )
     return _send(subject, message, settings.SMTP_STAFF_RECIPIENT)
+
+
+def notify_guest_access(application: Application, base_url: str) -> bool:
+    access = create_guest_access(application)
+    root = base_url.rstrip("/")
+    verify_link = f"{root}/guest/verify?token={access['verification_token']}"
+    status_link = f"{root}/guest/status?token={access['status_token']}"
+    subject = "Secure access to your Global Pathways application"
+    message = (
+        f"Hello {application.full_name},\n\n"
+        f"We received your application for {application.opportunity.title}.\n\n"
+        "You did not need to create an account to apply. Use the secure link below to verify your email and optionally create an account or claim this application later:\n\n"
+        f"{verify_link}\n\n"
+        "You can also use this private status link to check the application status:\n\n"
+        f"{status_link}\n\n"
+        "These links expire and should not be forwarded. Global Pathways will never ask for your password by email."
+    )
+    return _send(subject, message, application.email)
 
 
 def notify_application_status(application: Application, initial: bool = False) -> bool:

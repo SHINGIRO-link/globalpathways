@@ -24,6 +24,8 @@ function Router() {
     <Route path="/opportunities" component={Home} />
     <Route path="/how-it-works" component={Home} />
     <Route path="/why-us" component={Home} />
+    <Route path="/guest/verify" component={Home} />
+    <Route path="/guest/status" component={Home} />
     <Route path="/applicant-responsibility" component={Home} />
     <Route path="/policies" component={Home} />
     <Route path="/opportunities/:slug" component={Home} />

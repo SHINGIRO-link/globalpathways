@@ -93,6 +93,17 @@ describe("interactive card markup", () => {
     expect(homeSource).toContain("setCategory(queryCategory)");
   });
 
+  it("exposes guest verification, private status access, and optional claiming", () => {
+    expect(homeSource).toContain("verifyGuestEmail(token)");
+    expect(homeSource).toContain("getGuestStatus(token)");
+    expect(homeSource).toContain("Sign in and claim application");
+    expect(homeSource).toContain("globalpathways-guest-claim-token");
+    expect(homeSource).toContain('location === "/guest/verify"');
+    expect(homeSource).toContain('location === "/guest/status"');
+    expect(appSource).toContain('<Route path="/guest/verify" component={Home} />');
+    expect(appSource).toContain('<Route path="/guest/status" component={Home} />');
+  });
+
   it("keeps guest applications open while explaining optional account tracking", () => {
     expect(homeSource).toContain("Apply with or without an account.");
     expect(homeSource).toContain("No account was required.");

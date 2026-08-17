@@ -4,6 +4,7 @@ import { Loader2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { dashboardPath } from "@/lib/roles";
+import { claimGuestApplication } from "@/lib/api";
 
 export { dashboardPath } from "@/lib/roles";
 
@@ -12,7 +13,17 @@ export default function RoleRedirect() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    if (!loading && user) setLocation(dashboardPath(user.role));
+    if (!loading && user) {
+      void (async () => {
+        let claimToken = "";
+        try { claimToken = sessionStorage.getItem("globalpathways-guest-claim-token") || ""; } catch {}
+        if (claimToken) {
+          try { await claimGuestApplication(claimToken); } catch { /* Keep the account usable even if the optional claim expires. */ }
+          try { sessionStorage.removeItem("globalpathways-guest-claim-token"); } catch {}
+        }
+        setLocation(dashboardPath(user.role));
+      })();
+    }
   }, [loading, user, setLocation]);
 
   if (loading) return <main className="route-state"><div className="container"><Loader2 className="spin" /><span className="eyebrow">Checking account</span><h1>Opening your<br /><em>workspace.</em></h1><p>We are checking your account type and preparing the correct dashboard.</p></div></main>;

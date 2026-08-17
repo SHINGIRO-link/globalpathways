@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Opportunity(models.Model):
@@ -166,3 +167,29 @@ class SuccessStory(models.Model):
 
     def __str__(self):
         return f"{self.name} — {self.destination}"
+
+
+class GuestAccessToken(models.Model):
+    PURPOSE_CHOICES = [
+        ("verify", "Email verification"),
+        ("status", "Status tracking"),
+        ("claim", "Application claim"),
+    ]
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="guest_access_tokens")
+    email = models.EmailField(db_index=True)
+    token_hash = models.CharField(max_length=64, unique=True)
+    purpose = models.CharField(max_length=20, choices=PURPOSE_CHOICES)
+    expires_at = models.DateTimeField(db_index=True)
+    used_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["application", "purpose", "expires_at"])]
+        ordering = ["-created_at"]
+
+    @property
+    def is_valid(self):
+        return self.used_at is None and self.expires_at > timezone.now()
+
+    def __str__(self):
+        return f"{self.application_id} — {self.purpose}"

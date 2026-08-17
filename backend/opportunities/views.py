@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 
 from .authentication import IsStaffUser
 from .email_notifications import notify_new_application
-from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
+from .models import Application, ApplicationStatusEvent, GuestAccessToken, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
+from .guest_access import consume_token, create_claim_token
 from .serializers import ApplicationSerializer, ApplicationStatusEventSerializer, InquirySerializer, OpportunitySerializer, PaymentRecordSerializer, SavedOpportunitySerializer, StaffNotificationSerializer, SuccessStorySerializer
 
 
@@ -47,6 +48,58 @@ class ApplicationCreateView(generics.CreateAPIView):
         PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
         StaffNotification.objects.create(event_type="application_submitted", title="New application submitted", message=f"{application.full_name} submitted an application for {application.opportunity.title}.", application=application)
         notify_new_application(application)
+        if not owner_open_id:
+            from .email_notifications import notify_guest_access
+            notify_guest_access(application, self.request.build_absolute_uri("/").rstrip("/"))
+
+
+class GuestVerifyView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        token = consume_token(request.query_params.get("token", ""), "verify")
+        if not token:
+            return Response({"detail": "This verification link is invalid or expired."}, status=status.HTTP_410_GONE)
+        token.used_at = timezone.now()
+        token.save(update_fields=["used_at"])
+        claim_token = create_claim_token(token.application)
+        application = token.application
+        return Response({
+            "verified": True,
+            "claim_token": claim_token,
+            "application": {"id": application.id, "full_name": application.full_name, "email": application.email, "status": application.status, "status_label": application.get_status_display(), "opportunity_title": application.opportunity.title},
+        })
+
+
+class GuestStatusView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        token = consume_token(request.query_params.get("token", ""), "status")
+        if not token:
+            return Response({"detail": "This status link is invalid or expired."}, status=status.HTTP_410_GONE)
+        application = token.application
+        return Response({
+            "application": {"id": application.id, "full_name": application.full_name, "status": application.status, "status_label": application.get_status_display(), "opportunity_title": application.opportunity.title, "created_at": application.created_at, "updated_at": application.updated_at},
+            "events": ApplicationStatusEventSerializer(application.status_events.all(), many=True).data,
+        })
+
+
+class GuestClaimApplicationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        token = consume_token(str(request.data.get("claim_token", "")), "claim")
+        if not token:
+            return Response({"detail": "This claim request is invalid or expired."}, status=status.HTTP_410_GONE)
+        application = token.application
+        if application.owner_open_id and application.owner_open_id != request.user.open_id:
+            return Response({"detail": "This application is already linked to another account."}, status=status.HTTP_409_CONFLICT)
+        application.owner_open_id = request.user.open_id
+        application.save(update_fields=["owner_open_id", "updated_at"])
+        token.used_at = timezone.now()
+        token.save(update_fields=["used_at"])
+        return Response({"claimed": True, "application_id": application.id})
 
 
 class DashboardView(APIView):
