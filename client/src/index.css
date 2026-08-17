@@ -222,3 +222,8 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .staff-security-card strong { font-size: 0.875rem; font-weight: 600; }
 .staff-security-card span { font-size: 0.75rem; line-height: 1.45; color: var(--muted); }
 @media (max-width: 700px) { .staff-security-card { max-width: none; width: 100%; } .staff-heading { flex-direction: column; align-items: stretch; } }
+
+.staff-date-filter { display: flex; align-items: center; gap: 0.35rem; height: 2.5rem; padding: 0 0.65rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--surface); }
+.staff-date-filter span { font-size: 0.6875rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.staff-date-filter input { border: none; outline: none; background: transparent; color: var(--foreground); font-size: 0.8125rem; min-width: 8.5rem; }
+@media (max-width: 700px) { .staff-date-filter { flex: 1; min-width: 140px; } .staff-date-filter input { min-width: 0; width: 100%; } }

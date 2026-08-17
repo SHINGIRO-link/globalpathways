@@ -289,3 +289,11 @@
 - [x] Add regression coverage for staff authorization, archive contents, and safe filenames
 - [x] Verify desktop/mobile presentation and save a checkpoint
 
+
+## Filtered staff document ZIP export
+
+- [x] Add application-status and created-date range filters to the protected document ZIP endpoint
+- [x] Add matching status/date controls to the staff dashboard and preserve selected filters in the download URL
+- [x] Add regression coverage for filter combinations, archive contents, invalid dates, and authorization
+- [x] Verify desktop/mobile filter presentation and save a checkpoint
+

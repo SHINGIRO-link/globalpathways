@@ -362,4 +362,10 @@ export async function updateStaffPaymentStatus(paymentId: number, nextStatus: st
 export function getStaffApplicationsExportUrl() { return `${API_BASE}/staff/applications/export/`; }
 
 
-export function getStaffDocumentsExportUrl() { return `${API_BASE}/staff/applications/documents/export/`; }
+export function getStaffDocumentsExportUrl(filters: { status?: string; date_from?: string; date_to?: string } = {}) {
+  const params = new URLSearchParams();
+  if (filters.status) params.set("status", filters.status);
+  if (filters.date_from) params.set("date_from", filters.date_from);
+  if (filters.date_to) params.set("date_to", filters.date_to);
+  return `${API_BASE}/staff/applications/documents/export/${params.toString() ? `?${params.toString()}` : ""}`;
+}

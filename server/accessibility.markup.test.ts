@@ -36,6 +36,8 @@ describe("interactive card markup", () => {
     expect(staffApplicationsSource).toContain("Download CSV");
     expect(staffApplicationsSource).toContain("Download all documents");
     expect(staffApplicationsSource).toContain("getStaffDocumentsExportUrl");
+    expect(staffApplicationsSource).toContain("date_from: dateFrom");
+    expect(staffApplicationsSource).toContain("date_to: dateTo");
     expect(staffApplicationsSource).toContain("Documents");
     expect(staffSource).toContain('href="/staff/applications"');
   });

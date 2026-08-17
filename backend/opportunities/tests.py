@@ -280,6 +280,24 @@ class StaffDocumentsZipTests(TestCase):
             self.assertEqual(archive.read(document_names[0]), b"fake-pdf-bytes")
             self.assertIn("zip@example.com", archive.read("MANIFEST.tsv").decode())
 
+    def test_zip_filters_by_status_and_created_date(self):
+        class FakeStorageResponse:
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self, _limit): return b"filtered-pdf"
+
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "zip-staff"}), patch("opportunities.staff_views.urllib.request.urlopen", return_value=FakeStorageResponse()):
+            included = self.client.get("/api/staff/applications/documents/export/?status=payment_required&date_from=2020-01-01&date_to=2030-01-01")
+            excluded = self.client.get("/api/staff/applications/documents/export/?status=approved")
+            invalid = self.client.get("/api/staff/applications/documents/export/?date_from=not-a-date")
+        self.assertEqual(included.status_code, 200)
+        self.assertEqual(excluded.status_code, 200)
+        with zipfile.ZipFile(io.BytesIO(included.content)) as archive:
+            self.assertEqual(len([name for name in archive.namelist() if name != "MANIFEST.tsv"]), 1)
+        with zipfile.ZipFile(io.BytesIO(excluded.content)) as archive:
+            self.assertEqual([name for name in archive.namelist() if name != "MANIFEST.tsv"], [])
+        self.assertEqual(invalid.status_code, 400)
+
     def test_non_staff_cannot_download_all_documents(self):
         with patch.dict(os.environ, {"OWNER_OPEN_ID": "different-staff"}):
             response = self.client.get("/api/staff/applications/documents/export/")

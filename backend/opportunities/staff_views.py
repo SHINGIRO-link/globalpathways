@@ -3,6 +3,7 @@ import io
 import re
 import urllib.request
 import zipfile
+from datetime import date
 from urllib.parse import quote
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -167,6 +168,22 @@ class StaffAllDocumentsZipView(StaffOnlyView):
 
     def get(self, request):
         applications = Application.objects.select_related("opportunity").order_by("id")
+        application_status = request.query_params.get("status", "").strip()
+        date_from = request.query_params.get("date_from", "").strip()
+        date_to = request.query_params.get("date_to", "").strip()
+        if application_status and application_status not in dict(Application.STATUS_CHOICES):
+            return Response({"detail": "Invalid application status filter."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            if date_from:
+                applications = applications.filter(created_at__date__gte=date.fromisoformat(date_from))
+            if date_to:
+                applications = applications.filter(created_at__date__lte=date.fromisoformat(date_to))
+        except ValueError:
+            return Response({"detail": "Dates must use YYYY-MM-DD format."}, status=status.HTTP_400_BAD_REQUEST)
+        if date_from and date_to and date_from > date_to:
+            return Response({"detail": "The start date must be before or equal to the end date."}, status=status.HTTP_400_BAD_REQUEST)
+        if application_status:
+            applications = applications.filter(status=application_status)
         archive_buffer = io.BytesIO()
         manifest = []
         total_bytes = 0
