@@ -252,3 +252,9 @@
 - [x] Verify filtered category navigation preserves the filter while resetting scroll position
 - [x] Run tests and responsive navigation verification, then save a checkpoint
 
+
+## Footer policy label wording
+
+- [x] Rename the footer “A clear promise” label to “Policies” and update related link wording consistently
+- [x] Verify the wording change and save a checkpoint
+
