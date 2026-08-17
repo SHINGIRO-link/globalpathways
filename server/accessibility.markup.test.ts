@@ -10,6 +10,7 @@ const appSource = readFileSync(resolve(process.cwd(), "client/src/App.tsx"), "ut
 const roleRedirectSource = readFileSync(resolve(process.cwd(), "client/src/pages/RoleRedirect.tsx"), "utf8");
 const rolesSource = readFileSync(resolve(process.cwd(), "client/src/lib/roles.ts"), "utf8");
 const adminDashboardSource = readFileSync(resolve(process.cwd(), "client/src/pages/AdminDashboard.tsx"), "utf8");
+const accountControlsSource = readFileSync(resolve(process.cwd(), "client/src/components/AccountControls.tsx"), "utf8");
 
 describe("interactive card markup", () => {
   it("keeps opportunity actions outside the card navigation link", () => {
@@ -56,6 +57,16 @@ describe("interactive card markup", () => {
     expect(staffApplicationsSource).toContain("date_to: dateTo");
     expect(staffApplicationsSource).toContain("Documents");
     expect(staffSource).toContain('href="/staff/applications"');
+  });
+
+  it("provides shared account profile and sign-out controls across dashboards", () => {
+    expect(accountControlsSource).toContain("Account controls");
+    expect(accountControlsSource).toContain("Sign out of Global Pathways");
+    expect(accountControlsSource).toContain('setLocation("/")');
+    expect(dashboardSource).toContain("<AccountControls />");
+    expect(staffApplicationsSource).toContain("<AccountControls />");
+    expect(staffSource).toContain("<AccountControls />");
+    expect(adminDashboardSource).toContain("<AccountControls />");
   });
 
   it("registers automatic role-based dashboard routing", () => {

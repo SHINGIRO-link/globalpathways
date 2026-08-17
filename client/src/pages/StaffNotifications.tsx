@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { Bell, CheckCheck, ChevronLeft, Inbox, Loader2, MoreHorizontal, SlidersHorizontal, Trash2 } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { archiveStaffNotification, getStaffNotifications, markAllStaffNotificationsRead, markStaffNotificationRead, type StaffNotification } from "@/lib/api";
+import AccountControls from "@/components/AccountControls";
 
 const FILTERS = [
   { value: "all", label: "All alerts" },
@@ -61,7 +62,7 @@ export default function StaffNotifications() {
     catch { setError("We could not mark all alerts as read. Please try again."); }
   }
 
-  return <main className="staff-notifications-page"><div className="container">
+  return <main className="staff-notifications-page"><div className="container"><AccountControls />
     <Link href="/" className="back-link"><ChevronLeft size={16} /> Back home</Link>
     <div className="staff-heading"><div><span className="eyebrow">Staff workspace</span><h1>Stay close to<br /><em>every next step.</em></h1><p>Review application, status, and payment activity from one calm operational view.</p></div><div className="unread-card"><Bell size={18} /><strong>{unreadCount}</strong><span>unread alerts</span></div><Link href="/staff/applications" className="button button-primary compact">Review applications</Link></div>
     <div className="notification-toolbar"><div className="filter-label"><SlidersHorizontal size={15} /> Filter alerts</div><div className="notification-filters">{FILTERS.map((item) => <button key={item.value} className={filter === item.value ? "filter-chip active" : "filter-chip"} onClick={() => setFilter(item.value)}>{item.label}</button>)}</div><button className="button button-outline compact" onClick={markAllRead} disabled={!unreadCount}><CheckCheck size={15} /> Mark all read</button></div>

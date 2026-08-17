@@ -3,6 +3,7 @@ import { Download, FileDown, FileText, Loader2, RefreshCw, Search, ShieldCheck, 
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getStaffApplications, getStaffApplicationsExportUrl, getStaffDocumentsExportUrl, updateStaffApplicationStatus, updateStaffPaymentStatus, type StaffApplication, type StaffApplicationsResponse } from "@/lib/api";
+import AccountControls from "@/components/AccountControls";
 
 const money = (amount: number, currency: string) => `${amount.toLocaleString()} ${currency}`;
 
@@ -57,7 +58,7 @@ export default function StaffApplications() {
   if (!user) return <main className="route-state"><div className="container"><span className="eyebrow">Staff access</span><h1>Sign in to review<br /><em>applications.</em></h1><p>Application and payment records are available only to authenticated staff.</p><Link href="/" className="button button-dark">Back home</Link></div></main>;
   if (user.role !== "staff" && user.role !== "admin") return <main className="route-state"><div className="container"><span className="eyebrow">Private workspace</span><h1>This view is for<br /><em>staff only.</em></h1><p>Your account is an applicant account and does not have permission to review applicant records.</p><Link href="/dashboard/end-user" className="button button-dark">Open my dashboard</Link></div></main>;
 
-  return <main className="staff-applications-page"><div className="container">
+  return <main className="staff-applications-page"><div className="container"><AccountControls />
     <Link href="/" className="back-link">← Back home</Link>
     <div className="staff-heading"><div><span className="eyebrow">Staff workspace</span><h1>Review every<br /><em>next step.</em></h1><p>Manage submissions, payment readiness, and applicant documents from one protected view.</p></div><div className="staff-security-card"><ShieldCheck size={20} /><div><strong>Staff-only access</strong><span>Records are protected by the authenticated staff session.</span></div></div></div>
     {data && <div className="staff-summary-grid"><div><span>Applications</span><strong>{data.summary.applications}</strong></div><div><span>Payment records</span><strong>{data.summary.payments}</strong></div><div><span>Pending payments</span><strong>{data.summary.pending_payments}</strong></div><div><span>Unread alerts</span><strong>{data.summary.unread_notifications}</strong></div></div>}

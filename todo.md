@@ -329,3 +329,11 @@
 - [x] Enforce role boundaries and clear unauthorized states for every dashboard
 - [x] Add role-flow regression coverage and responsive verification, then save a checkpoint
 
+
+## Dashboard account profile and sign-out controls
+
+- [x] Audit existing logout helper and dashboard header patterns
+- [x] Add shared account-profile display with name, email, and role to end-user, staff, and admin dashboards
+- [x] Add accessible sign-out controls that clear the session and return users to the public homepage
+- [x] Add regression coverage and responsive verification, then save a checkpoint
+
