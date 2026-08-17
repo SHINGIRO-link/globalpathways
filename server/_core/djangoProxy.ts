@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import { sdk } from "./sdk";
 
 export function createDjangoProxyHandler(baseUrl: string) {
   const djangoApiBase = baseUrl.replace(/\/$/, "");
@@ -6,9 +7,16 @@ export function createDjangoProxyHandler(baseUrl: string) {
     const targetUrl = `${djangoApiBase}${req.originalUrl.slice("/api".length)}`;
     const headers = new Headers();
     for (const [key, value] of Object.entries(req.headers)) {
-      if (["host", "content-length", "connection"].includes(key)) continue;
+      if (["host", "content-length", "connection", "x-authenticated-role", "x-authenticated-open-id"].includes(key)) continue;
       if (typeof value === "string") headers.set(key, value);
       else if (Array.isArray(value)) headers.set(key, value.join(", "));
+    }
+    try {
+      const authenticatedUser = await sdk.authenticateRequest(req as any);
+      headers.set("X-Authenticated-Role", authenticatedUser.role);
+      headers.set("X-Authenticated-Open-Id", authenticatedUser.openId);
+    } catch {
+      // Django remains responsible for rejecting unauthenticated requests.
     }
 
     const body = ["GET", "HEAD"].includes(req.method) ? undefined : JSON.stringify(req.body ?? {});

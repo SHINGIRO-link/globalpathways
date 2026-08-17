@@ -7,6 +7,9 @@ const dashboardSource = readFileSync(resolve(process.cwd(), "client/src/pages/Da
 const staffSource = readFileSync(resolve(process.cwd(), "client/src/pages/StaffNotifications.tsx"), "utf8");
 const staffApplicationsSource = readFileSync(resolve(process.cwd(), "client/src/pages/StaffApplications.tsx"), "utf8");
 const appSource = readFileSync(resolve(process.cwd(), "client/src/App.tsx"), "utf8");
+const roleRedirectSource = readFileSync(resolve(process.cwd(), "client/src/pages/RoleRedirect.tsx"), "utf8");
+const rolesSource = readFileSync(resolve(process.cwd(), "client/src/lib/roles.ts"), "utf8");
+const adminDashboardSource = readFileSync(resolve(process.cwd(), "client/src/pages/AdminDashboard.tsx"), "utf8");
 
 describe("interactive card markup", () => {
   it("keeps opportunity actions outside the card navigation link", () => {
@@ -42,7 +45,7 @@ describe("interactive card markup", () => {
   it("registers and protects the staff applications workspace", () => {
     expect(appSource).toContain('const StaffApplications = lazy(() => import("@/pages/StaffApplications"));');
     expect(appSource).toContain('<Route path="/staff/applications" component={StaffApplications} />');
-    expect(staffApplicationsSource).toContain("user.role !== \"admin\"");
+    expect(staffApplicationsSource).toContain('user.role !== "staff" && user.role !== "admin"');
     expect(staffApplicationsSource).toContain('type="search"');
     expect(staffApplicationsSource).toContain("Search applicant name or email");
     expect(staffApplicationsSource).toContain("Clear applicant search");
@@ -53,6 +56,17 @@ describe("interactive card markup", () => {
     expect(staffApplicationsSource).toContain("date_to: dateTo");
     expect(staffApplicationsSource).toContain("Documents");
     expect(staffSource).toContain('href="/staff/applications"');
+  });
+
+  it("registers automatic role-based dashboard routing", () => {
+    expect(appSource).toContain('<Route path="/dashboard" component={RoleRedirect} />');
+    expect(appSource).toContain('<Route path="/dashboard/end-user" component={Dashboard} />');
+    expect(appSource).toContain('<Route path="/staff" component={StaffApplications} />');
+    expect(appSource).toContain('<Route path="/admin" component={AdminDashboard} />');
+    expect(rolesSource).toContain('if (role === "admin") return "/admin";');
+    expect(rolesSource).toContain('if (role === "staff") return "/staff";');
+    expect(rolesSource).toContain('return "/dashboard/end-user";');
+    expect(adminDashboardSource).toContain("Admin credentials verified");
   });
 
   it("routes the footer Policies links to the dedicated policies page", () => {

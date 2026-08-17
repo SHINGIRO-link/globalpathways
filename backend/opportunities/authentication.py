@@ -41,7 +41,8 @@ class ManusSessionAuthentication(BaseAuthentication):
                 raise ValueError("Incomplete session")
             if claims.get("exp") and int(claims["exp"]) < int(time.time()):
                 raise ValueError("Expired session")
-            user = SimpleNamespace(is_authenticated=True, open_id=claims["openId"], app_id=claims["appId"], name=claims["name"])
+            forwarded_role = request.headers.get("X-Authenticated-Role", "")
+            user = SimpleNamespace(is_authenticated=True, open_id=claims["openId"], app_id=claims["appId"], name=claims["name"], role=forwarded_role or "user")
             return user, token
         except Exception as exc:
             raise AuthenticationFailed("Invalid or expired session.") from exc
@@ -55,4 +56,5 @@ class IsStaffUser(BasePermission):
         owner_open_id = os.environ.get("OWNER_OPEN_ID", "")
         if not request.user or not getattr(request.user, "is_authenticated", False):
             return False
-        return bool(owner_open_id and getattr(request.user, "open_id", "") == owner_open_id)
+        role = getattr(request.user, "role", "")
+        return role in {"staff", "admin"} or bool(owner_open_id and getattr(request.user, "open_id", "") == owner_open_id)

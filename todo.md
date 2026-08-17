@@ -320,3 +320,12 @@
 - [x] Show clear account-status guidance when a signed-in user is not authorized for staff tools
 - [x] Verify access control, role-aware navigation, responsive states, and save a checkpoint
 
+
+## Automatic end-user, staff, and admin dashboards
+
+- [x] Define and audit the three account roles and their authoritative credential sources
+- [x] Add separate end-user, staff, and admin dashboard destinations
+- [x] Automatically route authenticated users to the correct dashboard without manual dashboard choices
+- [x] Enforce role boundaries and clear unauthorized states for every dashboard
+- [x] Add role-flow regression coverage and responsive verification, then save a checkpoint
+

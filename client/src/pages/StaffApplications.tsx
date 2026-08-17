@@ -31,7 +31,7 @@ export default function StaffApplications() {
     } finally { setLoading(false); }
   }
 
-  useEffect(() => { if (user?.role === "admin") void load(); }, [user?.role, status, paymentStatus]);
+  useEffect(() => { if (user?.role === "staff" || user?.role === "admin") void load(); }, [user?.role, status, paymentStatus]);
 
   async function changeApplicationStatus(nextStatus: string) {
     if (!selected) return;
@@ -55,7 +55,7 @@ export default function StaffApplications() {
 
   if (authLoading) return <main className="route-state"><div className="container"><Loader2 className="spin" /><span className="eyebrow">Checking access</span><h1>Preparing your<br /><em>admin workspace.</em></h1></div></main>;
   if (!user) return <main className="route-state"><div className="container"><span className="eyebrow">Staff access</span><h1>Sign in to review<br /><em>applications.</em></h1><p>Application and payment records are available only to authenticated staff.</p><Link href="/" className="button button-dark">Back home</Link></div></main>;
-  if (user.role !== "admin") return <main className="route-state"><div className="container"><span className="eyebrow">Private workspace</span><h1>This view is for<br /><em>staff only.</em></h1><p>Your account does not have permission to review applicant records.</p><Link href="/" className="button button-dark">Back home</Link></div></main>;
+  if (user.role !== "staff" && user.role !== "admin") return <main className="route-state"><div className="container"><span className="eyebrow">Private workspace</span><h1>This view is for<br /><em>staff only.</em></h1><p>Your account is an applicant account and does not have permission to review applicant records.</p><Link href="/dashboard/end-user" className="button button-dark">Open my dashboard</Link></div></main>;
 
   return <main className="staff-applications-page"><div className="container">
     <Link href="/" className="back-link">← Back home</Link>

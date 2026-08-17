@@ -35,11 +35,11 @@ export default function StaffNotifications() {
     }
   };
 
-  useEffect(() => { if (user?.role === "admin") void load(); }, [filter, user?.role]);
+  useEffect(() => { if (user?.role === "staff" || user?.role === "admin") void load(); }, [filter, user?.role]);
 
   if (authLoading) return <main className="route-state"><div className="container"><Loader2 className="spin" /><span className="eyebrow">Checking access</span><h1>Preparing your<br /><em>staff space.</em></h1></div></main>;
   if (!user) return <main className="route-state"><div className="container"><span className="eyebrow">Staff access</span><h1>Sign in to view<br /><em>team alerts.</em></h1><p>Staff notifications are available to authenticated team members only.</p><Link href="/" className="button button-dark">Back home</Link></div></main>;
-  if (user.role !== "admin") return <main className="route-state"><div className="container"><span className="eyebrow">Private workspace</span><h1>This view is for<br /><em>staff only.</em></h1><p>Your account does not have staff notification permissions.</p><Link href="/" className="button button-dark">Back home</Link></div></main>;
+  if (user.role !== "staff" && user.role !== "admin") return <main className="route-state"><div className="container"><span className="eyebrow">Private workspace</span><h1>This view is for<br /><em>staff only.</em></h1><p>Your applicant account does not have staff notification permissions.</p><Link href="/dashboard/end-user" className="button button-dark">Open my dashboard</Link></div></main>;
 
   async function markRead(notification: StaffNotification) {
     setWorkingId(notification.id);
