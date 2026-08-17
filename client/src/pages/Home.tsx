@@ -19,7 +19,7 @@ function Header({ onInquiry }: { onInquiry: () => void }) {
         <a href="/#opportunities" onClick={() => setOpen(false)}>Explore opportunities</a>
         <Link href="/opportunities?category=scholarship" onClick={() => setOpen(false)}>Scholarships</Link>
         <Link href="/opportunities?category=job" onClick={() => setOpen(false)}>Jobs</Link>
-        {loading ? <span className="nav-dashboard nav-loading">Checking account…</span> : user ? <Link href="/dashboard" className="nav-dashboard" onClick={() => setOpen(false)}>My dashboard <ArrowRight size={15} /></Link> : <button className="nav-dashboard nav-sign-in" onClick={() => { setOpen(false); startLogin(); }}>Sign in <ArrowRight size={15} /></button>}
+        {loading ? <span className="nav-dashboard nav-loading">Checking account…</span> : user?.role === "admin" ? <Link href="/staff/applications" className="nav-dashboard" onClick={() => setOpen(false)}>Admin dashboard <ArrowRight size={15} /></Link> : user ? <Link href="/dashboard" className="nav-dashboard" onClick={() => setOpen(false)}>My dashboard <ArrowRight size={15} /></Link> : <button className="nav-dashboard nav-sign-in" onClick={() => { setOpen(false); startLogin(); }}>Sign in <ArrowRight size={15} /></button>}
         <button className="nav-contact" onClick={() => { setOpen(false); onInquiry(); }}>Ask a question <ArrowRight size={15} /></button>
       </nav>
     </div>

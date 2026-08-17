@@ -33,6 +33,10 @@ describe("interactive card markup", () => {
     expect(homeSource).toContain("startLogin");
     expect(homeSource).toContain("Sign in");
     expect(homeSource).toContain("My dashboard");
+    expect(homeSource).toContain('user?.role === "admin"');
+    expect(homeSource).toContain("Admin dashboard");
+    expect(dashboardSource).toContain('user.role === "admin"');
+    expect(dashboardSource).toContain("Administrator account");
   });
 
   it("registers and protects the staff applications workspace", () => {

@@ -312,3 +312,11 @@
 - [x] Show the signed-in account state and appropriate staff-dashboard link after authentication
 - [x] Verify login navigation, accessibility, and protected staff routing, then save a checkpoint
 
+
+## Role-aware authentication separation
+
+- [x] Audit current authenticated user fields, role checks, and dashboard routes
+- [x] Route approved staff/admin accounts to the staff dashboard and applicants to the student dashboard after sign-in
+- [x] Show clear account-status guidance when a signed-in user is not authorized for staff tools
+- [x] Verify access control, role-aware navigation, responsive states, and save a checkpoint
+
