@@ -375,3 +375,9 @@
 - [x] Assess production email deliverability monitoring, bounce handling, and applicant resend requirements; implementation remains pending mail-provider operations
 - [x] Audit development-default Django settings, secure hosts, HTTPS, and secret-rotation requirements; production hardening remains a deployment task
 - [x] Assess the remaining real-browser guest submission, email-link, OAuth-return, claim, and status coverage gap; automated coverage remains a follow-up
+
+## GitHub export
+
+- [ ] Inspect Git status, remotes, and sensitive-file exclusions before publishing
+- [ ] Create or update a private GitHub repository and push the validated project
+- [ ] Verify the remote repository contents and provide its URL
