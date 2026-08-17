@@ -248,6 +248,17 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .account-error { margin: .5rem 0 0; color: #a33b32; font-size: .78rem; }
 @media (max-width: 640px) { .account-controls { align-items: stretch; flex-direction: column; } .account-sign-out { justify-content: center; width: 100%; } }
 
+.guest-access-page .container { max-width: 50rem; }
+.guest-access-card, .guest-status-card { display: grid; gap: .55rem; max-width: 42rem; margin: 1.5rem 0; padding: 1.25rem; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 1rem 2.5rem rgba(16, 53, 46, .06); }
+.guest-access-card strong, .guest-status-card strong { font-size: 1rem; line-height: 1.35; }
+.guest-access-card span, .guest-status-card small { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+.guest-access-card .button { justify-self: start; margin-top: .35rem; }
+.guest-event-list { display: grid; gap: .75rem; max-width: 42rem; margin: 1rem 0 1.5rem; }
+.guest-event-list > div { display: grid; gap: .2rem; padding: .9rem 1rem; border-left: 2px solid var(--accent); background: rgba(229, 239, 235, .72); }
+.guest-event-list span { color: var(--accent); font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.guest-event-list strong { font-size: .92rem; }
+.guest-event-list small { color: var(--muted); line-height: 1.45; }
+@media (max-width: 640px) { .guest-access-card .button { width: 100%; justify-content: center; } }
 .application-access-note { display: grid; gap: .3rem; margin-top: 1.25rem; padding: .9rem 1rem; border-left: 3px solid var(--accent); background: rgba(229, 239, 235, .72); color: var(--ink); }
 .application-access-note strong { font-size: .86rem; }
 .application-access-note span { color: var(--muted); font-size: .82rem; line-height: 1.55; }

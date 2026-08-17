@@ -171,7 +171,6 @@ class SuccessStory(models.Model):
 
 class GuestAccessToken(models.Model):
     PURPOSE_CHOICES = [
-        ("verify", "Email verification"),
         ("status", "Status tracking"),
         ("claim", "Application claim"),
     ]

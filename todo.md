@@ -356,3 +356,22 @@
 - [x] Add regression coverage for token expiry, one-time use, authorization, email delivery, and claim behavior
 - [x] Verify desktop/mobile flows and save a checkpoint
 
+
+## Guest access simplification and full platform audit
+
+- [x] Remove mandatory guest email verification from application submission and account-claim flow
+- [x] Preserve secure private guest status access without requiring email verification
+- [x] Update guest-access copy, email behavior, routes, and tests to match optional verification
+- [x] Audit public application, opportunity discovery, uploads, dashboards, staff/admin tools, notifications, exports, and authentication flows
+- [x] Audit security, authorization, privacy, validation, abuse protection, email, payment readiness, accessibility, performance, and operational gaps
+- [x] Fix all high-priority defects found during the audit
+- [x] Run full regression validation and save a new checkpoint
+
+## Audit findings for future implementation
+
+- [ ] Connect live MoMo and Airtel Money payment providers and add webhook reconciliation
+- [ ] Add production rate limiting, bot protection, and abuse monitoring for public applications, inquiries, uploads, and guest status links
+- [ ] Add a scheduled cleanup/retention policy for expired guest tokens and uploaded documents
+- [ ] Add production email deliverability monitoring, bounce handling, and applicant resend controls
+- [ ] Replace development-default Django settings with explicit production configuration, secure hosts, HTTPS, and secret rotation checks
+- [ ] Add end-to-end browser coverage for real guest submission, email-link opening, OAuth return, claim, and status tracking

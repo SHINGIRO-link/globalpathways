@@ -46,18 +46,17 @@ class DashboardAndPaymentApiTests(TestCase):
         response = self.client.post("/api/applications/", {"opportunity": self.opportunity.id, "full_name": "Email Applicant", "email": "email@example.com", "statement": "I want to study abroad.", "consent_to_contact": True, "document_links": []}, format="json")
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 3)
-        self.assertIn("/guest/verify?token=", mail.outbox[2].body)
+        self.assertIn("/guest/claim?token=", mail.outbox[2].body)
         self.assertIn("/guest/status?token=", mail.outbox[2].body)
+        self.assertIn("No email verification is required", mail.outbox[2].body)
         recipients = {recipient for message in mail.outbox for recipient in message.to}
         self.assertEqual(recipients, {"globalopportunityconnect@gmail.com", "email@example.com"})
 
-    def test_guest_access_links_verify_status_and_claim_once(self):
+    def test_guest_access_links_status_and_claim_without_verification(self):
         application = Application.objects.create(opportunity=self.opportunity, full_name="Guest Applicant", email="guest@example.com", consent_to_contact=False, status="reviewing")
         access = create_guest_access(application)
-        verify_response = self.client.get(f"/api/guest/verify/?token={access['verification_token']}")
-        self.assertEqual(verify_response.status_code, 200)
-        claim_token = verify_response.data["claim_token"]
-        self.assertEqual(self.client.get(f"/api/guest/verify/?token={access['verification_token']}").status_code, 410)
+        self.assertNotIn("verification_token", access)
+        claim_token = access["claim_token"]
         status_response = self.client.get(f"/api/guest/status/?token={access['status_token']}")
         self.assertEqual(status_response.status_code, 200)
         self.client.force_authenticate(user=None)

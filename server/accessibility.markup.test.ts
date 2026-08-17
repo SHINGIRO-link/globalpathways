@@ -93,14 +93,14 @@ describe("interactive card markup", () => {
     expect(homeSource).toContain("setCategory(queryCategory)");
   });
 
-  it("exposes guest verification, private status access, and optional claiming", () => {
-    expect(homeSource).toContain("verifyGuestEmail(token)");
+  it("exposes private status access and optional claiming without email verification", () => {
     expect(homeSource).toContain("getGuestStatus(token)");
     expect(homeSource).toContain("Sign in and claim application");
+    expect(homeSource).toContain("No email verification is required");
     expect(homeSource).toContain("globalpathways-guest-claim-token");
-    expect(homeSource).toContain('location === "/guest/verify"');
+    expect(homeSource).toContain('location === "/guest/claim"');
     expect(homeSource).toContain('location === "/guest/status"');
-    expect(appSource).toContain('<Route path="/guest/verify" component={Home} />');
+    expect(appSource).toContain('<Route path="/guest/claim" component={Home} />');
     expect(appSource).toContain('<Route path="/guest/status" component={Home} />');
   });
 
@@ -115,7 +115,7 @@ describe("interactive card markup", () => {
     const applySource = homeSource.slice(homeSource.indexOf("function Apply"), homeSource.indexOf("export default function Home"));
     expect(applySource).not.toContain("Please sign in before submitting");
     expect(applySource).toContain("const result = await submitApplication");
-    expect(applySource).toContain("setApplicationId(result.id); setSent(true)");
+    expect(applySource).toContain("setApplicationId(result.id); setGuestEmailSent(Boolean(result.guest_access?.email_sent)); setSent(true)");
     expect(applySource).toContain("Application received");
   });
 });

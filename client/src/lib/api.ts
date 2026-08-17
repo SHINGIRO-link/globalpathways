@@ -209,12 +209,7 @@ export async function submitApplication(payload: Record<string, unknown>) {
 }
 
 export type GuestApplicationSummary = { id: number; full_name: string; email?: string; status: string; status_label: string; opportunity_title: string; created_at?: string; updated_at?: string };
-export type GuestVerificationResponse = { verified: boolean; claim_token: string; application: GuestApplicationSummary };
 export type GuestStatusResponse = { application: GuestApplicationSummary; events: Array<{ id: number; status: string; status_label: string; note: string; created_at: string }> };
-
-export async function verifyGuestEmail(token: string) {
-  return request<GuestVerificationResponse>(`/guest/verify/?token=${encodeURIComponent(token)}`);
-}
 
 export async function getGuestStatus(token: string) {
   return request<GuestStatusResponse>(`/guest/status/?token=${encodeURIComponent(token)}`);

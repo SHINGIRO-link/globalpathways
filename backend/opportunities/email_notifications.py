@@ -58,16 +58,17 @@ def notify_internal_payment_status(application: Application, previous_status: st
 def notify_guest_access(application: Application, base_url: str) -> bool:
     access = create_guest_access(application)
     root = base_url.rstrip("/")
-    verify_link = f"{root}/guest/verify?token={access['verification_token']}"
+    claim_link = f"{root}/guest/claim?token={access['claim_token']}"
     status_link = f"{root}/guest/status?token={access['status_token']}"
     subject = "Secure access to your Global Pathways application"
     message = (
         f"Hello {application.full_name},\n\n"
         f"We received your application for {application.opportunity.title}.\n\n"
-        "You did not need to create an account to apply. Use the secure link below to verify your email and optionally create an account or claim this application later:\n\n"
-        f"{verify_link}\n\n"
-        "You can also use this private status link to check the application status:\n\n"
+        "You did not need to create an account to apply. You can use the private status link below immediately to check updates:\n\n"
         f"{status_link}\n\n"
+        "If you later want a personal dashboard, use this optional link to sign in and claim this application:\n\n"
+        f"{claim_link}\n\n"
+        "No email verification is required. These links are private access links for this application.\n\n"
         "These links expire and should not be forwarded. Global Pathways will never ask for your password by email."
     )
     return _send(subject, message, application.email)

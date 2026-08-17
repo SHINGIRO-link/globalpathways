@@ -6,9 +6,8 @@ from django.utils import timezone
 
 from .models import Application, GuestAccessToken
 
-VERIFY_TTL = timedelta(hours=24)
 STATUS_TTL = timedelta(days=14)
-CLAIM_TTL = timedelta(hours=1)
+CLAIM_TTL = timedelta(days=14)
 
 
 def _hash(raw_token: str) -> str:
@@ -38,9 +37,10 @@ def consume_token(raw_token: str, purpose: str) -> GuestAccessToken | None:
 
 
 def create_guest_access(application: Application) -> dict[str, str]:
+    """Issue capability links for guests without requiring email verification."""
     return {
-        "verification_token": issue_token(application, "verify", VERIFY_TTL),
         "status_token": issue_token(application, "status", STATUS_TTL),
+        "claim_token": issue_token(application, "claim", CLAIM_TTL),
     }
 
 

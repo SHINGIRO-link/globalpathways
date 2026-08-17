@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 
 from .authentication import IsStaffUser
 from .email_notifications import notify_new_application
-from .models import Application, ApplicationStatusEvent, GuestAccessToken, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
-from .guest_access import consume_token, create_claim_token
+from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
+from .guest_access import consume_token
 from .serializers import ApplicationSerializer, ApplicationStatusEventSerializer, InquirySerializer, OpportunitySerializer, PaymentRecordSerializer, SavedOpportunitySerializer, StaffNotificationSerializer, SuccessStorySerializer
 
 
@@ -51,24 +51,6 @@ class ApplicationCreateView(generics.CreateAPIView):
         if not owner_open_id:
             from .email_notifications import notify_guest_access
             notify_guest_access(application, self.request.build_absolute_uri("/").rstrip("/"))
-
-
-class GuestVerifyView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        token = consume_token(request.query_params.get("token", ""), "verify")
-        if not token:
-            return Response({"detail": "This verification link is invalid or expired."}, status=status.HTTP_410_GONE)
-        token.used_at = timezone.now()
-        token.save(update_fields=["used_at"])
-        claim_token = create_claim_token(token.application)
-        application = token.application
-        return Response({
-            "verified": True,
-            "claim_token": claim_token,
-            "application": {"id": application.id, "full_name": application.full_name, "email": application.email, "status": application.status, "status_label": application.get_status_display(), "opportunity_title": application.opportunity.title},
-        })
 
 
 class GuestStatusView(APIView):
