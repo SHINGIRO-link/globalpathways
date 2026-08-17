@@ -181,3 +181,60 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual(response.data["application"]["status"], "reviewing")
         self.assertEqual(len(response.data["events"]), 2)
         self.assertEqual(response.data["payment"]["status"], "integration_pending")
+
+
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+class StaffApplicationsApiTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.staff = SimpleNamespace(is_authenticated=True, open_id="staff-user", app_id="test-app", name="Staff User")
+        self.client.force_authenticate(user=self.staff)
+        self.opportunity = Opportunity.objects.create(
+            title="Staff Review Route", slug="staff-review-route", category="scholarship", status="open",
+            country="Germany", region="Europe", deadline="2026-12-01T23:59:00Z",
+            summary="Staff route", description="Staff description", eligibility=["Degree"], required_documents=["Passport"],
+        )
+        self.application = Application.objects.create(
+            opportunity=self.opportunity, full_name="Review Applicant", email="review@example.com",
+            consent_to_contact=True, status="received", document_metadata=[{
+                "name": "passport.pdf", "content_type": "application/pdf", "size": 2048,
+                "category": "passport", "key": "education-documents/passport/review.pdf",
+                "url": "/manus-storage/education-documents/passport/review.pdf",
+            }],
+        )
+        self.payment = PaymentRecord.objects.create(application=self.application, amount=2000, currency="RWF", status="integration_pending")
+
+    def test_staff_application_list_requires_owner_staff_session(self):
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "staff-user"}):
+            response = self.client.get("/api/staff/applications/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["applications"][0]["full_name"], "Review Applicant")
+        self.assertEqual(response.data["applications"][0]["documents"][0]["download_url"], f"/api/staff/applications/{self.application.id}/documents/0/download/")
+        self.assertEqual(response.data["summary"]["pending_payments"], 1)
+
+    def test_non_staff_cannot_review_or_export_applications(self):
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "another-user"}):
+            self.assertEqual(self.client.get("/api/staff/applications/").status_code, 403)
+            self.assertEqual(self.client.get("/api/staff/applications/export/").status_code, 403)
+
+    def test_staff_can_change_application_and_payment_statuses(self):
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "staff-user"}):
+            application_response = self.client.patch(f"/api/staff/applications/{self.application.id}/status/", {"status": "reviewing", "note": "Initial review"}, format="json")
+            payment_response = self.client.patch(f"/api/staff/payments/{self.payment.id}/status/", {"status": "paid", "provider_reference": "PAY-123"}, format="json")
+        self.assertEqual(application_response.status_code, 200)
+        self.assertEqual(application_response.data["status"], "reviewing")
+        self.assertEqual(payment_response.status_code, 200)
+        self.assertEqual(payment_response.data["payment"]["status"], "paid")
+        self.assertTrue(ApplicationStatusEvent.objects.filter(application=self.application, status="reviewing", note="Initial review").exists())
+        self.assertTrue(StaffNotification.objects.filter(application=self.application, event_type="application_status").exists())
+        self.assertEqual(PaymentRecord.objects.get(pk=self.payment.pk).provider_reference, "PAY-123")
+
+    def test_staff_export_is_csv_and_document_download_is_staff_gated(self):
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "staff-user"}):
+            export = self.client.get("/api/staff/applications/export/")
+            document = self.client.get(f"/api/staff/applications/{self.application.id}/documents/0/download/")
+        self.assertEqual(export.status_code, 200)
+        self.assertIn("text/csv", export["Content-Type"])
+        self.assertIn("Review Applicant", export.content.decode())
+        self.assertEqual(document.status_code, 302)
+        self.assertIn("education-documents/passport/review.pdf", document["Location"])

@@ -6,6 +6,10 @@ from .views import (
     StaffNotificationListView, StaffNotificationMarkAllReadView, StaffNotificationReadView,
     SuccessStoryListView,
 )
+from .staff_views import (
+    StaffApplicationDocumentDownloadView, StaffApplicationListView,
+    StaffApplicationStatusView, StaffApplicationsExportView, StaffPaymentStatusView,
+)
 
 urlpatterns = [
     path("health/", HealthView.as_view(), name="health"),
@@ -22,4 +26,9 @@ urlpatterns = [
     path("staff/notifications/", StaffNotificationListView.as_view(), name="staff-notifications"),
     path("staff/notifications/mark-all-read/", StaffNotificationMarkAllReadView.as_view(), name="staff-notifications-mark-all-read"),
     path("staff/notifications/<int:notification_id>/", StaffNotificationReadView.as_view(), name="staff-notification-detail"),
+    path("staff/applications/", StaffApplicationListView.as_view(), name="staff-applications"),
+    path("staff/applications/export/", StaffApplicationsExportView.as_view(), name="staff-applications-export"),
+    path("staff/applications/<int:application_id>/status/", StaffApplicationStatusView.as_view(), name="staff-application-status"),
+    path("staff/applications/<int:application_id>/documents/<int:document_index>/download/", StaffApplicationDocumentDownloadView.as_view(), name="staff-document-download"),
+    path("staff/payments/<int:payment_id>/status/", StaffPaymentStatusView.as_view(), name="staff-payment-status"),
 ]

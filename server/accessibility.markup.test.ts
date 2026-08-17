@@ -5,6 +5,8 @@ import { resolve } from "node:path";
 const homeSource = readFileSync(resolve(process.cwd(), "client/src/pages/Home.tsx"), "utf8");
 const dashboardSource = readFileSync(resolve(process.cwd(), "client/src/pages/Dashboard.tsx"), "utf8");
 const staffSource = readFileSync(resolve(process.cwd(), "client/src/pages/StaffNotifications.tsx"), "utf8");
+const staffApplicationsSource = readFileSync(resolve(process.cwd(), "client/src/pages/StaffApplications.tsx"), "utf8");
+const appSource = readFileSync(resolve(process.cwd(), "client/src/App.tsx"), "utf8");
 
 describe("interactive card markup", () => {
   it("keeps opportunity actions outside the card navigation link", () => {
@@ -25,6 +27,15 @@ describe("interactive card markup", () => {
   it("gives staff notification icon actions explicit accessible labels", () => {
     expect(staffSource).toContain("aria-label={notification.is_read ? `Mark ${notification.title} unread` : `Mark ${notification.title} read`}");
     expect(staffSource).toContain("aria-label={`Archive ${notification.title}`}");
+  });
+
+  it("registers and protects the staff applications workspace", () => {
+    expect(appSource).toContain('const StaffApplications = lazy(() => import("@/pages/StaffApplications"));');
+    expect(appSource).toContain('<Route path="/staff/applications" component={StaffApplications} />');
+    expect(staffApplicationsSource).toContain("user.role !== \"admin\"");
+    expect(staffApplicationsSource).toContain("Download CSV");
+    expect(staffApplicationsSource).toContain("Documents");
+    expect(staffSource).toContain('href="/staff/applications"');
   });
 
   it("routes the footer Policies links to the dedicated policies page", () => {

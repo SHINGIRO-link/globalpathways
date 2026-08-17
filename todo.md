@@ -271,3 +271,13 @@
 - [x] Repair route registration or fallback behavior so Policies opens correctly
 - [x] Verify the direct route, footer destination, tests, and save a checkpoint
 
+
+## Staff admin dashboard and downloads
+
+- [x] Audit current staff notification, application, payment, document, auth, and storage structures
+- [x] Add staff-only APIs for submission and payment review with filters and summaries
+- [x] Add secure application data and document download flows with authorization checks
+- [x] Build responsive staff admin dashboard for submissions, payments, status actions, and downloads
+- [x] Add regression coverage for staff authorization, filtering, status updates, and secure downloads
+- [x] Verify desktop/mobile dashboard behavior and save a checkpoint
+

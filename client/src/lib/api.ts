@@ -290,3 +290,73 @@ export async function markAllStaffNotificationsRead() {
 export async function archiveStaffNotification(id: number) {
   return request<{ deleted: boolean }>(`/staff/notifications/${id}/`, { method: "DELETE" });
 }
+
+
+export type StaffPayment = {
+  id: number;
+  application: number;
+  amount: number;
+  currency: string;
+  provider: string;
+  provider_label: string;
+  status: string;
+  status_label: string;
+  provider_reference: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StaffDocument = {
+  index: number;
+  name: string;
+  category: string;
+  content_type: string;
+  size: number;
+  download_url: string;
+};
+
+export type StaffApplication = {
+  id: number;
+  full_name: string;
+  email: string;
+  phone: string;
+  nationality: string;
+  current_location: string;
+  education_level: string;
+  statement: string;
+  opportunity: number;
+  opportunity_title: string;
+  status: ApplicationStatus;
+  status_label: string;
+  consent_to_contact: boolean;
+  created_at: string;
+  updated_at: string;
+  documents: StaffDocument[];
+  payment: StaffPayment | null;
+};
+
+export type StaffApplicationFilters = { q?: string; status?: string; payment_status?: string };
+export type StaffApplicationsResponse = {
+  summary: { applications: number; payments: number; pending_payments: number; unread_notifications: number };
+  applications: StaffApplication[];
+  statuses: Array<{ value: string; label: string }>;
+  payment_statuses: Array<{ value: string; label: string }>;
+};
+
+export async function getStaffApplications(filters: StaffApplicationFilters = {}) {
+  const params = new URLSearchParams();
+  if (filters.q) params.set("q", filters.q);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.payment_status) params.set("payment_status", filters.payment_status);
+  return request<StaffApplicationsResponse>(`/staff/applications/${params.toString() ? `?${params.toString()}` : ""}`);
+}
+
+export async function updateStaffApplicationStatus(applicationId: number, nextStatus: string, note = "") {
+  return request<StaffApplication>(`/staff/applications/${applicationId}/status/`, { method: "PATCH", body: JSON.stringify({ status: nextStatus, note }) });
+}
+
+export async function updateStaffPaymentStatus(paymentId: number, nextStatus: string, providerReference = "") {
+  return request<StaffApplication>(`/staff/payments/${paymentId}/status/`, { method: "PATCH", body: JSON.stringify({ status: nextStatus, provider_reference: providerReference }) });
+}
+
+export function getStaffApplicationsExportUrl() { return `${API_BASE}/staff/applications/export/`; }
