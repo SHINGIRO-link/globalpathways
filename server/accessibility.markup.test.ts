@@ -29,6 +29,12 @@ describe("interactive card markup", () => {
     expect(staffSource).toContain("aria-label={`Archive ${notification.title}`}");
   });
 
+  it("exposes a visible authentication entry point in the homepage header", () => {
+    expect(homeSource).toContain("startLogin");
+    expect(homeSource).toContain("Sign in");
+    expect(homeSource).toContain("My dashboard");
+  });
+
   it("registers and protects the staff applications workspace", () => {
     expect(appSource).toContain('const StaffApplications = lazy(() => import("@/pages/StaffApplications"));');
     expect(appSource).toContain('<Route path="/staff/applications" component={StaffApplications} />');

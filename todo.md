@@ -305,3 +305,10 @@
 - [x] Add regression coverage for name/email matching and verify responsive presentation
 - [x] Save a checkpoint after validation
 
+
+## Visible authentication entry point
+
+- [x] Add a clear Sign in or Continue with Google action to the public header and dashboard entry flow
+- [x] Show the signed-in account state and appropriate staff-dashboard link after authentication
+- [x] Verify login navigation, accessibility, and protected staff routing, then save a checkpoint
+

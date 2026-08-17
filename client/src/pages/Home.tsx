@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { startLogin } from "@/const";
 import { Link, useLocation, useRoute } from "wouter";
 import { ArrowRight, Bookmark, BriefcaseBusiness, Check, ChevronLeft, Clock3, CreditCard, FileCheck2, Globe2, GraduationCap, LockKeyhole, Mail, Menu, MessageCircle, RotateCcw, Search, ShieldCheck, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
@@ -9,6 +10,7 @@ const categoryLabels: Record<string, string> = { all: "All opportunities", schol
 
 function Header({ onInquiry }: { onInquiry: () => void }) {
   const [open, setOpen] = useState(false);
+  const { user, loading } = useAuth();
   return <header className="site-header">
     <div className="container nav-inner">
       <Link href="/" className="brand"><span className="brand-mark"><Globe2 size={18} /></span><span>Global<span>Pathways</span></span></Link>
@@ -17,7 +19,7 @@ function Header({ onInquiry }: { onInquiry: () => void }) {
         <a href="/#opportunities" onClick={() => setOpen(false)}>Explore opportunities</a>
         <Link href="/opportunities?category=scholarship" onClick={() => setOpen(false)}>Scholarships</Link>
         <Link href="/opportunities?category=job" onClick={() => setOpen(false)}>Jobs</Link>
-        <Link href="/dashboard" className="nav-dashboard" onClick={() => setOpen(false)}>My dashboard <ArrowRight size={15} /></Link>
+        {loading ? <span className="nav-dashboard nav-loading">Checking account…</span> : user ? <Link href="/dashboard" className="nav-dashboard" onClick={() => setOpen(false)}>My dashboard <ArrowRight size={15} /></Link> : <button className="nav-dashboard nav-sign-in" onClick={() => { setOpen(false); startLogin(); }}>Sign in <ArrowRight size={15} /></button>}
         <button className="nav-contact" onClick={() => { setOpen(false); onInquiry(); }}>Ask a question <ArrowRight size={15} /></button>
       </nav>
     </div>
