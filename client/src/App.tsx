@@ -18,6 +18,7 @@ function Router() {
     <Route path="/how-it-works" component={Home} />
     <Route path="/why-us" component={Home} />
     <Route path="/applicant-responsibility" component={Home} />
+    <Route path="/policies" component={Home} />
     <Route path="/opportunities/:slug" component={Home} />
     <Route path="/apply/:slug" component={Home} />
     <Route path="/404" component={NotFound} />

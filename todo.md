@@ -264,3 +264,10 @@
 - [x] Ensure the entire Policies label and supporting link open the dedicated policies page directly
 - [x] Verify the destination, tests, and save a checkpoint
 
+
+## Policies route 404 fix
+
+- [x] Diagnose why the dedicated `/policies` route returns the 404 page
+- [x] Repair route registration or fallback behavior so Policies opens correctly
+- [x] Verify the direct route, footer destination, tests, and save a checkpoint
+
