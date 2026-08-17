@@ -1,4 +1,6 @@
 import os
+import io
+import zipfile
 from types import SimpleNamespace
 from unittest.mock import patch
 from django.core.management import call_command
@@ -238,3 +240,47 @@ class StaffApplicationsApiTests(TestCase):
         self.assertIn("Review Applicant", export.content.decode())
         self.assertEqual(document.status_code, 302)
         self.assertIn("education-documents/passport/review.pdf", document["Location"])
+
+
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+class StaffDocumentsZipTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="zip-staff", app_id="test-app", name="ZIP Staff"))
+        opportunity = Opportunity.objects.create(
+            title="ZIP Route", slug="zip-route", category="scholarship", status="open",
+            country="Japan", region="Asia", deadline="2026-12-01T23:59:00Z",
+            summary="ZIP route", description="ZIP description", eligibility=["Degree"], required_documents=["Passport"],
+        )
+        Application.objects.create(
+            opportunity=opportunity, full_name="Asha / Review", email="zip@example.com", consent_to_contact=True,
+            document_metadata=[{
+                "name": "passport copy.pdf", "content_type": "application/pdf", "size": 11,
+                "category": "passport", "key": "education-documents/passport/zip.pdf",
+                "url": "/manus-storage/education-documents/passport/zip.pdf",
+            }],
+        )
+
+    def test_staff_zip_contains_document_and_manifest(self):
+        class FakeStorageResponse:
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self, _limit): return b"fake-pdf-bytes"
+
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "zip-staff"}), patch("opportunities.staff_views.urllib.request.urlopen", return_value=FakeStorageResponse()):
+            response = self.client.get("/api/staff/applications/documents/export/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/zip")
+        with zipfile.ZipFile(io.BytesIO(response.content)) as archive:
+            names = archive.namelist()
+            self.assertIn("MANIFEST.tsv", names)
+            document_names = [name for name in names if name != "MANIFEST.tsv"]
+            self.assertEqual(len(document_names), 1)
+            self.assertNotIn("/", document_names[0].split("applications/", 1)[-1].split("/", 1)[0])
+            self.assertEqual(archive.read(document_names[0]), b"fake-pdf-bytes")
+            self.assertIn("zip@example.com", archive.read("MANIFEST.tsv").decode())
+
+    def test_non_staff_cannot_download_all_documents(self):
+        with patch.dict(os.environ, {"OWNER_OPEN_ID": "different-staff"}):
+            response = self.client.get("/api/staff/applications/documents/export/")
+        self.assertEqual(response.status_code, 403)

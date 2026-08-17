@@ -34,6 +34,8 @@ describe("interactive card markup", () => {
     expect(appSource).toContain('<Route path="/staff/applications" component={StaffApplications} />');
     expect(staffApplicationsSource).toContain("user.role !== \"admin\"");
     expect(staffApplicationsSource).toContain("Download CSV");
+    expect(staffApplicationsSource).toContain("Download all documents");
+    expect(staffApplicationsSource).toContain("getStaffDocumentsExportUrl");
     expect(staffApplicationsSource).toContain("Documents");
     expect(staffSource).toContain('href="/staff/applications"');
   });

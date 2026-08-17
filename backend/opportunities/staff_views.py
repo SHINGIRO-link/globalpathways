@@ -1,4 +1,8 @@
 import csv
+import io
+import re
+import urllib.request
+import zipfile
 from urllib.parse import quote
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -150,6 +154,47 @@ class StaffApplicationsExportView(StaffOnlyView):
                 application.created_at.isoformat(),
                 application.updated_at.isoformat(),
             ])
+        return response
+
+
+class StaffAllDocumentsZipView(StaffOnlyView):
+    MAX_ARCHIVE_BYTES = 100 * 1024 * 1024
+
+    @staticmethod
+    def safe_name(value):
+        cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", str(value or "document"))
+        return cleaned.strip("._")[:100] or "document"
+
+    def get(self, request):
+        applications = Application.objects.select_related("opportunity").order_by("id")
+        archive_buffer = io.BytesIO()
+        manifest = []
+        total_bytes = 0
+        with zipfile.ZipFile(archive_buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for application in applications:
+                applicant = self.safe_name(application.full_name)
+                opportunity = self.safe_name(application.opportunity.title)
+                for index, document in enumerate(application.document_metadata or []):
+                    key = document.get("key", "")
+                    source_url = document.get("url", "")
+                    if not key.startswith("education-documents/") or not source_url.startswith("/manus-storage/"):
+                        continue
+                    target = request.build_absolute_uri(source_url)
+                    try:
+                        with urllib.request.urlopen(target, timeout=15) as response:
+                            contents = response.read(self.MAX_ARCHIVE_BYTES - total_bytes + 1)
+                    except Exception:
+                        continue
+                    if total_bytes + len(contents) > self.MAX_ARCHIVE_BYTES:
+                        break
+                    filename = self.safe_name(document.get("name", f"document-{index + 1}"))
+                    archive_path = f"applications/{application.id}-{applicant}/{opportunity}/{index + 1}-{filename}"
+                    archive.writestr(archive_path, contents)
+                    total_bytes += len(contents)
+                    manifest.append(f"{archive_path}\t{application.email}\t{document.get('category', 'supporting')}\n")
+            archive.writestr("MANIFEST.tsv", "Archive path\tApplicant email\tCategory\n" + "".join(manifest))
+        response = HttpResponse(archive_buffer.getvalue(), content_type="application/zip")
+        response["Content-Disposition"] = 'attachment; filename="globalpathways-application-documents.zip"'
         return response
 
 

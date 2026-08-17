@@ -360,3 +360,6 @@ export async function updateStaffPaymentStatus(paymentId: number, nextStatus: st
 }
 
 export function getStaffApplicationsExportUrl() { return `${API_BASE}/staff/applications/export/`; }
+
+
+export function getStaffDocumentsExportUrl() { return `${API_BASE}/staff/applications/documents/export/`; }

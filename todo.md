@@ -281,3 +281,11 @@
 - [x] Add regression coverage for staff authorization, filtering, status updates, and secure downloads
 - [x] Verify desktop/mobile dashboard behavior and save a checkpoint
 
+
+## Staff all-documents ZIP export
+
+- [x] Add a staff-only endpoint that packages all uploaded application documents into one ZIP archive
+- [x] Add a dashboard action and clear empty/loading/error behavior for the ZIP export
+- [x] Add regression coverage for staff authorization, archive contents, and safe filenames
+- [x] Verify desktop/mobile presentation and save a checkpoint
+

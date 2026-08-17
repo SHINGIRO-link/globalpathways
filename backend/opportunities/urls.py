@@ -7,7 +7,7 @@ from .views import (
     SuccessStoryListView,
 )
 from .staff_views import (
-    StaffApplicationDocumentDownloadView, StaffApplicationListView,
+    StaffAllDocumentsZipView, StaffApplicationDocumentDownloadView, StaffApplicationListView,
     StaffApplicationStatusView, StaffApplicationsExportView, StaffPaymentStatusView,
 )
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path("staff/notifications/<int:notification_id>/", StaffNotificationReadView.as_view(), name="staff-notification-detail"),
     path("staff/applications/", StaffApplicationListView.as_view(), name="staff-applications"),
     path("staff/applications/export/", StaffApplicationsExportView.as_view(), name="staff-applications-export"),
+    path("staff/applications/documents/export/", StaffAllDocumentsZipView.as_view(), name="staff-documents-export"),
     path("staff/applications/<int:application_id>/status/", StaffApplicationStatusView.as_view(), name="staff-application-status"),
     path("staff/applications/<int:application_id>/documents/<int:document_index>/download/", StaffApplicationDocumentDownloadView.as_view(), name="staff-document-download"),
     path("staff/payments/<int:payment_id>/status/", StaffPaymentStatusView.as_view(), name="staff-payment-status"),
