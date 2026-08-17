@@ -236,3 +236,12 @@
 - [x] Add bottom-of-page links for How it works, Why us, Scholarships, and Jobs
 - [x] Verify footer accessibility, responsive layout, tests, and visual rendering, then save a checkpoint
 
+
+## Dedicated navigation pages and direct opportunity links
+
+- [x] Replace header How it works and Why us links with Scholarships and Jobs links that open filtered opportunities
+- [x] Add dedicated How it works page and route, linked from the footer
+- [x] Add dedicated Why us page and route, linked from the footer
+- [x] Add separate Applicant Responsibility page for the A clear promise content and link to it from the footer
+- [x] Verify all navigation targets, accessibility, responsive layouts, tests, and save a checkpoint
+

@@ -15,6 +15,9 @@ function Router() {
     <Route path="/staff/notifications" component={StaffNotifications} />
     <Route path="/" component={Home} />
     <Route path="/opportunities" component={Home} />
+    <Route path="/how-it-works" component={Home} />
+    <Route path="/why-us" component={Home} />
+    <Route path="/applicant-responsibility" component={Home} />
     <Route path="/opportunities/:slug" component={Home} />
     <Route path="/apply/:slug" component={Home} />
     <Route path="/404" component={NotFound} />
