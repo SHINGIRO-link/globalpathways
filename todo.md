@@ -223,8 +223,8 @@
 
 ## SMTP email notifications
 
-- [ ] Rotate the exposed Gmail app password in Google and update SMTP_PASSWORD with the replacement secret
+- [x] Revoke the previously exposed Gmail app password in Google and confirm the replacement app password is active
 - [x] Send an internal notification after each new application submission
 - [x] Send applicant notifications when application status changes, using consent and a safe failure path
 - [x] Add email regression tests and verify notification behavior without exposing credentials
-- [ ] Save a validated email-notification checkpoint (SMTP credential rotation remains pending)
+- [x] Save a post-rotation validated email-notification checkpoint
