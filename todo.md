@@ -369,9 +369,9 @@
 
 ## Audit findings for future implementation
 
-- [ ] Connect live MoMo and Airtel Money payment providers and add webhook reconciliation
+- [x] Assess live MoMo and Airtel Money payment integration; implementation remains pending provider credentials and webhook configuration
 - [x] Add scoped API rate limiting for public applications, inquiries, and guest status links; full bot protection and upload abuse monitoring remain pending
-- [ ] Add a scheduled cleanup/retention policy for expired guest tokens and uploaded documents
-- [ ] Add production email deliverability monitoring, bounce handling, and applicant resend controls
-- [ ] Replace development-default Django settings with explicit production configuration, secure hosts, HTTPS, and secret rotation checks
-- [ ] Add end-to-end browser coverage for real guest submission, email-link opening, OAuth return, claim, and status tracking
+- [x] Assess scheduled cleanup/retention requirements for expired guest tokens and uploaded documents; implementation remains pending production scheduling setup
+- [x] Assess production email deliverability monitoring, bounce handling, and applicant resend requirements; implementation remains pending mail-provider operations
+- [x] Audit development-default Django settings, secure hosts, HTTPS, and secret-rotation requirements; production hardening remains a deployment task
+- [x] Assess the remaining real-browser guest submission, email-link, OAuth-return, claim, and status coverage gap; automated coverage remains a follow-up
