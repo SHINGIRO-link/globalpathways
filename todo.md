@@ -378,6 +378,6 @@
 
 ## GitHub export
 
-- [ ] Inspect Git status, remotes, and sensitive-file exclusions before publishing
-- [ ] Create or update a private GitHub repository and push the validated project
-- [ ] Verify the remote repository contents and provide its URL
+- [x] Inspect Git status, remotes, and sensitive-file exclusions before publishing
+- [x] Create or update a private GitHub repository and push the validated project
+- [x] Verify the remote repository contents and provide its URL
