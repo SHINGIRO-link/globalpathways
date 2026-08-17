@@ -389,3 +389,11 @@
 - [x] Configure the safe PythonAnywhere baseline secret, SQLite database, and private environment file; SMTP credentials and external storage remain intentionally unconfigured pending provider setup
 - [x] Deploy the Django API to PythonAnywhere and validate the public health and opportunities endpoints; CORS, uploads, email, and end-to-end guest access remain pending integration
 - [x] Document the PythonAnywhere API URL and frontend-hosting constraint; configuring a separate React frontend API base requires a final frontend hosting choice
+
+## Full functionality audit
+
+- [x] Audit frontend routes, forms, opportunity discovery, guest flow, dashboards, responsive behavior, accessibility, and error/loading states
+- [x] Audit Django APIs, models, migrations, validation, authorization, guest access, uploads, notifications, exports, and staff/admin workflows
+- [x] Audit email, payments, storage, CORS, OAuth/session proxying, PythonAnywhere deployment, secrets, and operational configuration
+- [x] Run automated tests, type checks, production build, live API probes, and responsive visual checks
+- [x] Produce a severity-ranked audit report with verified working areas, defects, missing features, and remediation roadmap
