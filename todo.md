@@ -384,8 +384,8 @@
 
 ## PythonAnywhere deployment
 
-- [ ] Audit PythonAnywhere compatibility, account state, and external-host constraints
-- [ ] Prepare Django production settings, WSGI, requirements, static files, and deployment documentation
+- [x] Audit PythonAnywhere compatibility, account state, and external-host constraints
+- [x] Prepare Django production settings, WSGI, requirements, static files, and deployment documentation
 - [ ] Configure required PythonAnywhere secrets and database/storage/email settings
 - [ ] Deploy the Django API to PythonAnywhere and validate health, CORS, uploads, email, and guest access
 - [ ] Configure the React frontend API base URL and document the final public URLs
