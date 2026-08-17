@@ -93,6 +93,13 @@ describe("interactive card markup", () => {
     expect(homeSource).toContain("setCategory(queryCategory)");
   });
 
+  it("keeps guest applications open while explaining optional account tracking", () => {
+    expect(homeSource).toContain("Apply with or without an account.");
+    expect(homeSource).toContain("No account was required.");
+    expect(homeSource).toContain("signing in is optional for applying");
+    expect(homeSource).toContain("continue as a guest with a valid email address");
+  });
+
   it("keeps the public apply form aligned with the API and success state", () => {
     const applySource = homeSource.slice(homeSource.indexOf("function Apply"), homeSource.indexOf("export default function Home"));
     expect(applySource).not.toContain("Please sign in before submitting");

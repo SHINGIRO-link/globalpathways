@@ -337,3 +337,11 @@
 - [x] Add accessible sign-out controls that clear the session and return users to the public homepage
 - [x] Add regression coverage and responsive verification, then save a checkpoint
 
+
+## Guest and authenticated applications
+
+- [x] Audit guest submission, signed-in ownership, and applicant email handling
+- [x] Clarify that end users can apply without registration while signed-in users can still apply and track submissions
+- [x] Add safe optional applicant access guidance without treating an email address alone as account proof
+- [x] Add regression coverage for guest and authenticated application paths, responsive verification, and save a checkpoint
+

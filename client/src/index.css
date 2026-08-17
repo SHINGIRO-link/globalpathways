@@ -247,3 +247,8 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .account-sign-out:disabled { opacity: .6; cursor: wait; }
 .account-error { margin: .5rem 0 0; color: #a33b32; font-size: .78rem; }
 @media (max-width: 640px) { .account-controls { align-items: stretch; flex-direction: column; } .account-sign-out { justify-content: center; width: 100%; } }
+
+.application-access-note { display: grid; gap: .3rem; margin-top: 1.25rem; padding: .9rem 1rem; border-left: 3px solid var(--accent); background: rgba(229, 239, 235, .72); color: var(--ink); }
+.application-access-note strong { font-size: .86rem; }
+.application-access-note span { color: var(--muted); font-size: .82rem; line-height: 1.55; }
+.apply-heading .application-access-note { max-width: 44rem; }
