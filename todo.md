@@ -228,3 +228,11 @@
 - [x] Send applicant notifications when application status changes, using consent and a safe failure path
 - [x] Add email regression tests and verify notification behavior without exposing credentials
 - [x] Save a post-rotation validated email-notification checkpoint
+
+## Homepage footer guidance and navigation
+
+- [x] Add transparent application-support disclaimer explaining that Global Pathways helps applicants prepare and submit applications but cannot guarantee acceptance
+- [x] Explain that incomplete, inaccurate, or unmatched requirements can lead to rejection and encourage applicants to review requirements carefully
+- [x] Add bottom-of-page links for How it works, Why us, Scholarships, and Jobs
+- [x] Verify footer accessibility, responsive layout, tests, and visual rendering, then save a checkpoint
+
