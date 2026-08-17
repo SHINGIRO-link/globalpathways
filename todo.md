@@ -397,3 +397,9 @@
 - [x] Audit email, payments, storage, CORS, OAuth/session proxying, PythonAnywhere deployment, secrets, and operational configuration
 - [x] Run automated tests, type checks, production build, live API probes, and responsive visual checks
 - [x] Produce a severity-ranked audit report with verified working areas, defects, missing features, and remediation roadmap
+
+## PythonAnywhere root 404 follow-up
+
+- [x] Verify the PythonAnywhere root 404 versus working Django API endpoints
+- [x] Decide to serve the compiled React frontend through Django on PythonAnywhere while preserving `/api/` routes
+- [ ] Configure or document the final frontend/API URL topology and validate the public entrypoint
