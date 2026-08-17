@@ -402,14 +402,14 @@
 
 - [x] Verify the PythonAnywhere root 404 versus working Django API endpoints
 - [x] Decide to serve the compiled React frontend through Django on PythonAnywhere while preserving `/api/` routes
-- [ ] Configure or document the final frontend/API URL topology and validate the public entrypoint
+- [x] Configure or document the final frontend/API URL topology and validate the public entrypoint
 
 ## PythonAnywhere frontend blank-screen fix
 
-- [ ] Remove the Vite production chunk cycle that prevents React from mounting on PythonAnywhere
-- [ ] Rebuild, validate, push, and redeploy the corrected frontend bundle
+- [x] Remove the Vite production chunk cycle that prevents React from mounting on PythonAnywhere
+- [x] Rebuild, validate, push, and redeploy the corrected frontend bundle
 
 ## Live template asset synchronization
 
-- [ ] Update the Django frontend template to reference the current Vite-built hashed assets instead of stale bundle names
-- [ ] Rebuild or collect static assets, reload PythonAnywhere, and verify the live homepage mounts
+- [x] Update the Django frontend template to reference the current Vite-built hashed assets instead of stale bundle names
+- [x] Rebuild or collect static assets, reload PythonAnywhere, and verify the live homepage mounts
