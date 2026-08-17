@@ -27,6 +27,12 @@ describe("interactive card markup", () => {
     expect(staffSource).toContain("aria-label={`Archive ${notification.title}`}");
   });
 
+  it("routes the footer Policies links to the dedicated policies page", () => {
+    expect(homeSource).toContain('<Link href="/policies" className="footer-promise-link">');
+    expect(homeSource).toContain('<Link href="/policies" className="footer-read-more">');
+    expect(homeSource).toContain('location === "/applicant-responsibility" || location === "/policies"');
+  });
+
   it("resets the viewport on route changes and syncs category links", () => {
     expect(homeSource).toContain('window.scrollTo({ top: 0, left: 0, behavior: "auto" })');
     expect(homeSource).toContain('href="/opportunities?category=scholarship"');

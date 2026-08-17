@@ -258,3 +258,9 @@
 - [x] Rename the footer “A clear promise” label to “Policies” and update related link wording consistently
 - [x] Verify the wording change and save a checkpoint
 
+
+## Policies footer destination fix
+
+- [x] Ensure the entire Policies label and supporting link open the dedicated policies page directly
+- [x] Verify the destination, tests, and save a checkpoint
+
