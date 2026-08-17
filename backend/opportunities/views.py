@@ -6,12 +6,19 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import ScopedRateThrottle
 
 from .authentication import IsStaffUser
 from .email_notifications import notify_new_application
 from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
 from .guest_access import consume_token
 from .serializers import ApplicationSerializer, ApplicationStatusEventSerializer, InquirySerializer, OpportunitySerializer, PaymentRecordSerializer, SavedOpportunitySerializer, StaffNotificationSerializer, SuccessStorySerializer
+
+
+class IPScopedRateThrottle(ScopedRateThrottle):
+    def get_cache_key(self, request, view):
+        ident = self.get_ident(request)
+        return self.cache_format % {"scope": self.scope, "ident": ident}
 
 
 class OpportunityListView(generics.ListAPIView):
@@ -39,6 +46,8 @@ class ApplicationCreateView(generics.CreateAPIView):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
     permission_classes = [AllowAny]
+    throttle_classes = [IPScopedRateThrottle]
+    throttle_scope = "public_application"
 
     @transaction.atomic
     def perform_create(self, serializer):
@@ -55,6 +64,8 @@ class ApplicationCreateView(generics.CreateAPIView):
 
 class GuestStatusView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [IPScopedRateThrottle]
+    throttle_scope = "guest_status"
 
     def get(self, request):
         token = consume_token(request.query_params.get("token", ""), "status")
@@ -213,6 +224,8 @@ class StaffNotificationMarkAllReadView(APIView):
 class InquiryCreateView(generics.CreateAPIView):
     queryset = Inquiry.objects.all()
     serializer_class = InquirySerializer
+    throttle_classes = [IPScopedRateThrottle]
+    throttle_scope = "public_inquiry"
 
 
 class SuccessStoryListView(generics.ListAPIView):

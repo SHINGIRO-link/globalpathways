@@ -370,7 +370,7 @@
 ## Audit findings for future implementation
 
 - [ ] Connect live MoMo and Airtel Money payment providers and add webhook reconciliation
-- [ ] Add production rate limiting, bot protection, and abuse monitoring for public applications, inquiries, uploads, and guest status links
+- [x] Add scoped API rate limiting for public applications, inquiries, and guest status links; full bot protection and upload abuse monitoring remain pending
 - [ ] Add a scheduled cleanup/retention policy for expired guest tokens and uploaded documents
 - [ ] Add production email deliverability monitoring, bounce handling, and applicant resend controls
 - [ ] Replace development-default Django settings with explicit production configuration, secure hosts, HTTPS, and secret rotation checks

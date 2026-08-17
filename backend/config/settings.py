@@ -75,4 +75,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_AUTHENTICATION_CLASSES": ["opportunities.authentication.ManusSessionAuthentication"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_THROTTLE_RATES": {
+        "public_application": os.getenv("PUBLIC_APPLICATION_RATE", "10/hour"),
+        "public_inquiry": os.getenv("PUBLIC_INQUIRY_RATE", "20/hour"),
+        "guest_status": os.getenv("GUEST_STATUS_RATE", "30/hour"),
+    },
 }
