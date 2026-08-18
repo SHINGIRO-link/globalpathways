@@ -440,3 +440,10 @@
 - [x] Add secure account creation, password sign-in, sign-out, and recovery requirements before implementation
 - [x] Deploy and verify the new authentication flow on PythonAnywhere
 - [x] Save an authentication checkpoint
+
+## Live stale OAuth bundle repair
+
+- [x] Identify the stale Manus OAuth asset or deployed template still used by the homepage
+- [x] Replace all live public sign-in entry points with the first-party `/sign-in` route
+- [x] Redeploy, reload PythonAnywhere, and verify no live bundle requests the Manus OAuth redirect
+- [x] Save a checkpoint for the stale-entrypoint repair
