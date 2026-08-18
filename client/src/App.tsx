@@ -7,6 +7,7 @@ const StaffNotifications = lazy(() => import("@/pages/StaffNotifications"));
 const StaffApplications = lazy(() => import("@/pages/StaffApplications"));
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
 const RoleRedirect = lazy(() => import("@/pages/RoleRedirect"));
+const AuthPage = lazy(() => import("@/pages/AuthPage"));
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -14,6 +15,10 @@ import Home from "./pages/Home";
 
 function Router() {
   return <Suspense fallback={<main className="route-state"><div className="container"><span className="eyebrow">Loading workspace</span><h1>Preparing your<br /><em>next step.</em></h1><p>Please give us a moment.</p></div></main>}><Switch>
+    <Route path="/sign-in" component={AuthPage} />
+    <Route path="/create-account" component={AuthPage} />
+    <Route path="/forgot-password" component={AuthPage} />
+    <Route path="/reset-password" component={AuthPage} />
     <Route path="/dashboard" component={RoleRedirect} />
     <Route path="/dashboard/end-user" component={Dashboard} />
     <Route path="/staff" component={StaffApplications} />

@@ -425,3 +425,18 @@
 ## Production secret rotation follow-up
 
 - [x] Rotate the Django secret key exposed during PythonAnywhere SMTP configuration, update the private environment file, and reload the web app
+
+## Production OAuth redirect repair
+
+- [ ] Identify the Manus OAuth project allowlist and the exact live callback URI required by PythonAnywhere
+- [ ] Update the production OAuth redirect configuration or provide the correct hosted-origin fallback
+- [ ] Verify live sign-in, callback, nonce, and session behavior after the redirect fix
+- [ ] Save a checkpoint for the OAuth repair
+
+## First-party Global Pathways authentication
+
+- [ ] Replace the blocked Manus-branded production sign-in with normal Global Pathways sign-in
+- [ ] Preserve automatic user, staff, and admin role routing and existing dashboard authorization
+- [ ] Add secure account creation, password sign-in, sign-out, and recovery requirements before implementation
+- [ ] Deploy and verify the new authentication flow on PythonAnywhere
+- [ ] Save an authentication checkpoint

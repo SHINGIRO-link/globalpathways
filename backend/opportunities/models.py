@@ -1,5 +1,24 @@
+import uuid
+
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
+
+
+class AccountProfile(models.Model):
+    ROLE_CHOICES = [("user", "User"), ("staff", "Staff"), ("admin", "Admin")]
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="account_profile")
+    public_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    role = models.CharField(max_length=12, choices=ROLE_CHOICES, default="user")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user.email or self.user.username} ({self.role})"
 
 
 class Opportunity(models.Model):

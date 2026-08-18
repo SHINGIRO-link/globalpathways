@@ -1,6 +1,14 @@
 from django.contrib import admin
 from .email_notifications import notify_application_status, notify_internal_status
-from .models import Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
+from .models import AccountProfile, Application, ApplicationStatusEvent, Inquiry, Opportunity, PaymentRecord, SavedOpportunity, StaffNotification, SuccessStory
+
+
+@admin.register(AccountProfile)
+class AccountProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "role", "created_at", "updated_at")
+    list_filter = ("role",)
+    search_fields = ("user__email", "user__first_name", "user__last_name")
+    readonly_fields = ("public_id", "created_at", "updated_at")
 
 
 @admin.register(Opportunity)

@@ -1,98 +1,48 @@
-import { startLogin } from "@/const";
-import { trpc } from "@/lib/trpc";
-import { TRPCClientError } from "@trpc/client";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { getCurrentUser, logoutAccount, notifyAuthChanged, type LocalUser } from "@/lib/auth";
 
-type UseAuthOptions = {
+export type UseAuthOptions = {
   redirectOnUnauthenticated?: boolean;
   redirectPath?: string;
 };
 
-export function useAuth(options?: UseAuthOptions) {
-  // Login is started via startLogin() in the effect below, only when we actually
-  // navigate — never during render. startLogin() mints a one-time nonce + writes
-  // the state cookie, so calling it per render would overwrite the cookie and
-  // desync it from an in-flight login's `state`.
-  const { redirectOnUnauthenticated = false, redirectPath } = options ?? {};
-  const utils = trpc.useUtils();
+export function useAuth(_options?: UseAuthOptions) {
+  const [user, setUser] = useState<LocalUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const meQuery = trpc.auth.me.useQuery(undefined, {
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
-
-  const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      utils.auth.me.setData(undefined, null);
-    },
-  });
-
-  const logout = useCallback(async () => {
+  const refresh = useCallback(async () => {
+    setLoading(true);
     try {
-      await logoutMutation.mutateAsync();
-    } catch (error: unknown) {
-      if (
-        error instanceof TRPCClientError &&
-        error.data?.code === "UNAUTHORIZED"
-      ) {
-        return;
-      }
-      throw error;
+      setUser(await getCurrentUser());
+      setError(null);
+    } catch (caught) {
+      setUser(null);
+      setError(caught instanceof Error ? caught : new Error("Authentication is unavailable."));
     } finally {
-      // Clear the Preview auto-login token mirrored into sessionStorage, so
-      // header-based sessions (Safari ITP / WebView) are logged out too. The
-      // backend cookie is cleared by the logout mutation.
-      try {
-        sessionStorage.removeItem("manus-cookie");
-      } catch {}
-      utils.auth.me.setData(undefined, null);
-      await utils.auth.me.invalidate();
+      setLoading(false);
     }
-  }, [logoutMutation, utils]);
-
-  const state = useMemo(() => {
-    localStorage.setItem(
-      "manus-runtime-user-info",
-      JSON.stringify(meQuery.data)
-    );
-    return {
-      user: meQuery.data ?? null,
-      loading: meQuery.isLoading || logoutMutation.isPending,
-      error: meQuery.error ?? logoutMutation.error ?? null,
-      isAuthenticated: Boolean(meQuery.data),
-    };
-  }, [
-    meQuery.data,
-    meQuery.error,
-    meQuery.isLoading,
-    logoutMutation.error,
-    logoutMutation.isPending,
-  ]);
+  }, []);
 
   useEffect(() => {
-    if (!redirectOnUnauthenticated) return;
-    if (meQuery.isLoading || logoutMutation.isPending) return;
-    if (state.user) return;
-    if (typeof window === "undefined") return;
-    if (redirectPath && window.location.pathname === redirectPath) return;
+    void refresh();
+    const listener = () => void refresh();
+    window.addEventListener("globalpathways-auth-changed", listener);
+    return () => window.removeEventListener("globalpathways-auth-changed", listener);
+  }, [refresh]);
 
-    // Navigate at this moment only. startLogin() mints the nonce + cookie itself.
-    if (redirectPath) {
-      window.location.href = redirectPath;
-    } else {
-      startLogin();
-    }
-  }, [
-    redirectOnUnauthenticated,
-    redirectPath,
-    logoutMutation.isPending,
-    meQuery.isLoading,
-    state.user,
-  ]);
+  const logout = useCallback(async () => {
+    await logoutAccount();
+    setUser(null);
+    notifyAuthChanged();
+  }, []);
 
   return {
-    ...state,
-    refresh: () => meQuery.refetch(),
+    user,
+    loading,
+    error,
+    isAuthenticated: Boolean(user),
+    refresh,
     logout,
   };
 }

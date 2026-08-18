@@ -263,3 +263,24 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .application-access-note strong { font-size: .86rem; }
 .application-access-note span { color: var(--muted); font-size: .82rem; line-height: 1.55; }
 .apply-heading .application-access-note { max-width: 44rem; }
+
+.auth-page { min-height: 100vh; background: var(--cream); padding: 2rem 0 4rem; }
+.auth-wrap { max-width: 32rem; margin: 0 auto; }
+.auth-brand { display: inline-flex; margin-bottom: 2.25rem; }
+.auth-card { background: var(--surface); border: 1px solid var(--line); padding: clamp(1.5rem, 5vw, 3rem); box-shadow: 0 1.25rem 3rem rgba(16, 53, 46, .08); }
+.auth-intro { display: grid; gap: .7rem; margin-bottom: 1.75rem; }
+.auth-intro .dashboard-access-icon { margin-bottom: .35rem; }
+.auth-intro h1 { margin: 0; font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: .98; letter-spacing: -.07em; }
+.auth-intro p { margin: 0; color: var(--muted); line-height: 1.7; font-size: .95rem; }
+.auth-form { display: grid; gap: 1rem; }
+.auth-field { display: grid; gap: .45rem; color: var(--ink); font-size: .78rem; font-weight: 700; letter-spacing: .03em; }
+.auth-field input { min-height: 3rem; padding: .75rem .85rem; border: 1px solid var(--line); background: var(--cream); color: var(--ink); font: inherit; font-size: .95rem; letter-spacing: normal; outline: none; }
+.auth-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37, 105, 84, .12); }
+.auth-submit { width: 100%; justify-content: space-between; margin-top: .45rem; }
+.auth-error, .auth-success { display: flex; align-items: flex-start; gap: .55rem; padding: .75rem .85rem; font-size: .82rem; line-height: 1.5; }
+.auth-error { color: #9b382f; background: #fff1ee; border: 1px solid #f0c8c1; }
+.auth-success { color: #1f6b51; background: #edf8f1; border: 1px solid #b8dfc5; }
+.auth-links, .auth-switch { display: flex; flex-wrap: wrap; gap: .7rem; justify-content: space-between; margin: 1.25rem 0 0; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+.auth-links a, .auth-switch a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.auth-note { margin: 1.1rem 0 0; color: var(--muted); font-size: .78rem; line-height: 1.6; text-align: center; }
+@media (max-width: 600px) { .auth-page { padding: 1.25rem 0 3rem; } .auth-card { padding: 1.35rem; } .auth-links { display: grid; justify-content: stretch; } }
