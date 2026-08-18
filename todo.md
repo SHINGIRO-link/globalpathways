@@ -428,15 +428,15 @@
 
 ## Production OAuth redirect repair
 
-- [ ] Identify the Manus OAuth project allowlist and the exact live callback URI required by PythonAnywhere
-- [ ] Update the production OAuth redirect configuration or provide the correct hosted-origin fallback
-- [ ] Verify live sign-in, callback, nonce, and session behavior after the redirect fix
-- [ ] Save a checkpoint for the OAuth repair
+- [x] Identify the Manus OAuth project allowlist and the exact live callback URI required by PythonAnywhere (superseded by first-party authentication)
+- [x] Update the production OAuth redirect configuration or provide the correct hosted-origin fallback (not required after removing Manus OAuth)
+- [x] Verify live sign-in, callback, nonce, and session behavior after the redirect fix (replaced with live first-party session endpoint verification)
+- [x] Save a checkpoint for the OAuth repair (superseded by first-party authentication checkpoint)
 
 ## First-party Global Pathways authentication
 
 - [x] Replace the blocked Manus-branded production sign-in with normal Global Pathways sign-in
 - [x] Preserve automatic user, staff, and admin role routing and existing dashboard authorization
 - [x] Add secure account creation, password sign-in, sign-out, and recovery requirements before implementation
-- [ ] Deploy and verify the new authentication flow on PythonAnywhere
-- [ ] Save an authentication checkpoint
+- [x] Deploy and verify the new authentication flow on PythonAnywhere
+- [x] Save an authentication checkpoint
