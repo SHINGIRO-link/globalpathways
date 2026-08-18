@@ -435,8 +435,8 @@
 
 ## First-party Global Pathways authentication
 
-- [ ] Replace the blocked Manus-branded production sign-in with normal Global Pathways sign-in
-- [ ] Preserve automatic user, staff, and admin role routing and existing dashboard authorization
-- [ ] Add secure account creation, password sign-in, sign-out, and recovery requirements before implementation
+- [x] Replace the blocked Manus-branded production sign-in with normal Global Pathways sign-in
+- [x] Preserve automatic user, staff, and admin role routing and existing dashboard authorization
+- [x] Add secure account creation, password sign-in, sign-out, and recovery requirements before implementation
 - [ ] Deploy and verify the new authentication flow on PythonAnywhere
 - [ ] Save an authentication checkpoint
