@@ -456,9 +456,15 @@
 
 ## Authentication and dashboard completeness audit
 
-- [ ] Test account registration, validation, session creation, sign-out, and password recovery
-- [ ] Test automatic applicant, staff, and admin dashboard routing with role enforcement
-- [ ] Audit applicant dashboard UI actions and backend endpoints
-- [ ] Audit staff dashboard, notification, export, and document actions with permissions
-- [ ] Audit admin dashboard actions, role management, and backend coverage
-- [ ] Fix verified defects, run tests/build, and save an audit checkpoint
+- [x] Test account registration, validation, session creation, sign-out, and password recovery
+- [x] Test automatic applicant, staff, and admin dashboard routing with role enforcement
+- [x] Audit applicant dashboard UI actions and backend endpoints
+- [x] Audit staff dashboard, notification, export, and document actions with permissions
+- [x] Audit admin dashboard actions, role management, and backend coverage
+- [x] Fix verified defects, run tests/build, and save an audit checkpoint
+
+## Dashboard audit follow-up gaps
+
+- [ ] Add dedicated admin account/user management, role assignment, and audit-log tools beyond the current staff-workspace launcher
+- [ ] Add a real payment-provider transaction flow; current applicant payment remains integration_pending
+- [ ] Add full end-to-end browser tests using a disposable account for registration, sign-in, and role routing
