@@ -447,3 +447,9 @@
 - [x] Replace all live public sign-in entry points with the first-party `/sign-in` route
 - [x] Redeploy, reload PythonAnywhere, and verify no live bundle requests the Manus OAuth redirect
 - [x] Save a checkpoint for the stale-entrypoint repair
+
+## Independent sign-in and automatic dashboard routing
+
+- [x] Audit and remove remaining Manus API/auth dependencies from sign-in, session checks, and dashboard routing
+- [x] Ensure one Global Pathways sign-in sends applicants, staff, and admins directly to their correct dashboards
+- [x] Verify the independent flow on PythonAnywhere and save a checkpoint
