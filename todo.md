@@ -465,8 +465,8 @@
 
 ## Dashboard audit follow-up gaps
 
-- [ ] Add dedicated admin account/user management, role assignment, and audit-log tools beyond the current staff-workspace launcher
+- [x] Add dedicated admin account/user management, role assignment, and audit-log tools beyond the current staff-workspace launcher
 - [ ] Add a real payment-provider transaction flow; current applicant payment remains integration_pending
 - [ ] Add full end-to-end browser tests using a disposable account for registration, sign-in, and role routing
 
-- [ ] Fix admin role resolution for direct Django users and local session identities, then rerun authentication tests
+- [x] Fix admin role resolution for direct Django users and local session identities, then rerun authentication tests
