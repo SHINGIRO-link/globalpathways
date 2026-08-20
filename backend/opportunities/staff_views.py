@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .authentication import IsStaffUser
+from .documents import local_document_path
 from .email_notifications import notify_application_status, notify_internal_status
 from .models import Application, ApplicationStatusEvent, PaymentRecord, StaffNotification
 from .serializers import ApplicationSerializer, PaymentRecordSerializer
@@ -196,11 +197,13 @@ class StaffAllDocumentsZipView(StaffOnlyView):
                     source_url = document.get("url", "")
                     if not key.startswith("education-documents/") or not source_url.startswith("/manus-storage/"):
                         continue
-                    target = request.build_absolute_uri(source_url)
+                    target = local_document_path(key)
+                    if target is None or not target.is_file():
+                        continue
                     try:
-                        with urllib.request.urlopen(target, timeout=15) as response:
-                            contents = response.read(self.MAX_ARCHIVE_BYTES - total_bytes + 1)
-                    except Exception:
+                        with target.open("rb") as source:
+                            contents = source.read(self.MAX_ARCHIVE_BYTES - total_bytes + 1)
+                    except OSError:
                         continue
                     if total_bytes + len(contents) > self.MAX_ARCHIVE_BYTES:
                         break

@@ -467,6 +467,17 @@
 
 - [x] Add dedicated admin account/user management, role assignment, and audit-log tools beyond the current staff-workspace launcher
 - [ ] Add a real payment-provider transaction flow; current applicant payment remains integration_pending
-- [ ] Add full end-to-end browser tests using a disposable account for registration, sign-in, and role routing
+- [x] Add full end-to-end browser tests using a disposable account for registration, sign-in, and role routing
 
 - [x] Fix admin role resolution for direct Django users and local session identities, then rerun authentication tests
+
+## Application form and attachment process audit
+
+- [ ] Audit opportunity-to-application navigation and every public/signed-in form step
+- [ ] Audit client-side validation, required fields, consent, submission states, and error recovery
+- [ ] Audit certificate, diploma, and additional-document attachment selection, type/size validation, progress, retry, and removal behavior
+- [ ] Audit backend submission validation, document metadata persistence, storage references, ownership, and authorization
+- [ ] Audit guest and authenticated submission paths, payment-ready state, notifications, and status tracking
+- [ ] Audit staff document listing/download behavior and attachment visibility after submission
+- [ ] Run automated, live, and responsive checks; fix verified gaps and document results
+- [ ] Save a checkpoint after the form and attachment audit is complete

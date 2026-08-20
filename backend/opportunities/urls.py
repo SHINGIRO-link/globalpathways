@@ -2,6 +2,7 @@ from django.urls import path
 
 from .admin_views import AdminAccountView
 from .auth_views import AuthMeView, LoginView, LogoutView, PasswordResetConfirmView, PasswordResetRequestView, RegisterView, csrf_cookie
+from .documents import EducationDocumentUploadView, StaffDocumentServeView
 from .views import (
     ApplicationCreateView, ApplicationStatusView, DashboardView, GuestClaimApplicationView, GuestStatusView, HealthView,
     InquiryCreateView, OpportunityDetailView, OpportunityListView,
@@ -22,6 +23,8 @@ urlpatterns = [
     path("auth/logout/", LogoutView.as_view(), name="auth-logout"),
     path("auth/password-reset/", PasswordResetRequestView.as_view(), name="auth-password-reset"),
     path("auth/password-reset/confirm/", PasswordResetConfirmView.as_view(), name="auth-password-reset-confirm"),
+    path("uploads/education-document", EducationDocumentUploadView.as_view(), name="education-document-upload"),
+    path("manus-storage/<path:key>", StaffDocumentServeView.as_view(), name="staff-document-serve"),
     path("admin/accounts/", AdminAccountView.as_view(), name="admin-accounts"),
     path("admin/accounts/<int:account_id>/", AdminAccountView.as_view(), name="admin-account-detail"),
     path("health/", HealthView.as_view(), name="health"),

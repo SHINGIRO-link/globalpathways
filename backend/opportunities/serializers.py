@@ -24,6 +24,10 @@ class ApplicationSerializer(serializers.ModelSerializer):
     def validate_documents(self, value):
         allowed_types = {"application/pdf", "image/jpeg", "image/png", "image/webp"}
         allowed_categories = {"certificate", "passport", "transcript", "cv", "supporting"}
+        if len(value) > 10:
+            raise serializers.ValidationError("You can attach up to 10 documents per application.")
+        if sum(document.get("size", 0) for document in value) > 50 * 1024 * 1024:
+            raise serializers.ValidationError("Your attached documents must total 50 MB or less.")
         for document in value:
             key = document.get("key", "")
             url = document.get("url", "")
@@ -39,6 +43,12 @@ class ApplicationSerializer(serializers.ModelSerializer):
         validated_data["document_links"] = [document["url"] for document in documents]
         validated_data["document_metadata"] = documents or []
         return super().create(validated_data)
+
+    def validate_statement(self, value):
+        cleaned = value.strip()
+        if len(cleaned) < 20:
+            raise serializers.ValidationError("Please provide at least 20 characters explaining your application.")
+        return cleaned
 
     def validate_consent_to_contact(self, value):
         if not value:

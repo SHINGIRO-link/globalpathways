@@ -1,10 +1,15 @@
 import os
 import io
+from pathlib import Path
+import shutil
+import tempfile
 import zipfile
 from types import SimpleNamespace
 from unittest.mock import patch
+from django.conf import settings
 from django.core.management import call_command
 from django.core import mail
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 from opportunities.email_notifications import notify_application_status, notify_internal_payment_status, notify_internal_status
@@ -282,12 +287,15 @@ class StaffApplicationsApiTests(TestCase):
 class StaffDocumentsZipTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="zip-staff", app_id="test-app", name="ZIP Staff"))
+        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="zip-staff", app_id="test-app", name="ZIP Staff", role="staff"))
         opportunity = Opportunity.objects.create(
             title="ZIP Route", slug="zip-route", category="scholarship", status="open",
             country="Japan", region="Asia", deadline="2026-12-01T23:59:00Z",
             summary="ZIP route", description="ZIP description", eligibility=["Degree"], required_documents=["Passport"],
         )
+        self.zip_document = Path(settings.MEDIA_ROOT) / "education-documents/passport/zip.pdf"
+        self.zip_document.parent.mkdir(parents=True, exist_ok=True)
+        self.zip_document.write_bytes(b"fake-pdf-bytes")
         Application.objects.create(
             opportunity=opportunity, full_name="Asha / Review", email="zip@example.com", consent_to_contact=True,
             document_metadata=[{
@@ -335,6 +343,71 @@ class StaffDocumentsZipTests(TestCase):
         self.assertEqual(invalid.status_code, 400)
 
     def test_non_staff_cannot_download_all_documents(self):
+        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="applicant-user", app_id="test-app", name="Applicant", role="user"))
         with patch.dict(os.environ, {"OWNER_OPEN_ID": "different-staff"}):
             response = self.client.get("/api/staff/applications/documents/export/")
         self.assertEqual(response.status_code, 403)
+
+
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+class EducationDocumentUploadTests(TestCase):
+    def setUp(self):
+        self.media_root = tempfile.mkdtemp(prefix="globalpathways-test-media-")
+        self.settings_override = override_settings(MEDIA_ROOT=self.media_root)
+        self.settings_override.enable()
+        self.client = APIClient()
+        self.opportunity = Opportunity.objects.create(
+            title="Upload Route", slug="upload-route", category="scholarship", status="open",
+            country="Rwanda", region="Africa", deadline="2026-12-31T23:59:00Z",
+            summary="Upload route", description="Upload route", eligibility=["Degree"], required_documents=["Certificate"],
+        )
+
+    def tearDown(self):
+        self.settings_override.disable()
+        shutil.rmtree(self.media_root, ignore_errors=True)
+
+    def test_upload_returns_server_issued_metadata_and_persists_file(self):
+        response = self.client.post(
+            "/api/uploads/education-document",
+            {"category": "certificate", "file": SimpleUploadedFile("diploma.pdf", b"%PDF-1.7\nreal-bytes", content_type="application/pdf")},
+            format="multipart",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(response.data["key"].startswith("education-documents/certificate/"))
+        self.assertEqual(response.data["url"], f"/manus-storage/{response.data['key']}")
+        self.assertTrue((self.media_root + "/" + response.data["key"]).endswith("diploma.pdf"))
+        self.assertTrue((__import__("pathlib").Path(self.media_root) / response.data["key"]).is_file())
+
+    def test_upload_rejects_mismatched_signature_and_oversized_file(self):
+        mismatched = self.client.post(
+            "/api/uploads/education-document",
+            {"category": "certificate", "file": SimpleUploadedFile("fake.pdf", b"not-a-pdf", content_type="application/pdf")},
+            format="multipart",
+        )
+        self.assertEqual(mismatched.status_code, 400)
+        oversized = self.client.post(
+            "/api/uploads/education-document",
+            {"category": "certificate", "file": SimpleUploadedFile("large.pdf", b"%PDF-" + b"x" * (10 * 1024 * 1024), content_type="application/pdf")},
+            format="multipart",
+        )
+        self.assertEqual(oversized.status_code, 400)
+
+    def test_uploaded_metadata_can_be_attached_and_staff_file_is_protected(self):
+        upload = self.client.post(
+            "/api/uploads/education-document",
+            {"category": "certificate", "file": SimpleUploadedFile("certificate.pdf", b"%PDF-1.7\nbytes", content_type="application/pdf")},
+            format="multipart",
+        )
+        metadata = upload.data
+        application = self.client.post(
+            "/api/applications/",
+            {"opportunity": self.opportunity.id, "full_name": "Attachment Applicant", "email": "attachment@example.com", "statement": "I want to study abroad.", "consent_to_contact": True, "documents": [metadata]},
+            format="json",
+        )
+        self.assertEqual(application.status_code, 201)
+        stored = Application.objects.get(email="attachment@example.com")
+        self.client.force_authenticate(user=None)
+        self.assertIn(self.client.get(metadata["url"]).status_code, {401, 403})
+        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="staff-upload", app_id="test-app", name="Staff", role="staff"))
+        self.assertEqual(self.client.get(metadata["url"]).status_code, 200)
+        self.assertEqual(self.client.get(f"/api/staff/applications/{stored.id}/documents/0/download/").status_code, 302)
