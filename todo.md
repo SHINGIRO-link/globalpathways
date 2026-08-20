@@ -473,11 +473,11 @@
 
 ## Application form and attachment process audit
 
-- [ ] Audit opportunity-to-application navigation and every public/signed-in form step
-- [ ] Audit client-side validation, required fields, consent, submission states, and error recovery
-- [ ] Audit certificate, diploma, and additional-document attachment selection, type/size validation, progress, retry, and removal behavior
-- [ ] Audit backend submission validation, document metadata persistence, storage references, ownership, and authorization
-- [ ] Audit guest and authenticated submission paths, payment-ready state, notifications, and status tracking
-- [ ] Audit staff document listing/download behavior and attachment visibility after submission
-- [ ] Run automated, live, and responsive checks; fix verified gaps and document results
+- [x] Audit opportunity-to-application navigation and every public/signed-in form step
+- [x] Audit client-side validation, required fields, consent, submission states, and error recovery
+- [x] Audit certificate, diploma, and additional-document attachment selection, type/size validation, progress, retry, and removal behavior
+- [x] Audit backend submission validation, document metadata persistence, storage references, ownership, and authorization
+- [x] Audit guest and authenticated submission paths, payment-ready state, notifications, and status tracking
+- [x] Audit staff document listing/download behavior and attachment visibility after submission
+- [x] Run automated, live, and responsive checks; fix verified gaps and document results
 - [ ] Save a checkpoint after the form and attachment audit is complete
