@@ -6,9 +6,9 @@ from .models import AccountProfile
 def _profile_for(user):
     profile, _ = AccountProfile.objects.get_or_create(
         user=user,
-        defaults={"role": "admin" if user.is_superuser else "staff" if user.is_staff else "user"},
+        defaults={"role": "admin" if getattr(user, "is_superuser", False) else "staff" if getattr(user, "is_staff", False) else "user"},
     )
-    if user.is_superuser and profile.role != "admin":
+    if getattr(user, "is_superuser", False) and profile.role != "admin":
         profile.role = "admin"
         profile.save(update_fields=["role", "updated_at"])
     return profile

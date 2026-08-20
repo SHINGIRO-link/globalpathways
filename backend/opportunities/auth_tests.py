@@ -45,3 +45,33 @@ class LocalAuthenticationTests(TestCase):
         unknown = self.client.post("/api/auth/password-reset/", {"email": "unknown@example.com"}, format="json")
         self.assertEqual(unknown.status_code, 202)
         self.assertEqual(len(mail.outbox), 1)
+
+
+class AdminAccountManagementTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        admin = User.objects.create_user(username="owner@example.com", email="owner@example.com", password="SafePassword123!")
+        AccountProfile.objects.create(user=admin, role="admin")
+        applicant = User.objects.create_user(username="applicant@example.com", email="applicant@example.com", password="SafePassword123!")
+        AccountProfile.objects.create(user=applicant, role="user")
+        self.client.force_authenticate(admin)
+
+    def test_admin_can_list_and_change_account_role(self):
+        response = self.client.get("/api/admin/accounts/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data["accounts"]), 2)
+        applicant = User.objects.get(email="applicant@example.com")
+        changed = self.client.patch(f"/api/admin/accounts/{applicant.account_profile.id}/", {"role": "staff"}, format="json")
+        self.assertEqual(changed.status_code, 200)
+        self.assertEqual(changed.data["role"], "staff")
+
+    def test_admin_cannot_demote_self(self):
+        admin = User.objects.get(email="owner@example.com")
+        response = self.client.patch(f"/api/admin/accounts/{admin.account_profile.id}/", {"role": "user"}, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(admin.account_profile.role, "admin")
+
+    def test_applicant_cannot_list_accounts(self):
+        applicant = User.objects.get(email="applicant@example.com")
+        self.client.force_authenticate(applicant)
+        self.assertEqual(self.client.get("/api/admin/accounts/").status_code, 403)

@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .admin_views import AdminAccountView
 from .auth_views import AuthMeView, LoginView, LogoutView, PasswordResetConfirmView, PasswordResetRequestView, RegisterView, csrf_cookie
 from .views import (
     ApplicationCreateView, ApplicationStatusView, DashboardView, GuestClaimApplicationView, GuestStatusView, HealthView,
@@ -21,6 +22,8 @@ urlpatterns = [
     path("auth/logout/", LogoutView.as_view(), name="auth-logout"),
     path("auth/password-reset/", PasswordResetRequestView.as_view(), name="auth-password-reset"),
     path("auth/password-reset/confirm/", PasswordResetConfirmView.as_view(), name="auth-password-reset-confirm"),
+    path("admin/accounts/", AdminAccountView.as_view(), name="admin-accounts"),
+    path("admin/accounts/<int:account_id>/", AdminAccountView.as_view(), name="admin-account-detail"),
     path("health/", HealthView.as_view(), name="health"),
     path("opportunities/", OpportunityListView.as_view(), name="opportunity-list"),
     path("opportunities/<slug:slug>/", OpportunityDetailView.as_view(), name="opportunity-detail"),

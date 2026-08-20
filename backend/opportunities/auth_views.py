@@ -19,11 +19,12 @@ User = get_user_model()
 
 
 def _profile_for(user):
+    real_user = user if hasattr(user, "pk") else User.objects.get(email=user.email)
     profile, _ = AccountProfile.objects.get_or_create(
-        user=user,
-        defaults={"role": "admin" if user.is_superuser else "staff" if user.is_staff else "user"},
+        user=real_user,
+        defaults={"role": "admin" if getattr(real_user, "is_superuser", False) else "staff" if getattr(real_user, "is_staff", False) else "user"},
     )
-    if user.is_superuser and profile.role != "admin":
+    if getattr(real_user, "is_superuser", False) and profile.role != "admin":
         profile.role = "admin"
         profile.save(update_fields=["role", "updated_at"])
     return profile
@@ -31,11 +32,12 @@ def _profile_for(user):
 
 def _user_payload(user):
     profile = _profile_for(user)
+    real_user = user if hasattr(user, "pk") else profile.user
     return {
-        "id": user.pk,
+        "id": real_user.pk,
         "openId": f"local:{profile.public_id}",
-        "name": user.get_full_name() or user.email.split("@", 1)[0],
-        "email": user.email,
+        "name": real_user.get_full_name() or real_user.email.split("@", 1)[0],
+        "email": real_user.email,
         "loginMethod": "email",
         "role": profile.role,
     }

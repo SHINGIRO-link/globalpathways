@@ -51,10 +51,28 @@ class ManusSessionAuthentication(BaseAuthentication):
         return "Bearer"
 
 
+def _request_role(user):
+    role = getattr(user, "role", "")
+    if role:
+        return role
+    profile = getattr(user, "account_profile", None)
+    if profile is not None:
+        return profile.role
+    if getattr(user, "is_superuser", False):
+        return "admin"
+    if getattr(user, "is_staff", False):
+        return "staff"
+    return "user"
+
+
 class IsStaffUser(BasePermission):
     def has_permission(self, request, view):
         owner_open_id = os.environ.get("OWNER_OPEN_ID", "")
         if not request.user or not getattr(request.user, "is_authenticated", False):
             return False
-        role = getattr(request.user, "role", "")
-        return role in {"staff", "admin"} or bool(owner_open_id and getattr(request.user, "open_id", "") == owner_open_id)
+        return _request_role(request.user) in {"staff", "admin"} or bool(owner_open_id and getattr(request.user, "open_id", "") == owner_open_id)
+
+
+class IsAdminUser(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and getattr(request.user, "is_authenticated", False) and _request_role(request.user) == "admin")

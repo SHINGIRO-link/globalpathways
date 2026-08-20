@@ -380,3 +380,25 @@ export function getStaffDocumentsExportUrl(filters: { status?: string; date_from
   if (filters.date_to) params.set("date_to", filters.date_to);
   return `${API_BASE}/staff/applications/documents/export/${params.toString() ? `?${params.toString()}` : ""}`;
 }
+
+
+export type AdminAccount = {
+  id: number;
+  public_id: string;
+  name: string;
+  email: string;
+  role: "user" | "staff" | "admin";
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getAdminAccounts() {
+  return request<{ accounts: AdminAccount[] }>("/admin/accounts/");
+}
+
+export async function updateAdminAccountRole(accountId: number, role: AdminAccount["role"]) {
+  return request<AdminAccount>(`/admin/accounts/${accountId}/`, {
+    method: "PATCH",
+    body: JSON.stringify({ role }),
+  });
+}
