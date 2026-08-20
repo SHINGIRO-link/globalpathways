@@ -16,7 +16,7 @@ from opportunities.guest_access import create_guest_access
 class DashboardAndPaymentApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="test-user", app_id="test-app", name="Test User"))
+        self.client.force_authenticate(user=SimpleNamespace(is_authenticated=True, open_id="test-user", app_id="test-app", name="Test User", email="amina@example.com"))
         self.opportunity = Opportunity.objects.create(
             title="Test Scholarship", slug="test-scholarship", category="scholarship", status="open",
             country="Netherlands", region="Europe", deadline="2026-10-28T23:59:00Z",
@@ -118,6 +118,16 @@ class DashboardAndPaymentApiTests(TestCase):
         dashboard = self.client.get("/api/dashboard/?email=amina@example.com", HTTP_X_DASHBOARD_EMAIL="amina@example.com")
         self.assertEqual(dashboard.status_code, 200)
         self.assertEqual(len(dashboard.data["applications"]), 1)
+
+    def test_dashboard_and_saved_reads_ignore_forged_identity_values(self):
+        own = SavedOpportunity.objects.create(email="amina@example.com", owner_open_id="test-user", opportunity=self.opportunity)
+        SavedOpportunity.objects.create(email="other@example.com", owner_open_id="other-user", opportunity=self.opportunity)
+        dashboard = self.client.get("/api/dashboard/?email=other@example.com", HTTP_X_DASHBOARD_EMAIL="other@example.com")
+        self.assertEqual(dashboard.status_code, 200)
+        self.assertEqual(dashboard.data["email"], "amina@example.com")
+        saved = self.client.get("/api/saved-opportunities/?email=other@example.com", HTTP_X_DASHBOARD_EMAIL="other@example.com")
+        self.assertEqual(saved.status_code, 200)
+        self.assertEqual([item["id"] for item in saved.data], [own.id])
 
     def test_saved_opportunity_and_provider_selection_are_recorded_without_live_charge(self):
         saved = self.client.post("/api/saved-opportunities/", {"email": "amina@example.com", "opportunity": self.opportunity.id}, HTTP_X_DASHBOARD_EMAIL="amina@example.com", format="json")

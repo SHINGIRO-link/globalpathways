@@ -453,3 +453,12 @@
 - [x] Audit and remove remaining Manus API/auth dependencies from sign-in, session checks, and dashboard routing
 - [x] Ensure one Global Pathways sign-in sends applicants, staff, and admins directly to their correct dashboards
 - [x] Verify the independent flow on PythonAnywhere and save a checkpoint
+
+## Authentication and dashboard completeness audit
+
+- [ ] Test account registration, validation, session creation, sign-out, and password recovery
+- [ ] Test automatic applicant, staff, and admin dashboard routing with role enforcement
+- [ ] Audit applicant dashboard UI actions and backend endpoints
+- [ ] Audit staff dashboard, notification, export, and document actions with permissions
+- [ ] Audit admin dashboard actions, role management, and backend coverage
+- [ ] Fix verified defects, run tests/build, and save an audit checkpoint

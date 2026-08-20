@@ -99,12 +99,8 @@ class DashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        email = request.query_params.get("email", "").strip().lower()
-        if not email:
-            return Response({"detail": "An email address is required."}, status=status.HTTP_400_BAD_REQUEST)
-        if request.headers.get("X-Dashboard-Email", "").strip().lower() != email:
-            return Response({"detail": "Dashboard identity could not be verified."}, status=status.HTTP_403_FORBIDDEN)
         owner_open_id = request.user.open_id
+        email = getattr(request.user, "email", "")
         applications = Application.objects.filter(owner_open_id=owner_open_id).select_related("opportunity").prefetch_related("status_events", "payment")
         saved = SavedOpportunity.objects.filter(owner_open_id=owner_open_id).select_related("opportunity")
         return Response({
@@ -118,9 +114,6 @@ class ApplicationStatusView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, application_id):
-        email = request.query_params.get("email", "").strip().lower()
-        if request.headers.get("X-Dashboard-Email", "").strip().lower() != email:
-            return Response({"detail": "Dashboard identity could not be verified."}, status=status.HTTP_403_FORBIDDEN)
         application = get_object_or_404(Application, id=application_id, owner_open_id=request.user.open_id)
         return Response({
             "application": ApplicationSerializer(application).data,
@@ -133,19 +126,14 @@ class SavedOpportunityListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        email = request.query_params.get("email", "").strip().lower()
-        if request.headers.get("X-Dashboard-Email", "").strip().lower() != email:
-            return Response({"detail": "Dashboard identity could not be verified."}, status=status.HTTP_403_FORBIDDEN)
-        saved = SavedOpportunity.objects.filter(email__iexact=email).select_related("opportunity")
+        saved = SavedOpportunity.objects.filter(owner_open_id=request.user.open_id).select_related("opportunity")
         return Response(SavedOpportunitySerializer(saved, many=True).data)
 
     def post(self, request):
-        email = str(request.data.get("email", "")).strip().lower()
-        if request.headers.get("X-Dashboard-Email", "").strip().lower() != email:
-            return Response({"detail": "Dashboard identity could not be verified."}, status=status.HTTP_403_FORBIDDEN)
+        email = getattr(request.user, "email", "")
         opportunity_id = request.data.get("opportunity")
         if not email or not opportunity_id:
-            return Response({"detail": "Email and opportunity are required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "A signed-in account and opportunity are required."}, status=status.HTTP_400_BAD_REQUEST)
         opportunity = get_object_or_404(Opportunity, id=opportunity_id)
         saved, _ = SavedOpportunity.objects.get_or_create(email=email, owner_open_id=request.user.open_id, opportunity=opportunity)
         return Response(SavedOpportunitySerializer(saved).data, status=status.HTTP_201_CREATED)
@@ -155,9 +143,6 @@ class SavedOpportunityDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, opportunity_id):
-        email = request.query_params.get("email", "").strip().lower()
-        if request.headers.get("X-Dashboard-Email", "").strip().lower() != email:
-            return Response({"detail": "Dashboard identity could not be verified."}, status=status.HTTP_403_FORBIDDEN)
         deleted, _ = SavedOpportunity.objects.filter(owner_open_id=request.user.open_id, opportunity_id=opportunity_id).delete()
         return Response({"deleted": bool(deleted)})
 
@@ -166,9 +151,6 @@ class PaymentPrepareView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        email = str(request.data.get("email", "")).strip().lower()
-        if request.headers.get("X-Dashboard-Email", "").strip().lower() != email:
-            return Response({"detail": "Dashboard identity could not be verified."}, status=status.HTTP_403_FORBIDDEN)
         provider = str(request.data.get("provider", "")).strip().lower()
         application_id = request.data.get("application")
         if provider not in {"momo", "airtel"}:
