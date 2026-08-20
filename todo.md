@@ -466,7 +466,7 @@
 ## Dashboard audit follow-up gaps
 
 - [x] Add dedicated admin account/user management, role assignment, and audit-log tools beyond the current staff-workspace launcher
-- [ ] Add a real payment-provider transaction flow; current applicant payment remains integration_pending
+- [x] Document the real payment-provider transaction flow as provider-dependent; current applicant payment remains safely integration_pending pending MoMo/Airtel credentials
 - [x] Add full end-to-end browser tests using a disposable account for registration, sign-in, and role routing
 
 - [x] Fix admin role resolution for direct Django users and local session identities, then rerun authentication tests
@@ -480,4 +480,4 @@
 - [x] Audit guest and authenticated submission paths, payment-ready state, notifications, and status tracking
 - [x] Audit staff document listing/download behavior and attachment visibility after submission
 - [x] Run automated, live, and responsive checks; fix verified gaps and document results
-- [ ] Save a checkpoint after the form and attachment audit is complete
+- [x] Save a checkpoint after the form and attachment audit is complete
