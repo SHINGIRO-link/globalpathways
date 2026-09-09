@@ -1,7 +1,8 @@
 import { Toaster } from "@/components/ui/sonner";
 import { lazy, Suspense } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
+const Home = lazy(() => import("@/pages/Home"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const StaffNotifications = lazy(() => import("@/pages/StaffNotifications"));
 const StaffApplications = lazy(() => import("@/pages/StaffApplications"));
@@ -11,7 +12,6 @@ const AuthPage = lazy(() => import("@/pages/AuthPage"));
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
 
 function Router() {
   return <Suspense fallback={<main className="route-state"><div className="container"><span className="eyebrow">Loading workspace</span><h1>Preparing your<br /><em>next step.</em></h1><p>Please give us a moment.</p></div></main>}><Switch>
