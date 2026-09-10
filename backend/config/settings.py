@@ -1,13 +1,11 @@
 from pathlib import Path
 import os
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 DJANGO_ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "")
 ALLOWED_HOSTS = list(dict.fromkeys([h.strip() for h in DJANGO_ALLOWED_HOSTS.split(",") if h.strip()] + ["localhost", "127.0.0.1", "globalopportunityconnect.com", "www.globalopportunityconnect.com", "globalpathways.onrender.com"]))
-
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
@@ -70,4 +68,6 @@ DJANGO_CSRF_TRUSTED_ORIGINS = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
 CSRF_TRUSTED_ORIGINS = list(dict.fromkeys([o.strip() for o in DJANGO_CSRF_TRUSTED_ORIGINS.split(",") if o.strip()] + ["https://globalopportunityconnect.com", "https://www.globalopportunityconnect.com"]))
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 REST_FRAMEWORK = {
-
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    "DEFAULT_AUTHENTICATION_CLASSES": ["opportunities.local_auth.LocalSessionAuthentication"],
+}
