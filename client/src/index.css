@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap');
 @import 'tailwindcss';
+@source not "./pages/ComponentShowcase.tsx";
 
 :root { --ink:#15231f; --muted:#61716b; --cream:#f7f6f0; --paper:#fffefa; --sage:#dfe9e1; --deep:#173c35; --forest:#1f5549; --sun:#efc65d; --line:#d9e1db; --ease-out:cubic-bezier(.23,1,.32,1); }
 * { box-sizing:border-box; }
