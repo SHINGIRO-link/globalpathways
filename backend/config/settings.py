@@ -70,4 +70,9 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_AUTHENTICATION_CLASSES": ["opportunities.local_auth.LocalSessionAuthentication"],
+    "DEFAULT_THROTTLE_RATES": {
+        "public_application": "10/hour",
+        "guest_status": "30/hour",
+        "public_inquiry": "20/hour",
+    },
 }
