@@ -238,6 +238,8 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .account-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; padding: .85rem 1rem; border: 1px solid var(--line); background: rgba(255,255,255,.7); }
 .account-home-link { display: inline-flex; align-items: center; gap: .4rem; flex: 0 0 auto; color: var(--forest); font-size: .8rem; font-weight: 700; }
 .account-home-link:hover, .account-home-link:focus-visible { color: var(--ink); text-decoration: underline; outline: none; }
+.dashboard-home-link { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; margin-top: 1rem; color: var(--forest); font-size: .8rem; font-weight: 700; }
+.dashboard-home-link:hover, .dashboard-home-link:focus-visible { color: var(--ink); text-decoration: underline; outline: none; }
 .account-profile { display: flex; align-items: center; gap: .75rem; min-width: 0; }
 .account-avatar { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 2.25rem; width: 2.25rem; height: 2.25rem; border-radius: 50%; color: var(--surface); background: var(--ink); font-weight: 700; }
 .account-profile > div { display: grid; gap: .12rem; min-width: 0; }
