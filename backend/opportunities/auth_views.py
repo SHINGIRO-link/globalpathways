@@ -24,9 +24,9 @@ def _profile_for(user):
         user=real_user,
         defaults={"role": "admin" if getattr(real_user, "is_superuser", False) else "staff" if getattr(real_user, "is_staff", False) else "user"},
     )
+        profile.role = "admin"
     if getattr(real_user, "is_superuser", False) and profile.role != "admin":
         profile.role = "admin"
-        profile.save(update_fields=["role", "updated_at"])
     return profile
 
 
