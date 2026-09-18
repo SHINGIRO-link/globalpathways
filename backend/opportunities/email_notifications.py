@@ -34,6 +34,9 @@ def _send(subject: str, message: str, recipient: str) -> bool:
             )
             with urlopen(request, timeout=20) as response:
                 return 200 <= response.status < 300
+        if not settings.EMAIL_HOST_USER or not settings.EMAIL_HOST_PASSWORD:
+            logger.warning("Email notification skipped because no Resend or SMTP credentials are configured: %s", subject)
+            return False
         return bool(send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], fail_silently=False))
     except Exception:
         logger.exception("Email notification failed: %s", subject)
