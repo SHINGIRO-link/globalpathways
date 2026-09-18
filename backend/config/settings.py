@@ -5,7 +5,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 DJANGO_ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "")
-ALLOWED_HOSTS = list(dict.fromkeys([h.strip() for h in DJANGO_ALLOWED_HOSTS.split(",") if h.strip()] + ["localhost", "127.0.0.1", "globalopportunityconnect.com", "www.globalopportunityconnect.com", "globalpathways.onrender.com"]))
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME", "")
+ALLOWED_HOSTS = list(dict.fromkeys([h.strip() for h in ",".join([DJANGO_ALLOWED_HOSTS, RENDER_EXTERNAL_HOSTNAME]).split(",") if h.strip()] + ["localhost", "127.0.0.1", "globalopportunityconnect.com", "www.globalopportunityconnect.com", "globalpathways.onrender.com"]))
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
