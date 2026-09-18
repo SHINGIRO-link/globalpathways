@@ -134,7 +134,9 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual(saved.status_code, 200)
         self.assertEqual([item["id"] for item in saved.data], [own.id])
 
-    def test_saved_opportunity_and_provider_selection_are_recorded_without_live_charge(self):
+    @patch("opportunities.intouchpay.urlopen")
+    @patch.dict(os.environ, {"INTOUCHPAY_USERNAME": "sandbox-user", "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account", "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password"}, clear=False)
+    def test_saved_opportunity_and_intouchpay_request_is_recorded(self, mock_urlopen):
         saved = self.client.post("/api/saved-opportunities/", {"email": "amina@example.com", "opportunity": self.opportunity.id}, HTTP_X_DASHBOARD_EMAIL="amina@example.com", format="json")
         self.assertEqual(saved.status_code, 201)
         self.assertTrue(SavedOpportunity.objects.filter(email="amina@example.com", opportunity=self.opportunity).exists())
@@ -144,10 +146,12 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertFalse(SavedOpportunity.objects.filter(email="amina@example.com", opportunity=self.opportunity).exists())
         application = Application.objects.create(opportunity=self.opportunity, owner_open_id="test-user", full_name="Amina Test", email="amina@example.com", consent_to_contact=True)
         PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
-        payment = self.client.post("/api/payments/prepare/", {"email": "amina@example.com", "application": application.id, "provider": "momo"}, HTTP_X_DASHBOARD_EMAIL="amina@example.com", format="json")
+        response = mock_urlopen.return_value.__enter__.return_value
+        response.read.return_value = b'{"success":true,"status":"Pending","responsecode":"1000","requesttransactionid":"GP-test"}'
+        payment = self.client.post("/api/payments/prepare/", {"email": "amina@example.com", "application": application.id, "provider": "intouchpay", "mobile_phone": "250788888888"}, HTTP_X_DASHBOARD_EMAIL="amina@example.com", format="json")
         self.assertEqual(payment.status_code, 202)
-        self.assertEqual(payment.data["payment"]["provider"], "momo")
-        self.assertEqual(payment.data["payment"]["status"], "integration_pending")
+        self.assertEqual(payment.data["payment"]["provider"], "intouchpay")
+        self.assertEqual(payment.data["payment"]["status"], "pending")
         self.assertTrue(StaffNotification.objects.filter(application=application, event_type="payment_status").exists())
 
     def test_later_payment_status_change_creates_staff_notification(self):

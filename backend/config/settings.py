@@ -61,7 +61,7 @@ EMAIL_HOST_USER = os.getenv("SMTP_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("SMTP_PASSWORD", "").replace(" ", "")
 EMAIL_USE_TLS = os.getenv("SMTP_USE_TLS", "true").lower() == "true"
 DEFAULT_FROM_EMAIL = os.getenv("SMTP_FROM", EMAIL_HOST_USER or "webmaster@localhost")
-SMTP_STAFF_RECIPIENT = os.getenv("SMTP_STAFF_RECIPIENT", DEFAULT_FROM_EMAIL)
+SMTP_STAFF_RECIPIENT = os.getenv("SMTP_STAFF_RECIPIENT", "globalopportunityconnect@gmail.com")
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [o.strip() for o in os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()]
 DJANGO_CSRF_TRUSTED_ORIGINS = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
