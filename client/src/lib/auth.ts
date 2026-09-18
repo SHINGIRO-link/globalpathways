@@ -39,7 +39,8 @@ export async function getCurrentUser() {
   return payload.user;
 }
 
-export async function registerAccount(name: string, email: string, password: string) {
+export async function registerAccount(email: string, password: string) {
+  const name = email.split("@", 1)[0].trim();
   return request<{ user: LocalUser }>("/auth/register/", { name, email, password });
 }
 

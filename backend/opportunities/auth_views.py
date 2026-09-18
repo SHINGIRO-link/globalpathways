@@ -34,6 +34,15 @@ def _profile_for(user):
 
 
 def _user_payload(user):
+    if not getattr(user, "pk", None):
+        return {
+            "id": None,
+            "openId": getattr(user, "open_id", ""),
+            "name": getattr(user, "name", ""),
+            "email": getattr(user, "email", ""),
+            "loginMethod": "email",
+            "role": getattr(user, "role", "user"),
+        }
     profile = _profile_for(user)
     return {
         "id": user.pk,
@@ -69,11 +78,9 @@ class RegisterView(APIView):
 
     @transaction.atomic
     def post(self, request):
-        name = str(request.data.get("name", "")).strip()
         email = str(request.data.get("email", "")).strip().lower()
+        name = str(request.data.get("name", "")).strip() or email.split("@", 1)[0]
         password = str(request.data.get("password", ""))
-        if not name:
-            return _error("Enter your full name.", "name")
         if not email or "@" not in email:
             return _error("Enter a valid email address.", "email")
         if len(password) < 8:

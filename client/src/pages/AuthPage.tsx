@@ -14,7 +14,6 @@ function Field({ label, type = "text", value, onChange, placeholder, autoComplet
 export default function AuthPage() {
   const [location, setLocation] = useLocation();
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [message, setMessage] = useState("");
@@ -40,7 +39,7 @@ export default function AuthPage() {
         const response = await requestPasswordReset(email);
         setMessage(response.detail);
       } else if (registerMode) {
-        await registerAccount(name, email, password);
+        await registerAccount(email, password);
         notifyAuthChanged();
         setLocation("/dashboard");
       } else {
@@ -59,5 +58,5 @@ export default function AuthPage() {
 
   if (forgotMode) return <AuthShell eyebrow="Password recovery" title="A clear way back in." description="Enter your account email and we will send a secure password-reset link if the account exists."><form className="auth-form" onSubmit={submit}><Field label="Email address" type="email" value={email} onChange={setEmail} placeholder="you@example.com" autoComplete="email" />{message && <div className="auth-success" role="status"><CheckCircle2 size={17} />{message}</div>}{error && <div className="auth-error" role="alert">{error}</div>}<button className="button button-dark auth-submit" disabled={working}>{working ? "Sending…" : "Send reset link"}<Mail size={17} /></button></form><p className="auth-switch"><Link href="/sign-in">Return to sign in</Link></p></AuthShell>;
 
-  return <AuthShell eyebrow={registerMode ? "Create your account" : "Global Pathways account"} title={registerMode ? "Keep your next step close." : "Welcome back."} description={registerMode ? "Create a secure account to track applications, save routes, and return to your plans." : "Sign in to continue to your private application workspace."}><form className="auth-form" onSubmit={submit}>{registerMode && <Field label="Full name" value={name} onChange={setName} placeholder="Your full name" autoComplete="name" />}<Field label="Email address" type="email" value={email} onChange={setEmail} placeholder="you@example.com" autoComplete="email" /><Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 8 characters" autoComplete={registerMode ? "new-password" : "current-password"} />{error && <div className="auth-error" role="alert">{error}</div>}<button className="button button-dark auth-submit" disabled={working}>{working ? "Please wait…" : registerMode ? "Create account" : "Sign in"}<ArrowRight size={17} /></button></form><div className="auth-links">{!registerMode && <Link href="/forgot-password">Forgot password?</Link>}<span>{registerMode ? "Already have an account?" : "New to Global Pathways?"} <Link href={registerMode ? "/sign-in" : "/create-account"}>{registerMode ? "Sign in" : "Create account"}</Link></span></div></AuthShell>;
+  return <AuthShell eyebrow={registerMode ? "Create your account" : "Global Pathways account"} title={registerMode ? "Start simply." : "Welcome back."} description={registerMode ? "Use your email and a password to create an account and track your applications." : "Sign in to continue to your private application workspace."}><form className="auth-form" onSubmit={submit}><Field label="Email address" type="email" value={email} onChange={setEmail} placeholder="you@example.com" autoComplete="email" /><Field label="Password" type="password" value={password} onChange={setPassword} placeholder="At least 8 characters" autoComplete={registerMode ? "new-password" : "current-password"} />{error && <div className="auth-error" role="alert">{error}</div>}<button className="button button-dark auth-submit" disabled={working}>{working ? "Please wait…" : registerMode ? "Create account" : "Sign in"}<ArrowRight size={17} /></button></form><div className="auth-links">{!registerMode && <Link href="/forgot-password">Forgot password?</Link>}<span>{registerMode ? "Already have an account?" : "New to Global Pathways?"} <Link href={registerMode ? "/sign-in" : "/create-account"}>{registerMode ? "Sign in" : "Create account"}</Link></span></div></AuthShell>;
 }

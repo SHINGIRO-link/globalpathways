@@ -21,6 +21,11 @@ class LocalAuthenticationTests(TestCase):
         self.assertEqual(self.client.get("/api/auth/me/").data["user"]["email"], "amina@example.com")
         self.assertEqual(self.client.get("/api/auth/me/").data["user"]["role"], "user")
 
+    def test_register_can_use_only_email_and_password(self):
+        response = self.client.post("/api/auth/register/", {"email": "simple@example.com", "password": "SafePassword123!"}, format="json")
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data["user"]["name"], "simple")
+
     def test_login_and_logout_use_django_session(self):
         user = User.objects.create_user(username="staff@example.com", email="staff@example.com", password="SafePassword123!")
         AccountProfile.objects.create(user=user, role="staff")
