@@ -135,7 +135,7 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual([item["id"] for item in saved.data], [own.id])
 
     @patch("opportunities.intouchpay.urlopen")
-    @patch.dict(os.environ, {"INTOUCHPAY_USERNAME": "sandbox-user", "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account", "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password"}, clear=False)
+    @patch.dict(os.environ, {"INTOUCHPAY_USERNAME": "sandbox-user", "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account", "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password", "INTOUCHPAY_CALLBACK_URL": "https://example.com/api/payments/intouchpay/callback/"}, clear=False)
     def test_saved_opportunity_and_intouchpay_request_is_recorded(self, mock_urlopen):
         saved = self.client.post("/api/saved-opportunities/", {"email": "amina@example.com", "opportunity": self.opportunity.id}, HTTP_X_DASHBOARD_EMAIL="amina@example.com", format="json")
         self.assertEqual(saved.status_code, 201)

@@ -33,6 +33,8 @@ class IntouchPayClient:
     def request_payment(self, *, amount: int, mobile_phone: str, request_transaction_id: str):
         if not self.configured:
             raise IntouchPayError("IntouchPay sandbox credentials are not configured.")
+        if not self.callback_url:
+            raise IntouchPayError("IntouchPay callback URL is not configured.")
         timestamp, password_hash = self._credentials()
         body = {
             "username": self.username,
@@ -43,8 +45,7 @@ class IntouchPayClient:
             "requesttransactionid": request_transaction_id,
             "accountno": self.account_number,
         }
-        if self.callback_url:
-            body["callbackurl"] = self.callback_url
+        body["callbackurl"] = self.callback_url
         request = Request(
             f"{self.base_url}/requestpayment/",
             data=json.dumps(body).encode("utf-8"),

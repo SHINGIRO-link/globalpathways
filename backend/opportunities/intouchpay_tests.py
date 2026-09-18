@@ -4,7 +4,7 @@ import os
 import unittest
 from unittest.mock import patch
 
-from .intouchpay import IntouchPayClient, callback_payload, is_successful_status
+from .intouchpay import IntouchPayClient, IntouchPayError, callback_payload, is_successful_status
 
 
 class IntouchPayClientTests(unittest.TestCase):
@@ -32,3 +32,13 @@ class IntouchPayClientTests(unittest.TestCase):
         payload = {"jsonpayload": {"requesttransactionid": "GP-1-test", "responsecode": "01", "status": "Successful"}}
         self.assertEqual(callback_payload(payload)["requesttransactionid"], "GP-1-test")
         self.assertTrue(is_successful_status(callback_payload(payload)))
+
+    @patch.dict(os.environ, {
+        "INTOUCHPAY_USERNAME": "sandbox-user",
+        "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account",
+        "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password",
+        "INTOUCHPAY_CALLBACK_URL": "",
+    }, clear=False)
+    def test_request_payment_requires_callback_url(self):
+        with self.assertRaisesRegex(IntouchPayError, "callback URL"):
+            IntouchPayClient().request_payment(amount=2000, mobile_phone="250788888888", request_transaction_id="GP-2-test")
