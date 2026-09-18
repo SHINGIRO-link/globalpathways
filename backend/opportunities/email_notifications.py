@@ -1,4 +1,6 @@
 import logging
+import json
+from urllib.request import Request, urlopen
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -14,6 +16,24 @@ def _send(subject: str, message: str, recipient: str) -> bool:
         logger.warning("Email notification skipped because recipient is empty: %s", subject)
         return False
     try:
+        if settings.RESEND_API_KEY:
+            request = Request(
+                "https://api.resend.com/emails",
+                data=json.dumps({
+                    "from": settings.RESEND_FROM_EMAIL,
+                    "to": [recipient],
+                    "subject": subject,
+                    "text": message,
+                }).encode("utf-8"),
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {settings.RESEND_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                method="POST",
+            )
+            with urlopen(request, timeout=20) as response:
+                return 200 <= response.status < 300
         return bool(send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [recipient], fail_silently=False))
     except Exception:
         logger.exception("Email notification failed: %s", subject)
