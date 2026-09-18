@@ -6,7 +6,7 @@ from .documents import EducationDocumentUploadView, StaffDocumentServeView
 from .views import (
     ApplicationCreateView, ApplicationStatusView, DashboardView, GuestClaimApplicationView, GuestStatusView, HealthView,
     InquiryCreateView, OpportunityDetailView, OpportunityListView,
-    PaymentPrepareView, SavedOpportunityDeleteView, SavedOpportunityListCreateView,
+    PaymentPrepareView, IntouchPayCallbackView, SavedOpportunityDeleteView, SavedOpportunityListCreateView,
     StaffNotificationListView, StaffNotificationMarkAllReadView, StaffNotificationReadView,
     SuccessStoryListView,
 )
@@ -38,6 +38,7 @@ urlpatterns = [
     path("saved-opportunities/", SavedOpportunityListCreateView.as_view(), name="saved-opportunities"),
     path("saved-opportunities/<int:opportunity_id>/", SavedOpportunityDeleteView.as_view(), name="saved-opportunity-delete"),
     path("payments/prepare/", PaymentPrepareView.as_view(), name="payment-prepare"),
+    path("payments/intouchpay/callback/", IntouchPayCallbackView.as_view(), name="intouchpay-callback"),
     path("inquiries/", InquiryCreateView.as_view(), name="inquiry-create"),
     path("success-stories/", SuccessStoryListView.as_view(), name="success-story-list"),
     path("staff/notifications/", StaffNotificationListView.as_view(), name="staff-notifications"),

@@ -131,7 +131,7 @@ class StaffNotification(models.Model):
 
 
 class PaymentRecord(models.Model):
-    PROVIDER_CHOICES = [("momo", "MoMo"), ("airtel", "Airtel Money")]
+    PROVIDER_CHOICES = [("intouchpay", "IntouchPay")]
     STATUS_CHOICES = [("pending", "Pending"), ("integration_pending", "Integration pending"), ("paid", "Paid"), ("failed", "Failed")]
 
     application = models.OneToOneField(Application, on_delete=models.CASCADE, related_name="payment")

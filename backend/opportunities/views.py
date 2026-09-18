@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -7,6 +9,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.throttling import ScopedRateThrottle
+from .intouchpay import IntouchPayClient, IntouchPayError, callback_payload, is_failed_status, is_successful_status
 
 from .authentication import IsStaffUser
 from .email_notifications import notify_new_application
@@ -148,20 +151,63 @@ class SavedOpportunityDeleteView(APIView):
 
 
 class PaymentPrepareView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         provider = str(request.data.get("provider", "")).strip().lower()
         application_id = request.data.get("application")
-        if provider not in {"momo", "airtel"}:
-            return Response({"detail": "Choose MoMo or Airtel Money."}, status=status.HTTP_400_BAD_REQUEST)
-        application = get_object_or_404(Application, id=application_id, owner_open_id=request.user.open_id)
+        if provider != "intouchpay":
+            return Response({"detail": "Choose IntouchPay."}, status=status.HTTP_400_BAD_REQUEST)
+        application = get_object_or_404(Application, id=application_id)
+        if getattr(request.user, "is_authenticated", False):
+            if application.owner_open_id and application.owner_open_id != request.user.open_id:
+                return Response({"detail": "This application is linked to another account."}, status=status.HTTP_403_FORBIDDEN)
+        elif not application.owner_open_id and str(request.data.get("email", "")).strip().lower() != application.email.lower():
+            return Response({"detail": "The application email is required to start this payment."}, status=status.HTTP_403_FORBIDDEN)
+        mobile_phone = str(request.data.get("mobile_phone", "")).strip()
+        if not mobile_phone:
+            return Response({"detail": "A mobile money phone number is required."}, status=status.HTTP_400_BAD_REQUEST)
         payment, _ = PaymentRecord.objects.get_or_create(application=application, defaults={"amount": 2000, "currency": "RWF"})
+        request_id = f"GP-{uuid.uuid4().hex}"
+        try:
+            result = IntouchPayClient().request_payment(amount=payment.amount, mobile_phone=mobile_phone, request_transaction_id=request_id)
+        except IntouchPayError as error:
+            return Response({"detail": str(error)}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
         payment.provider = provider
-        payment.status = "integration_pending"
-        payment.save(update_fields=["provider", "status", "updated_at"])
-        StaffNotification.objects.create(event_type="payment_status", title="Payment provider selected", message=f"{application.full_name} selected {payment.get_provider_display()} for the 2,000 RWF service fee.", application=application)
-        return Response({"payment": PaymentRecordSerializer(payment).data, "message": "Provider integration is not enabled yet. Your application remains safely recorded and payment can be completed when the service is connected."}, status=status.HTTP_202_ACCEPTED)
+        payment.provider_reference = request_id
+        payment.status = "pending" if str(result.get("responsecode", "")) == "1000" or str(result.get("status", "")).lower() in {"pending", "processing"} else ("paid" if is_successful_status(result) else "failed")
+        payment.save(update_fields=["provider", "provider_reference", "status", "updated_at"])
+        if payment.status == "paid" and application.status == "payment_required":
+            application.status = "received"
+            application.save(update_fields=["status", "updated_at"])
+            ApplicationStatusEvent.objects.create(application=application, status="received", note="IntouchPay sandbox payment confirmed.")
+        StaffNotification.objects.create(event_type="payment_status", title="IntouchPay payment requested", message=f"A {payment.amount} {payment.currency} IntouchPay sandbox payment was requested for {application.full_name}.", application=application)
+        return Response({"payment": PaymentRecordSerializer(payment).data, "message": result.get("message", "Payment request sent. Confirm the prompt on your phone.")}, status=status.HTTP_202_ACCEPTED)
+
+
+class IntouchPayCallbackView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        payload = callback_payload(request.data)
+        request_id = str(payload.get("requesttransactionid", "")).strip()
+        if not request_id:
+            return Response({"success": False, "message": "Missing request transaction ID."}, status=status.HTTP_400_BAD_REQUEST)
+        payment = PaymentRecord.objects.filter(provider="intouchpay", provider_reference=request_id).select_related("application").first()
+        if not payment:
+            return Response({"success": False, "message": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)
+        if is_successful_status(payload):
+            payment.status = "paid"
+            payment.provider_reference = str(payload.get("transactionid") or request_id)
+            payment.save(update_fields=["status", "provider_reference", "updated_at"])
+            if payment.application.status == "payment_required":
+                payment.application.status = "received"
+                payment.application.save(update_fields=["status", "updated_at"])
+                ApplicationStatusEvent.objects.create(application=payment.application, status="received", note="IntouchPay payment confirmed.")
+        elif is_failed_status(payload):
+            payment.status = "failed"
+            payment.save(update_fields=["status", "updated_at"])
+        return Response({"success": True, "request_id": request_id})
 
 
 class StaffNotificationListView(APIView):

@@ -266,8 +266,8 @@ export async function getApplicationStatus(email: string, applicationId: number)
   return request<{ application: DashboardApplication; events: Array<{ id: number; status: ApplicationStatus; status_label: string; note: string; created_at: string }>; payment: { amount: number; currency: string; provider: string; status: string; status_label: string } | null }>(`/applications/${applicationId}/status/?email=${encodeURIComponent(email)}`, { headers: { "Content-Type": "application/json", ...dashboardHeaders(email) } });
 }
 
-export async function preparePayment(email: string, application: number, provider: "momo" | "airtel") {
-  return request<{ payment: { amount: number; currency: string; provider: string; status: string }; message: string }>("/payments/prepare/", { method: "POST", headers: { "Content-Type": "application/json", ...dashboardHeaders(email) }, body: JSON.stringify({ email, application, provider }) });
+export async function preparePayment(email: string, application: number, mobile_phone: string) {
+  return request<{ payment: { amount: number; currency: string; provider: string; status: string }; message: string }>("/payments/prepare/", { method: "POST", headers: { "Content-Type": "application/json", ...dashboardHeaders(email) }, body: JSON.stringify({ email, application, provider: "intouchpay", mobile_phone }) });
 }
 
 

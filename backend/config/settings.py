@@ -76,3 +76,6 @@ REST_FRAMEWORK = {
         "public_inquiry": "20/hour",
     },
 }
+
+# IntouchPay sandbox credentials are read only from deployment environment variables.
+INTOUCHPAY_BASE_URL = os.getenv("INTOUCHPAY_BASE_URL", "https://developer.intouchpay.co.rw/api/v1/sandbox")

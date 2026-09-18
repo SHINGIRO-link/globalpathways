@@ -41,9 +41,16 @@ SMTP_USER=<mailbox>
 SMTP_PASSWORD=<mail-app-password>
 SMTP_FROM=<verified-sender>
 SMTP_STAFF_RECIPIENT=<staff-recipient>
+INTOUCHPAY_BASE_URL=https://developer.intouchpay.co.rw/api/v1/sandbox
+INTOUCHPAY_USERNAME=<sandbox-username>
+INTOUCHPAY_ACCOUNT_NUMBER=<sandbox-account-number>
+INTOUCHPAY_PARTNER_PASSWORD=<sandbox-partner-password>
+INTOUCHPAY_CALLBACK_URL=https://globalopportunityconnect.com/api/payments/intouchpay/callback/
 ```
 
 Do not commit this file. If the frontend remains on Manus, the CORS and CSRF origin values must match the exact public Manus origin. If the API uses Manus session authentication or storage proxy services, those service credentials and callback configuration must also be available in the deployed architecture; PythonAnywhere alone does not automatically provide Manus runtime environment values.
+
+The application now uses IntouchPay's sandbox **Request Payment** flow. The server computes the SHA-256 password from the sandbox username, account number, partner password, and UTC timestamp; the partner password is never sent to the browser or stored in the repository. Set the callback URL to the public API URL above so IntouchPay can report the final transaction status. Do not use these sandbox values for live payments.
 
 ## 4. Create the Web app
 
