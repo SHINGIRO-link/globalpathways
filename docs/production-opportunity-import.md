@@ -15,7 +15,7 @@ python manage.py import_uploaded_opportunities
 Expected output:
 
 ```text
-Imported 70 opportunities with update_or_create.
+Imported 104 opportunities with update_or_create.
 ```
 
 If the service uses a different working directory, run the same command from the directory containing `manage.py`:
@@ -41,8 +41,8 @@ from opportunities.models import Opportunity
 
 path = Path('opportunities/uploaded_opportunities.json')
 rows = json.loads(path.read_text(encoding='utf-8'))
-if len(rows) != 70:
-    raise SystemExit(f'Expected 70 rows, found {len(rows)}')
+if len(rows) != 104:
+    raise SystemExit(f"Expected 104 rows, found {len(rows)}")
 
 for row in rows:
     values = dict(row)
@@ -66,8 +66,8 @@ import json
 from pathlib import Path
 rows = json.loads(Path('/tmp/opportunities.json').read_text())
 assert isinstance(rows, list), type(rows)
-assert len(rows) == 70, len(rows)
-assert len({row['slug'] for row in rows}) == 70
+assert len(rows) == 104, len(rows)
+assert len({row['slug'] for row in rows}) == 104
 assert all(row['source_url'] for row in rows)
 required = {
     'id', 'title', 'slug', 'category', 'category_label', 'status',
