@@ -146,26 +146,26 @@
   {
     "title": "International Chinese Language Teachers Scholarship — BLCU",
     "slug": "international-chinese-language-teachers-scholarship-blcu",
-    "category": "job",
+    "category": "scholarship",
     "status": "open",
     "country": "China",
     "region": "Asia",
     "deadline": "2026-10-31T23:59:00Z",
-    "deadline_note": "31 Oct 2026 for March 2027 intake",
-    "source_name": "BLCU official call",
+    "deadline_note": "Published intake; deadline is call-specific",
+    "source_name": "Beijing Language and Culture University",
     "source_url": "https://admission.blcu.edu.cn/en/2026/0303/c1148a3044/page.htm",
-    "source_verified_at": "2026-09-18",
-    "summary": "Chinese-language study / bachelor’s-related pathway opportunity in China.",
-    "description": "International applicants; program and HSK requirements apply Always verify the official notice before applying; postings can close early or change.",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full/partial according to the call.",
+    "description": "International applicants to eligible BLCU Chinese-language programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
     "eligibility": [
-      "International applicants; program and HSK requirements apply"
+      "International applicants to eligible BLCU Chinese-language programmes."
     ],
     "required_documents": [
       "Passport or national ID",
       "CV or academic records",
       "Official application documents"
     ],
-    "featured": true
+    "featured": false
   },
   {
     "title": "International Chinese Language Teachers Scholarship — Guangdong University of Foreign Studies",
@@ -223,21 +223,21 @@
     "country": "Japan",
     "region": "Asia",
     "deadline": "2026-11-15T23:59:00Z",
-    "deadline_note": "1 Oct–15 Nov 2026",
-    "source_name": "PEPP official admissions",
+    "deadline_note": "15 Nov 2026",
+    "source_name": "University of Tsukuba",
     "source_url": "https://pepp.hass.tsukuba.ac.jp/admission/",
-    "source_verified_at": "2026-09-18",
-    "summary": "Master’s / doctoral admission with scholarship route opportunity in Japan.",
-    "description": "Applicants to PEPP scholarship admission; program-specific academic and English requirements Always verify the official notice before applying; postings can close early or change.",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full/varies by PEPP award.",
+    "description": "International applicants to the PEPP graduate programme. Always verify the official notice before applying; deadlines and eligibility can change.",
     "eligibility": [
-      "Applicants to PEPP scholarship admission; program-specific academic and English requirements"
+      "International applicants to the PEPP graduate programme."
     ],
     "required_documents": [
       "Passport or national ID",
       "CV or academic records",
       "Official application documents"
     ],
-    "featured": true
+    "featured": false
   },
   {
     "title": "Policy Officer — PNT / Space Threat Response Duty Officer",
@@ -748,17 +748,17 @@
     "slug": "lead-generation-consultant",
     "category": "job",
     "status": "open",
-    "country": "Remote / Asia-Pacific program",
+    "country": "Asia-Pacific / remote terms in posting",
     "region": "Asia",
     "deadline": "2026-09-25T23:59:00Z",
     "deadline_note": "25 Sep 2026",
-    "source_name": "ESCAP jobs",
-    "source_url": "https://www.unescap.org/jobs",
-    "source_verified_at": "2026-09-18",
-    "summary": "Consultancy opportunity in Remote / Asia-Pacific program.",
-    "description": "Consultancy in trade, investment and innovation Always verify the official notice before applying; postings can close early or change.",
+    "source_name": "United Nations ESCAP",
+    "source_url": "https://careers.un.org/jobSearchDescription/285074?language=en",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current UN ESCAP consultancy.",
+    "description": "Check the official job description for qualifications, deliverables, and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
     "eligibility": [
-      "Consultancy in trade, investment and innovation"
+      "Check the official job description for qualifications, deliverables, and contract terms."
     ],
     "required_documents": [
       "Passport or national ID",
@@ -918,15 +918,15 @@
     "status": "open",
     "country": "Bangkok, Thailand",
     "region": "Asia",
-    "deadline": "2026-09-30T23:59:00Z",
-    "deadline_note": "30 Sep 2026",
-    "source_name": "ESCAP jobs",
-    "source_url": "https://www.unescap.org/jobs",
-    "source_verified_at": "2026-09-18",
-    "summary": "Consultancy opportunity in Bangkok, Thailand.",
-    "description": "Biodiversity/environment consultancy Always verify the official notice before applying; postings can close early or change.",
+    "deadline": "2026-10-01T23:59:00Z",
+    "deadline_note": "1 Oct 2026",
+    "source_name": "FAO",
+    "source_url": "https://jobs.fao.org/careersection/fao_external/jobdetail.ftl?job=2601911",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current FAO vacancy.",
+    "description": "Check the official job description for qualifications and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
     "eligibility": [
-      "Biodiversity/environment consultancy"
+      "Check the official job description for qualifications and contract terms."
     ],
     "required_documents": [
       "Passport or national ID",
@@ -1636,17 +1636,17 @@
     "slug": "rhodes-scholarship-2027",
     "category": "scholarship",
     "status": "open",
-    "country": "UK / Oxford",
+    "country": "United Kingdom / Oxford",
     "region": "Europe",
     "deadline": "2027-12-31T23:59:00Z",
-    "deadline_note": "Open; constituency deadline varies",
-    "source_name": "Rhodes official applications",
+    "deadline_note": "Open; closing date varies by Rhodes constituency",
+    "source_name": "Rhodes Trust",
     "source_url": "https://www.rhodeshouse.ox.ac.uk/scholarships/applications/",
-    "source_verified_at": "2026-09-18",
-    "summary": "Postgraduate scholarship opportunity in UK / Oxford.",
-    "description": "Applicants apply through the Rhodes constituency relevant to them Always verify the official notice before applying; postings can close early or change.",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full postgraduate scholarship.",
+    "description": "Outstanding young applicants from eligible constituencies for full-time Oxford postgraduate study. Always verify the official notice before applying; deadlines and eligibility can change.",
     "eligibility": [
-      "Applicants apply through the Rhodes constituency relevant to them"
+      "Outstanding young applicants from eligible constituencies for full-time Oxford postgraduate study."
     ],
     "required_documents": [
       "Passport or national ID",
@@ -1660,17 +1660,833 @@
     "slug": "university-of-stirling-vice-chancellor-s-postgraduate-international-scholarship",
     "category": "scholarship",
     "status": "open",
-    "country": "UK",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-31T23:59:00Z",
+    "deadline_note": "1 Sep–31 Oct 2026 for January 2027 start; later windows listed officially",
+    "source_name": "University of Stirling",
+    "source_url": "https://www.stir.ac.uk/scholarships/general/postgraduate/vice-chancellors-postgraduate-international-scholarship/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Partial £7,000 tuition-fee waiver.",
+    "description": "International, self-funded students with an eligible postgraduate taught offer. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International, self-funded students with an eligible postgraduate taught offer."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Chevening Scholarship 2027–28",
+    "slug": "chevening-scholarship-2027-28",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-06T11:00:00Z",
+    "deadline_note": "6 Oct 2026, 11:00 UTC",
+    "source_name": "Chevening",
+    "source_url": "https://www.chevening.org/scholarships/application-timeline/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full one-year taught master’s scholarship.",
+    "description": "International applicants; country/territory eligibility and Chevening requirements apply. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants; country/territory eligibility and Chevening requirements apply."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Swiss Government Excellence Research Scholarship 2027–28",
+    "slug": "swiss-government-excellence-research-scholarship-2027-28",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Switzerland",
     "region": "Europe",
     "deadline": "2027-12-31T23:59:00Z",
-    "deadline_note": "Applications remain open; awards for Sep 2026/Jan 2027",
-    "source_name": "Stirling official scholarship",
-    "source_url": "https://www.stir.ac.uk/scholarships/general/postgraduate/vice-chancellors-postgraduate-international-scholarship/",
-    "source_verified_at": "2026-09-18",
-    "summary": "Master’s scholarship opportunity in UK.",
-    "description": "International postgraduate applicants; admission and eligibility conditions apply Always verify the official notice before applying; postings can close early or change.",
+    "deadline_note": "Country-specific deadline; call open from 20 Aug 2026",
+    "source_name": "Swiss official call",
+    "source_url": "https://www.sbfi.admin.ch/en/swiss-government-excellence-scholarships",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full/varies postgraduate research support; CHF 2,450 monthly stated for the main research route.",
+    "description": "Early-career researchers with a completed master’s and a Swiss academic supervisor. Always verify the official notice before applying; deadlines and eligibility can change.",
     "eligibility": [
-      "International postgraduate applicants; admission and eligibility conditions apply"
+      "Early-career researchers with a completed master’s and a Swiss academic supervisor."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Swiss Government Excellence Art Scholarship 2027–28",
+    "slug": "swiss-government-excellence-art-scholarship-2027-28",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Switzerland",
+    "region": "Europe",
+    "deadline": "2027-12-31T23:59:00Z",
+    "deadline_note": "Country-specific deadline; call open from 20 Aug 2026",
+    "source_name": "Swiss official call",
+    "source_url": "https://www.sbfi.admin.ch/en/swiss-government-excellence-scholarships",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full/varies initial master’s art scholarship route.",
+    "description": "Applicants from eligible countries pursuing an initial master’s in an artistic field. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Applicants from eligible countries pursuing an initial master’s in an artistic field."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Czech Government Scholarships for Developing Countries 2026",
+    "slug": "czech-government-scholarships-for-developing-countries-2026",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Czech Republic",
+    "region": "Europe",
+    "deadline": "2026-09-30T23:59:00Z",
+    "deadline_note": "30 Sep 2026",
+    "source_name": "Study in Czechia",
+    "source_url": "https://studyin.gov.cz/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Government scholarship route; coverage varies by track.",
+    "description": "Citizens of listed eligible developing countries; study level depends on the call. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Citizens of listed eligible developing countries; study level depends on the call."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "CEU Master’s with Institutional Financial Aid, Round 1",
+    "slug": "ceu-master-s-with-institutional-financial-aid-round-1",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Austria / Hungary",
+    "region": "Europe",
+    "deadline": "2026-10-15T23:59:00Z",
+    "deadline_note": "15 Oct 2026, 23:59 CET",
+    "source_name": "Central European University",
+    "source_url": "https://www.ceu.edu/admissions/master",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full or partial competitive institutional financial aid.",
+    "description": "Bachelor’s holders applying to CEU master’s programmes; financial-aid application open in Round 1. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Bachelor’s holders applying to CEU master’s programmes; financial-aid application open in Round 1."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Mastercard Foundation Scholars Program at Cambridge 2027–28",
+    "slug": "mastercard-foundation-scholars-program-at-cambridge-2027-28",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2027-12-31T23:59:00Z",
+    "deadline_note": "Applications announced open 11 Sep 2026; course deadline applies",
+    "source_name": "University of Cambridge",
+    "source_url": "https://www.mastercardfoundation.fund.cam.ac.uk/news/2027-applications-now-open",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full tuition plus monthly maintenance allowance.",
+    "description": "African citizens and residents applying to eligible full-time one-year postgraduate courses. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "African citizens and residents applying to eligible full-time one-year postgraduate courses."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Chevening route for University of Reading applicants",
+    "slug": "chevening-route-for-university-of-reading-applicants",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-06T11:00:00Z",
+    "deadline_note": "6 Oct 2026, 11:00 UTC",
+    "source_name": "University of Reading / Chevening",
+    "source_url": "https://www.reading.ac.uk/ready-to-study/study/fees-and-funding/masters-scholarships",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full through Chevening.",
+    "description": "Applicants meeting Chevening and University of Reading course requirements. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Applicants meeting Chevening and University of Reading course requirements."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Chevening route for University of York applicants",
+    "slug": "chevening-route-for-university-of-york-applicants",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-06T11:00:00Z",
+    "deadline_note": "6 Oct 2026, 11:00 UTC",
+    "source_name": "University of York / Chevening",
+    "source_url": "https://www.york.ac.uk/study/postgraduate-taught/funding/international/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full through Chevening.",
+    "description": "International applicants to eligible York postgraduate courses. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants to eligible York postgraduate courses."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Chevening route for University of Westminster applicants",
+    "slug": "chevening-route-for-university-of-westminster-applicants",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-06T11:00:00Z",
+    "deadline_note": "6 Oct 2026, 11:00 UTC",
+    "source_name": "University of Westminster / Chevening",
+    "source_url": "https://www.westminster.ac.uk/study/fees-and-funding/scholarships",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full through Chevening.",
+    "description": "Overseas fee-paying applicants seeking eligible postgraduate study. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Overseas fee-paying applicants seeking eligible postgraduate study."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Chevening route for LSTM applicants",
+    "slug": "chevening-route-for-lstm-applicants",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-06T11:00:00Z",
+    "deadline_note": "6 Oct 2026, 11:00 UTC",
+    "source_name": "LSTM / Chevening",
+    "source_url": "https://lstmed.ac.uk/study/fees-and-funding-international/chevening-scholarships/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full through Chevening.",
+    "description": "International applicants to eligible postgraduate courses. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants to eligible postgraduate courses."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Chevening route for LSHTM applicants",
+    "slug": "chevening-route-for-lshtm-applicants",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-06T11:00:00Z",
+    "deadline_note": "6 Oct 2026, 11:00 UTC",
+    "source_name": "LSHTM / Chevening",
+    "source_url": "https://www.lshtm.ac.uk/study/fees-and-funding/funding-scholarships/masters-funding",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full through Chevening.",
+    "description": "International applicants to eligible postgraduate programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants to eligible postgraduate programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Chevening route for University of Kent applicants",
+    "slug": "chevening-route-for-university-of-kent-applicants",
+    "category": "scholarship",
+    "status": "open",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "deadline": "2026-10-06T11:00:00Z",
+    "deadline_note": "6 Oct 2026, 11:00 UTC",
+    "source_name": "University of Kent / Chevening",
+    "source_url": "https://www.kent.ac.uk/scholarships/postgraduate",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full through Chevening.",
+    "description": "International applicants to eligible postgraduate programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants to eligible postgraduate programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Honjo International Scholarship for Foreign Students",
+    "slug": "honjo-international-scholarship-for-foreign-students",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Japan",
+    "region": "Asia",
+    "deadline": "2026-10-31T23:59:00Z",
+    "deadline_note": "1 Sep–31 Oct 2026",
+    "source_name": "Honjo International Scholarship Foundation",
+    "source_url": "https://www.hisf.or.jp/en/scholarship/foreigner/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Monthly support of ¥180,000–¥230,000 depending on degree duration.",
+    "description": "Foreign students enrolled or accepted for a Japanese master’s or doctoral programme. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Foreign students enrolled or accepted for a Japanese master’s or doctoral programme."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Global Korea Scholarship 2027 Undergraduate",
+    "slug": "global-korea-scholarship-2027-undergraduate",
+    "category": "scholarship",
+    "status": "open",
+    "country": "South Korea",
+    "region": "Asia",
+    "deadline": "2027-12-31T23:59:00Z",
+    "deadline_note": "2027 call published; embassy and university deadlines vary",
+    "source_name": "Study in Korea",
+    "source_url": "https://www.studyinkorea.go.kr/ko/plan/scholarship.do",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full government scholarship route.",
+    "description": "International undergraduate applicants; follow the relevant embassy or university notice. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International undergraduate applicants; follow the relevant embassy or university notice."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Hong Kong PhD Fellowship Scheme 2027",
+    "slug": "hong-kong-phd-fellowship-scheme-2027",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Hong Kong SAR",
+    "region": "Asia",
+    "deadline": "2026-12-01T04:00:00Z",
+    "deadline_note": "1 Sep–1 Dec 2026, 12:00 HKT",
+    "source_name": "Research Grants Council",
+    "source_url": "https://cerg1.ugc.edu.hk/hkpfs/index.html",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full research fellowship with annual stipend and travel/research allowance.",
+    "description": "International and local applicants to participating research-degree programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International and local applicants to participating research-degree programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Lingnan University Research Postgraduate Funding Route",
+    "slug": "lingnan-university-research-postgraduate-funding-route",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Hong Kong SAR",
+    "region": "Asia",
+    "deadline": "2027-01-15T15:59:00Z",
+    "deadline_note": "Main round 1 Sep 2026–15 Jan 2027",
+    "source_name": "Lingnan University",
+    "source_url": "https://www.ln.edu.hk/rpg/admission/application-for-admission",
+    "source_verified_at": "2026-09-23",
+    "summary": "Funding varies by fellowship and university award.",
+    "description": "Research postgraduate applicants meeting programme-specific requirements. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Research postgraduate applicants meeting programme-specific requirements."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "HKUST Fok Ying Tung Graduate School Funding Route",
+    "slug": "hkust-fok-ying-tung-graduate-school-funding-route",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Hong Kong SAR",
+    "region": "Asia",
+    "deadline": "2027-12-31T23:59:00Z",
+    "deadline_note": "Fall 2027 applications open 1 Sep 2026; programme deadline varies",
+    "source_name": "HKUST",
+    "source_url": "https://fytgs.hkust.edu.hk/admissions/Admission-to-Hong-Kong-Campus/submitting-an-application/online-application",
+    "source_verified_at": "2026-09-23",
+    "summary": "Funding varies by admission and scholarship award.",
+    "description": "Applicants to HKUST research postgraduate programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Applicants to HKUST research postgraduate programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "HKBU International Talent and Social Sciences Transdisciplinary PhD",
+    "slug": "hkbu-international-talent-and-social-sciences-transdisciplinary-phd",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Hong Kong SAR",
+    "region": "Asia",
+    "deadline": "2026-12-01T23:59:00Z",
+    "deadline_note": "September 2027 intake; 1 Dec 2026 deadline",
+    "source_name": "Hong Kong Baptist University",
+    "source_url": "https://gs.hkbu.edu.hk/admission/its-transdisciplinary-phd-programme",
+    "source_verified_at": "2026-09-23",
+    "summary": "Funding/support package varies by offer.",
+    "description": "Applicants meeting HKBU doctoral admission requirements. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Applicants meeting HKBU doctoral admission requirements."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Hokkaido University MEXT Scholarship IGP Special Quota",
+    "slug": "hokkaido-university-mext-scholarship-igp-special-quota",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Japan",
+    "region": "Asia",
+    "deadline": "2026-11-10T23:59:00Z",
+    "deadline_note": "Official page states application open now; supervisor contact by 10 Nov 2026",
+    "source_name": "Hokkaido University",
+    "source_url": "https://www.lfsci.hokudai.ac.jp/en/info/2515.html",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full MEXT scholarship route.",
+    "description": "International graduate applicants to participating Hokkaido programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International graduate applicants to participating Hokkaido programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "NUS CDE Research Graduate Admission with Scholarship Consideration",
+    "slug": "nus-cde-research-graduate-admission-with-scholarship-consideration",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Singapore",
+    "region": "Asia",
+    "deadline": "2027-01-15T23:59:00Z",
+    "deadline_note": "Current cycle; international portal closes 15 Jan 2027 for August intake",
+    "source_name": "National University of Singapore",
+    "source_url": "https://cde.nus.edu.sg/graduate/graduate-programmes-by-research/how-to-apply/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Funding varies; scholarship consideration available.",
+    "description": "International research master’s and doctoral applicants. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International research master’s and doctoral applicants."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "NUS MBA Scholarships and August 2027 Intake",
+    "slug": "nus-mba-scholarships-and-august-2027-intake",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Singapore",
+    "region": "Asia",
+    "deadline": "2027-12-31T23:59:00Z",
+    "deadline_note": "Applications open 1 Sep 2026; rounds vary",
+    "source_name": "National University of Singapore",
+    "source_url": "https://mba.nus.edu.sg/admissions-and-funding/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Partial/full award depending on scholarship.",
+    "description": "Applicants to the full-time or part-time NUS MBA. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Applicants to the full-time or part-time NUS MBA."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "NUS Law Graduate Programmes Funding Routes",
+    "slug": "nus-law-graduate-programmes-funding-routes",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Singapore",
+    "region": "Asia",
+    "deadline": "2027-12-31T23:59:00Z",
+    "deadline_note": "Applications open 1 Sep 2026; programme deadlines vary",
+    "source_name": "National University of Singapore",
+    "source_url": "https://law.nus.edu.sg/prospective-students/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Funding varies by programme and scholarship.",
+    "description": "International applicants to eligible graduate law programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants to eligible graduate law programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "NUS MSc Management and CEMS MIM Funding Routes",
+    "slug": "nus-msc-management-and-cems-mim-funding-routes",
+    "category": "scholarship",
+    "status": "open",
+    "country": "Singapore",
+    "region": "Asia",
+    "deadline": "2027-12-31T23:59:00Z",
+    "deadline_note": "Applications open 1 Sep 2026",
+    "source_name": "National University of Singapore",
+    "source_url": "https://mim.nus.edu.sg/admissions/application-process/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Partial/varies by scholarship.",
+    "description": "Applicants meeting programme admission criteria. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Applicants meeting programme admission criteria."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "International Chinese Language Teachers Scholarship — GDUFS",
+    "slug": "international-chinese-language-teachers-scholarship-gdufs",
+    "category": "scholarship",
+    "status": "open",
+    "country": "China",
+    "region": "Asia",
+    "deadline": "2026-10-31T23:59:00Z",
+    "deadline_note": "31 Oct 2026 for the listed intake",
+    "source_name": "Guangdong University of Foreign Studies",
+    "source_url": "https://iie-en.gdufs.edu.cn/info/1143/2635.htm",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full/partial according to the call.",
+    "description": "International applicants to eligible Chinese-language teacher education programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants to eligible Chinese-language teacher education programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "International Chinese Language Teachers Scholarship — Zhejiang Normal",
+    "slug": "international-chinese-language-teachers-scholarship-zhejiang-normal",
+    "category": "scholarship",
+    "status": "open",
+    "country": "China",
+    "region": "Asia",
+    "deadline": "2026-10-31T23:59:00Z",
+    "deadline_note": "31 Oct 2026 for the listed intake",
+    "source_name": "Zhejiang Normal University",
+    "source_url": "https://iso.zjnu.edu.cn/2018/0518/c19187a517281/page.psp",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full/partial according to the call.",
+    "description": "International applicants to eligible Chinese-language teacher education programmes. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "International applicants to eligible Chinese-language teacher education programmes."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "France–South Africa Scholarship Programme 2027",
+    "slug": "france-south-africa-scholarship-programme-2027",
+    "category": "scholarship",
+    "status": "open",
+    "country": "France / South Africa",
+    "region": "Europe",
+    "deadline": "2026-10-08T23:59:00Z",
+    "deadline_note": "8 Oct 2026, 23:59",
+    "source_name": "EEAS / programme partners",
+    "source_url": "https://www.eeas.europa.eu/delegations/lesotho/france-south-africa-scholarship-programme-now-accepting-applications-2025-intake_en",
+    "source_verified_at": "2026-09-23",
+    "summary": "Full/varies by award.",
+    "description": "South African applicants meeting programme academic and nationality requirements. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "South African applicants meeting programme academic and nationality requirements."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Forestry Specialist",
+    "slug": "forestry-specialist",
+    "category": "job",
+    "status": "open",
+    "country": "Bangkok, Thailand",
+    "region": "Asia",
+    "deadline": "2026-10-09T23:59:00Z",
+    "deadline_note": "9 Oct 2026",
+    "source_name": "FAO",
+    "source_url": "https://jobs.fao.org/careersection/fao_external/jobdetail.ftl?job=2601964&tz=GMT-07%3A00&tzname=America/Los_Angeles",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current FAO vacancy.",
+    "description": "Check the official job description for qualifications and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Check the official job description for qualifications and contract terms."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "National Communication Specialist",
+    "slug": "national-communication-specialist",
+    "category": "job",
+    "status": "open",
+    "country": "FAO duty station in posting",
+    "region": "Europe / Asia",
+    "deadline": "2026-10-07T23:59:00Z",
+    "deadline_note": "7 Oct 2026",
+    "source_name": "FAO",
+    "source_url": "https://jobs.fao.org/careersection/fao_external/jobdetail.ftl?job=2601944&tz=GMT%2B01%3A00&tzname=Europe/Lisbon",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current FAO vacancy.",
+    "description": "Check the official job description for qualifications and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Check the official job description for qualifications and contract terms."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Project Coordinator, Competitiveness",
+    "slug": "project-coordinator-competitiveness",
+    "category": "job",
+    "status": "open",
+    "country": "Central Asia / Europe and Central Asia",
+    "region": "Europe / Asia",
+    "deadline": "2026-10-06T23:59:00Z",
+    "deadline_note": "6 Oct 2026",
+    "source_name": "FAO",
+    "source_url": "https://jobs.fao.org/careersection/fao_external/jobdetail.ftl?job=2601198&tz=GMT-07%3A00&tzname=America/Los_Angeles",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current FAO vacancy.",
+    "description": "Check the official job description for qualifications and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Check the official job description for qualifications and contract terms."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Evaluation Specialist, Common Oceans Programme Evaluation",
+    "slug": "evaluation-specialist-common-oceans-programme-evaluation",
+    "category": "job",
+    "status": "open",
+    "country": "FAO duty station in posting",
+    "region": "Europe / Asia",
+    "deadline": "2026-10-09T23:59:00Z",
+    "deadline_note": "9 Oct 2026",
+    "source_name": "FAO",
+    "source_url": "https://jobs.fao.org/careersection/fao_external/jobdetail.ftl?job=2601871&tz=GMT%2B01%3A00&tzname=Europe/Lisbon",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current FAO vacancy.",
+    "description": "Check the official job description for qualifications and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Check the official job description for qualifications and contract terms."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Individual Contractor — Gender Equality and Social Inclusion",
+    "slug": "individual-contractor-gender-equality-and-social-inclusion",
+    "category": "job",
+    "status": "open",
+    "country": "Asia-Pacific",
+    "region": "Asia",
+    "deadline": "2026-09-24T23:59:00Z",
+    "deadline_note": "24 Sep 2026",
+    "source_name": "United Nations ESCAP",
+    "source_url": "https://careers.un.org/jobSearchDescription/279310",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current UN ESCAP consultancy.",
+    "description": "Check the official job description for qualifications, deliverables, and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Check the official job description for qualifications, deliverables, and contract terms."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "National Consultant, Communications Officer — EU-OACPS",
+    "slug": "national-consultant-communications-officer-eu-oacps",
+    "category": "job",
+    "status": "open",
+    "country": "Europe-linked programme",
+    "region": "Europe",
+    "deadline": "2026-09-30T23:59:00Z",
+    "deadline_note": "30 Sep 2026",
+    "source_name": "United Nations",
+    "source_url": "https://careers.un.org/jobopening",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current UN Careers vacancy; use the official search page to open the role.",
+    "description": "Check the official job description for location, qualifications, and contract terms. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Check the official job description for location, qualifications, and contract terms."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "ICT Competition, AD8",
+    "slug": "ict-competition-ad8",
+    "category": "job",
+    "status": "open",
+    "country": "European Union institutions",
+    "region": "Europe",
+    "deadline": "2026-10-13T12:00:00Z",
+    "deadline_note": "8 Sep–13 Oct 2026, 12:00 Brussels time",
+    "source_name": "EU Careers",
+    "source_url": "https://eu-careers.europa.eu/en/apply-ict-competition-ad8",
+    "source_verified_at": "2026-09-23",
+    "summary": "Open EU selection competition.",
+    "description": "Candidates must meet the competition notice and eligibility requirements. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Candidates must meet the competition notice and eligibility requirements."
+    ],
+    "required_documents": [
+      "Passport or national ID",
+      "CV or academic records",
+      "Official application documents"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Country Manager",
+    "slug": "country-manager",
+    "category": "job",
+    "status": "open",
+    "country": "Port Moresby, Papua New Guinea",
+    "region": "Asia",
+    "deadline": "2026-10-23T23:59:00Z",
+    "deadline_note": "23 Oct 2026",
+    "source_name": "The Asia Foundation",
+    "source_url": "https://asiafoundation.org/careers/",
+    "source_verified_at": "2026-09-23",
+    "summary": "Current senior country-management vacancy.",
+    "description": "Check the official employer posting for experience, qualifications, and application instructions. Always verify the official notice before applying; deadlines and eligibility can change.",
+    "eligibility": [
+      "Check the official employer posting for experience, qualifications, and application instructions."
     ],
     "required_documents": [
       "Passport or national ID",
