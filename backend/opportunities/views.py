@@ -265,4 +265,21 @@ class SuccessStoryListView(generics.ListAPIView):
 
 class HealthView(APIView):
     def get(self, request):
-        return Response({"status": "ok", "service": "globalpathways-django-api", "time": timezone.now()})
+        required_categories = ("scholarship", "job")
+        category_counts = {
+            category: Opportunity.objects.filter(category=category).count()
+            for category in required_categories
+        }
+        total = Opportunity.objects.count()
+        missing_categories = [category for category, count in category_counts.items() if count == 0]
+        healthy = total > 0 and not missing_categories
+        return Response(
+            {
+                "status": "ok" if healthy else "unhealthy",
+                "service": "globalpathways-django-api",
+                "time": timezone.now(),
+                "opportunities": {"total": total, "by_category": category_counts},
+                "missing_categories": missing_categories,
+            },
+            status=status.HTTP_200_OK if healthy else status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
