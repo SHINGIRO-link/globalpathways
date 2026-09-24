@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 
 from dotenv import load_dotenv
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -9,10 +10,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # variables are already present, so a missing .env file is harmless.
 load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
-DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
+DEBUG = os.getenv("DJANGO_DEBUG", "false").lower() == "true"
 DJANGO_ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "")
 RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME", "")
-ALLOWED_HOSTS = list(dict.fromkeys([h.strip() for h in ",".join([DJANGO_ALLOWED_HOSTS, RENDER_EXTERNAL_HOSTNAME]).split(",") if h.strip()] + ["localhost", "127.0.0.1", "globalopportunityconnect.com", "www.globalopportunityconnect.com", "globalpathways.onrender.com"]))
+ALLOWED_HOSTS = list(dict.fromkeys([h.strip() for h in ",".join([DJANGO_ALLOWED_HOSTS, RENDER_EXTERNAL_HOSTNAME]).split(",") if h.strip()] + ["localhost", "127.0.0.1", "globalopportunityconnect.com", "www.globalopportunityconnect.com", "globalpathways-gglc.onrender.com"]))
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
@@ -36,7 +37,18 @@ TEMPLATES = [{
     ]},
 }]
 WSGI_APPLICATION = "config.wsgi.application"
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=os.getenv("DATABASE_SSL_REQUIRE", "true").lower() == "true",
+        )
+    }
+else:
+    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 8}},
