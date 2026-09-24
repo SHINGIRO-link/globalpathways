@@ -17,6 +17,37 @@ from opportunities.models import Application, ApplicationStatusEvent, GuestAcces
 from opportunities.guest_access import create_guest_access
 
 
+class OpportunityHealthCheckTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_health_check_fails_when_catalog_is_empty(self):
+        response = self.client.get("/api/health/")
+
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.data["status"], "unhealthy")
+        self.assertEqual(response.data["opportunities"]["total"], 0)
+        self.assertEqual(response.data["missing_categories"], ["scholarship", "job"])
+
+    def test_health_check_passes_when_jobs_and_scholarships_exist(self):
+        common = {
+            "country": "Rwanda",
+            "region": "Europe",
+            "deadline": "2026-12-31T23:59:00Z",
+            "summary": "A verified opportunity.",
+            "description": "Details are available from the official source.",
+        }
+        Opportunity.objects.create(title="Test Scholarship", slug="health-test-scholarship", category="scholarship", **common)
+        Opportunity.objects.create(title="Test Job", slug="health-test-job", category="job", **common)
+
+        response = self.client.get("/api/health/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["status"], "ok")
+        self.assertEqual(response.data["opportunities"], {"total": 2, "by_category": {"scholarship": 1, "job": 1}})
+        self.assertEqual(response.data["missing_categories"], [])
+
+
 @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 class DashboardAndPaymentApiTests(TestCase):
     def setUp(self):
