@@ -4,6 +4,7 @@ import os
 import unittest
 from io import BytesIO
 from urllib.error import HTTPError, URLError
+from urllib.parse import parse_qs
 from unittest.mock import patch
 
 from .intouchpay import IntouchPayClient, IntouchPayError, callback_payload, is_successful_status
@@ -23,12 +24,13 @@ class IntouchPayClientTests(unittest.TestCase):
         result = IntouchPayClient().request_payment(amount=2000, mobile_phone="250788888888", request_transaction_id="GP-1-test")
         self.assertTrue(result["success"])
         request = mock_urlopen.call_args.args[0]
-        payload = json.loads(request.data.decode())
-        expected = hashlib.sha256(f"sandbox-usersandbox-accountsandbox-password{payload['timestamp']}".encode()).hexdigest()
-        self.assertEqual(payload["password"], expected)
-        self.assertEqual(payload["mobilephone"], "250788888888")
-        self.assertEqual(payload["accountno"], "sandbox-account")
-        self.assertEqual(payload["callbackurl"], "https://example.com/api/payments/intouchpay/callback/")
+        payload = parse_qs(request.data.decode())
+        expected = hashlib.sha256(f"sandbox-usersandbox-accountsandbox-password{payload['timestamp'][0]}".encode()).hexdigest()
+        self.assertEqual(request.get_header("Content-type"), "application/x-www-form-urlencoded")
+        self.assertEqual(payload["password"][0], expected)
+        self.assertEqual(payload["mobilephone"][0], "250788888888")
+        self.assertEqual(payload["accountno"][0], "sandbox-account")
+        self.assertEqual(payload["callbackurl"][0], "https://example.com/api/payments/intouchpay/callback/")
 
     @patch.dict(os.environ, {
         "INTOUCHPAY_USERNAME": "sandbox-user",
@@ -63,6 +65,35 @@ class IntouchPayClientTests(unittest.TestCase):
         self.assertIn("1100", str(error))
         self.assertNotIn("private account detail", str(error))
         self.assertNotIn("private account detail", " ".join(logs.output))
+
+    @patch.dict(os.environ, {
+        "INTOUCHPAY_USERNAME": "sandbox-user",
+        "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account",
+        "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password",
+        "INTOUCHPAY_CALLBACK_URL": "https://example.com/callback/",
+    }, clear=False)
+    @patch("opportunities.intouchpay.urlopen")
+    def test_business_failure_response_maps_safe_code_without_raw_message(self, mock_urlopen):
+        response = mock_urlopen.return_value.__enter__.return_value
+        response.read.return_value = json.dumps({
+            "success": False,
+            "responsecode": "0005",
+            "message": "private provider account details",
+        }).encode()
+
+        with self.assertLogs("opportunities.intouchpay", level="ERROR") as logs:
+            with self.assertRaises(IntouchPayError) as raised:
+                IntouchPayClient().request_payment(
+                    amount=2000,
+                    mobile_phone="250788888888",
+                    request_transaction_id="GP-business-error",
+                )
+
+        self.assertEqual(raised.exception.category, "provider_rejected")
+        self.assertEqual(raised.exception.provider_code, "0005")
+        self.assertIn("rejected its credentials", str(raised.exception))
+        self.assertNotIn("private provider account details", str(raised.exception))
+        self.assertNotIn("private provider account details", " ".join(logs.output))
 
     @patch.dict(os.environ, {
         "INTOUCHPAY_USERNAME": "sandbox-user",

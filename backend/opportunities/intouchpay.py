@@ -5,6 +5,7 @@ import os
 import re
 from datetime import datetime, timezone
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 
@@ -19,6 +20,37 @@ class IntouchPayError(Exception):
         self.category = category
         self.http_status = http_status
         self.provider_code = provider_code
+
+
+SAFE_PROVIDER_MESSAGES = {
+    "0002": "The payment gateway is missing its merchant username. Check the configured sandbox account.",
+    "0003": "The payment gateway is missing its authentication value. Check the configured sandbox credentials.",
+    "0004": "The payment gateway rejected the request timestamp. Check the server clock and timestamp format.",
+    "0005": "The payment gateway rejected its credentials. Confirm the sandbox username, account number, and partner password with IntouchPay.",
+    "0006": "The IntouchPay merchant account is not active for collections. Confirm the account setup with IntouchPay.",
+    "0007": "IntouchPay could not find the configured merchant account. Confirm the account number and credentials with IntouchPay.",
+    "0008": "IntouchPay authentication failed. Confirm the account credentials and API access with IntouchPay.",
+    "1002": "This phone number is not registered for mobile money. Check the number or choose another mobile-money account.",
+    "1100": "This number is not supported on the selected mobile-money network. Check the number and provider.",
+    "1200": "The mobile-money number is invalid. Enter a valid Rwanda mobile number.",
+    "2100": "The requested payment amount is invalid.",
+    "2200": "The requested amount is below IntouchPay's minimum. Confirm the minimum amount with IntouchPay.",
+    "2300": "The requested amount exceeds IntouchPay's limit. Confirm the maximum amount with IntouchPay.",
+    "2400": "IntouchPay received a duplicate request identifier. Please retry once; contact support if it persists.",
+    "2500": "IntouchPay could not find the configured collection route. Confirm the merchant's sandbox route with IntouchPay.",
+    "2600": "The merchant account is not permitted to collect this payment. Confirm collection permissions with IntouchPay.",
+    "2700": "IntouchPay could not complete this request. Please retry later or contact the provider.",
+    "1005": "The payment could not be completed because of insufficient funds or balance.",
+    "1008": "IntouchPay could not complete this request. Please retry later or contact the provider.",
+    "1300": "IntouchPay could not complete this request. Please retry later or contact the provider.",
+}
+
+
+def _provider_error_message(provider_code):
+    return SAFE_PROVIDER_MESSAGES.get(
+        provider_code,
+        "IntouchPay rejected the payment request. Confirm the merchant setup with IntouchPay.",
+    )
 
 
 def _safe_provider_code(error):
@@ -82,8 +114,8 @@ class IntouchPayClient:
         }
         request = Request(
             f"{self.base_url}/requestpayment/",
-            data=json.dumps(body).encode("utf-8"),
-            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            data=urlencode(body).encode("utf-8"),
+            headers={"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"},
             method="POST",
         )
         try:
@@ -96,9 +128,9 @@ class IntouchPayClient:
                 error.code,
                 provider_code or "unknown",
             )
-            detail = f" (response code {provider_code})" if provider_code else ""
+            detail = f"{_provider_error_message(provider_code)} (response code {provider_code})" if provider_code else "Check the provider account, credentials, and API version."
             raise IntouchPayError(
-                f"IntouchPay returned HTTP {error.code}{detail}. Check the provider account, credentials, and API version.",
+                f"IntouchPay returned HTTP {error.code}. {detail}",
                 category="upstream_http",
                 http_status=error.code,
                 provider_code=provider_code,
@@ -130,6 +162,22 @@ class IntouchPayClient:
             raise IntouchPayError(
                 "IntouchPay returned an unreadable response. Contact the payment provider if the problem persists.",
                 category="invalid_response",
+            )
+        provider_code = payload.get("responsecode") or payload.get("errorcode") or payload.get("code")
+        if isinstance(provider_code, int):
+            provider_code = str(provider_code)
+        if not isinstance(provider_code, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,16}", provider_code):
+            provider_code = None
+        success_value = payload.get("success")
+        is_explicit_failure = success_value is False or (isinstance(success_value, str) and success_value.strip().lower() in {"false", "no", "0"})
+        if is_explicit_failure or (provider_code and provider_code not in {"1000", "01"}):
+            logger.error("IntouchPay rejected payment request: provider_code=%s", provider_code or "unknown")
+            detail = _provider_error_message(provider_code)
+            code_detail = f" (response code {provider_code})" if provider_code else ""
+            raise IntouchPayError(
+                f"IntouchPay rejected the payment request. {detail}{code_detail}",
+                category="provider_rejected",
+                provider_code=provider_code,
             )
         return payload
 
