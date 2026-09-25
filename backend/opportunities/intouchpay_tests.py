@@ -2,6 +2,8 @@ import hashlib
 import json
 import os
 import unittest
+from io import BytesIO
+from urllib.error import HTTPError, URLError
 from unittest.mock import patch
 
 from .intouchpay import IntouchPayClient, IntouchPayError, callback_payload, is_successful_status
@@ -27,6 +29,84 @@ class IntouchPayClientTests(unittest.TestCase):
         self.assertEqual(payload["mobilephone"], "250788888888")
         self.assertEqual(payload["accountno"], "sandbox-account")
         self.assertEqual(payload["callbackurl"], "https://example.com/api/payments/intouchpay/callback/")
+
+    @patch.dict(os.environ, {
+        "INTOUCHPAY_USERNAME": "sandbox-user",
+        "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account",
+        "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password",
+        "INTOUCHPAY_CALLBACK_URL": "https://example.com/callback/",
+    }, clear=False)
+    @patch("opportunities.intouchpay.urlopen")
+    def test_http_error_exposes_only_status_and_safe_response_code(self, mock_urlopen):
+        secret_like_body = b'{"responsecode":"1100","message":"private account detail"}'
+        mock_urlopen.side_effect = HTTPError(
+            "https://provider.example/requestpayment/",
+            401,
+            "Unauthorized",
+            hdrs=None,
+            fp=BytesIO(secret_like_body),
+        )
+
+        with self.assertLogs("opportunities.intouchpay", level="ERROR") as logs:
+            with self.assertRaises(IntouchPayError) as raised:
+                IntouchPayClient().request_payment(
+                    amount=2000,
+                    mobile_phone="250788888888",
+                    request_transaction_id="GP-http-error",
+                )
+
+        error = raised.exception
+        self.assertEqual(error.category, "upstream_http")
+        self.assertEqual(error.http_status, 401)
+        self.assertEqual(error.provider_code, "1100")
+        self.assertIn("HTTP 401", str(error))
+        self.assertIn("1100", str(error))
+        self.assertNotIn("private account detail", str(error))
+        self.assertNotIn("private account detail", " ".join(logs.output))
+
+    @patch.dict(os.environ, {
+        "INTOUCHPAY_USERNAME": "sandbox-user",
+        "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account",
+        "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password",
+        "INTOUCHPAY_CALLBACK_URL": "https://example.com/callback/",
+    }, clear=False)
+    @patch("opportunities.intouchpay.urlopen")
+    def test_network_error_reports_safe_category_not_raw_reason(self, mock_urlopen):
+        mock_urlopen.side_effect = URLError("sensitive-provider-internal-detail")
+
+        with self.assertLogs("opportunities.intouchpay", level="ERROR") as logs:
+            with self.assertRaises(IntouchPayError) as raised:
+                IntouchPayClient().request_payment(
+                    amount=2000,
+                    mobile_phone="250788888888",
+                    request_transaction_id="GP-network-error",
+                )
+
+        self.assertEqual(raised.exception.category, "transport")
+        self.assertNotIn("sensitive-provider-internal-detail", str(raised.exception))
+        self.assertNotIn("sensitive-provider-internal-detail", " ".join(logs.output))
+
+    @patch.dict(os.environ, {
+        "INTOUCHPAY_USERNAME": "sandbox-user",
+        "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account",
+        "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password",
+        "INTOUCHPAY_CALLBACK_URL": "https://example.com/callback/",
+    }, clear=False)
+    @patch("opportunities.intouchpay.urlopen")
+    def test_unreadable_success_response_is_classified_safely(self, mock_urlopen):
+        response = mock_urlopen.return_value.__enter__.return_value
+        response.read.return_value = b"not-json"
+
+        with self.assertLogs("opportunities.intouchpay", level="ERROR") as logs:
+            with self.assertRaises(IntouchPayError) as raised:
+                IntouchPayClient().request_payment(
+                    amount=2000,
+                    mobile_phone="250788888888",
+                    request_transaction_id="GP-invalid-json",
+                )
+
+        self.assertEqual(raised.exception.category, "invalid_response")
+        self.assertNotIn("not-json", " ".join(logs.output))
 
     def test_callback_and_success_helpers(self):
         payload = {"jsonpayload": {"requesttransactionid": "GP-1-test", "responsecode": "01", "status": "Successful"}}

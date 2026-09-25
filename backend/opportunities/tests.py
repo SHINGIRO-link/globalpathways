@@ -5,6 +5,7 @@ import shutil
 import tempfile
 import zipfile
 from types import SimpleNamespace
+from urllib.error import HTTPError
 from unittest.mock import patch
 from django.conf import settings
 from django.core.management import call_command
@@ -184,6 +185,38 @@ class DashboardAndPaymentApiTests(TestCase):
         self.assertEqual(payment.data["payment"]["provider"], "intouchpay")
         self.assertEqual(payment.data["payment"]["status"], "pending")
         self.assertTrue(StaffNotification.objects.filter(application=application, event_type="payment_status").exists())
+
+    @patch("opportunities.intouchpay.urlopen")
+    @patch.dict(os.environ, {"INTOUCHPAY_USERNAME": "sandbox-user", "INTOUCHPAY_ACCOUNT_NUMBER": "sandbox-account", "INTOUCHPAY_PARTNER_PASSWORD": "sandbox-password", "INTOUCHPAY_CALLBACK_URL": "https://example.com/api/payments/intouchpay/callback/"}, clear=False)
+    def test_payment_provider_error_returns_sanitized_diagnostic(self, mock_urlopen):
+        mock_urlopen.side_effect = HTTPError(
+            "https://provider.example/requestpayment/",
+            401,
+            "Unauthorized",
+            hdrs=None,
+            fp=io.BytesIO(b'{"responsecode":"1100","message":"private provider account details"}'),
+        )
+        application = Application.objects.create(
+            opportunity=self.opportunity,
+            owner_open_id="test-user",
+            full_name="Amina Test",
+            email="amina@example.com",
+            consent_to_contact=True,
+        )
+        PaymentRecord.objects.create(application=application, amount=2000, currency="RWF", status="integration_pending")
+
+        payment = self.client.post(
+            "/api/payments/prepare/",
+            {"email": "amina@example.com", "application": application.id, "provider": "intouchpay", "mobile_phone": "250788888888"},
+            HTTP_X_DASHBOARD_EMAIL="amina@example.com",
+            format="json",
+        )
+
+        self.assertEqual(payment.status_code, 503)
+        self.assertIn("IntouchPay returned HTTP 401", payment.data["detail"])
+        self.assertIn("response code 1100", payment.data["detail"])
+        self.assertNotIn("private provider account details", payment.data["detail"])
+        self.assertFalse(StaffNotification.objects.filter(application=application, event_type="payment_status").exists())
 
     def test_later_payment_status_change_creates_staff_notification(self):
         application = Application.objects.create(opportunity=self.opportunity, owner_open_id="test-user", full_name="Amina Test", email="amina@example.com", consent_to_contact=True)

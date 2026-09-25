@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { filterOpportunities, getOpportunities, getOpportunity, submitApplication, uploadEducationDocument } from "./api";
+import { filterOpportunities, getOpportunities, getOpportunity, preparePayment, submitApplication, uploadEducationDocument } from "./api";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -28,6 +28,28 @@ describe("Django REST client", () => {
   it("surfaces a controlled error when application submission is rejected", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, json: async () => ({ detail: "Invalid application" }) }));
     await expect(submitApplication({ opportunity: 10 })).rejects.toThrow("Invalid application");
+  });
+
+  it("surfaces the sanitized IntouchPay failure detail for payment requests", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: false,
+      status: 503,
+      headers: { get: () => "application/json" },
+      json: async () => ({ detail: "IntouchPay returned HTTP 401 (response code 1100). Check the provider account, credentials, and API version." }),
+    }));
+    await expect(preparePayment("amina@example.com", 42, "250788888888"))
+      .rejects.toThrow("IntouchPay returned HTTP 401 (response code 1100)");
+  });
+
+  it("does not surface unrelated backend details for generic server failures", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: false,
+      status: 503,
+      headers: { get: () => "application/json" },
+      json: async () => ({ detail: "sensitive internal database information" }),
+    }));
+    await expect(preparePayment("amina@example.com", 42, "250788888888"))
+      .rejects.toThrow("Service Unavailable: the service is temporarily unavailable. Please try again in a moment.");
   });
 
   it("filters the expanded catalog by category and keyword", () => {

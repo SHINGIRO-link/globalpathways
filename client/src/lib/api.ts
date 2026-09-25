@@ -157,7 +157,12 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const contentType = response.headers?.get?.("content-type") || "application/json";
   const payload = contentType.includes("application/json") ? await response.json().catch(() => ({})) : {};
   if (!response.ok || !contentType.includes("application/json")) {
-    if (response.status >= 500 || !contentType.includes("application/json")) throw new ServiceUnavailableError();
+    if (response.status >= 500 || !contentType.includes("application/json")) {
+      const paymentDetail = response.status === 503 && typeof payload?.detail === "string" && payload.detail.startsWith("IntouchPay ")
+        ? payload.detail
+        : undefined;
+      throw new ServiceUnavailableError(paymentDetail);
+    }
     const detail = typeof payload?.detail === "string" ? payload.detail : "Please review the highlighted information and try again.";
     throw new Error(detail);
   }

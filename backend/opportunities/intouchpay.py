@@ -1,13 +1,41 @@
 import hashlib
 import json
+import logging
 import os
+import re
 from datetime import datetime, timezone
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
+logger = logging.getLogger(__name__)
+
+
 class IntouchPayError(Exception):
-    """Raised when the IntouchPay sandbox request cannot be completed."""
+    """Raised when an IntouchPay request cannot be completed safely."""
+
+    def __init__(self, message, *, category="provider_error", http_status=None, provider_code=None):
+        super().__init__(message)
+        self.category = category
+        self.http_status = http_status
+        self.provider_code = provider_code
+
+
+def _safe_provider_code(error):
+    """Extract only a short response code; never retain or log the provider body."""
+    try:
+        body = error.read(4096)
+        payload = json.loads(body.decode("utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        return None
+    if not isinstance(payload, dict):
+        return None
+    code = payload.get("responsecode") or payload.get("errorcode") or payload.get("code")
+    if isinstance(code, int):
+        code = str(code)
+    if isinstance(code, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,16}", code):
+        return code
+    return None
 
 
 class IntouchPayClient:
@@ -32,9 +60,15 @@ class IntouchPayClient:
 
     def request_payment(self, *, amount: int, mobile_phone: str, request_transaction_id: str):
         if not self.configured:
-            raise IntouchPayError("IntouchPay sandbox credentials are not configured.")
+            raise IntouchPayError(
+                "IntouchPay sandbox credentials are not configured.",
+                category="configuration",
+            )
         if not self.callback_url:
-            raise IntouchPayError("IntouchPay callback URL is not configured.")
+            raise IntouchPayError(
+                "IntouchPay callback URL is not configured.",
+                category="configuration",
+            )
         timestamp, password_hash = self._credentials()
         body = {
             "username": self.username,
@@ -44,8 +78,8 @@ class IntouchPayClient:
             "mobilephone": mobile_phone,
             "requesttransactionid": request_transaction_id,
             "accountno": self.account_number,
+            "callbackurl": self.callback_url,
         }
-        body["callbackurl"] = self.callback_url
         request = Request(
             f"{self.base_url}/requestpayment/",
             data=json.dumps(body).encode("utf-8"),
@@ -54,9 +88,49 @@ class IntouchPayClient:
         )
         try:
             with urlopen(request, timeout=self.timeout) as response:
-                payload = json.loads(response.read().decode("utf-8"))
-        except (HTTPError, URLError, TimeoutError, ValueError) as error:
-            raise IntouchPayError("The IntouchPay sandbox could not be reached.") from error
+                response_body = response.read()
+        except HTTPError as error:
+            provider_code = _safe_provider_code(error)
+            logger.error(
+                "IntouchPay upstream HTTP error: status=%s provider_code=%s",
+                error.code,
+                provider_code or "unknown",
+            )
+            detail = f" (response code {provider_code})" if provider_code else ""
+            raise IntouchPayError(
+                f"IntouchPay returned HTTP {error.code}{detail}. Check the provider account, credentials, and API version.",
+                category="upstream_http",
+                http_status=error.code,
+                provider_code=provider_code,
+            ) from error
+        except URLError as error:
+            reason_type = type(error.reason).__name__
+            logger.error("IntouchPay transport failure: reason_type=%s", reason_type)
+            raise IntouchPayError(
+                "IntouchPay could not be reached. Check provider connectivity and retry later.",
+                category="transport",
+            ) from error
+        except TimeoutError as error:
+            logger.error("IntouchPay request timed out.")
+            raise IntouchPayError(
+                "IntouchPay request timed out. Retry later.",
+                category="timeout",
+            ) from error
+
+        try:
+            payload = json.loads(response_body.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as error:
+            logger.error("IntouchPay returned an unreadable response.")
+            raise IntouchPayError(
+                "IntouchPay returned an unreadable response. Contact the payment provider if the problem persists.",
+                category="invalid_response",
+            ) from error
+        if not isinstance(payload, dict):
+            logger.error("IntouchPay returned a non-object JSON response.")
+            raise IntouchPayError(
+                "IntouchPay returned an unreadable response. Contact the payment provider if the problem persists.",
+                category="invalid_response",
+            )
         return payload
 
 
