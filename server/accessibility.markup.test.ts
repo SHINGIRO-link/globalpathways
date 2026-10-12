@@ -36,9 +36,11 @@ describe("interactive card markup", () => {
   it("exposes a visible authentication entry point in the homepage header", () => {
     expect(homeSource).toContain("startLogin");
     expect(homeSource).toContain("Sign in");
-    expect(homeSource).toContain("My dashboard");
-    expect(homeSource).toContain('user?.role === "admin"');
-    expect(homeSource).toContain("Admin dashboard");
+    expect(homeSource).toContain("dashboardLabel(user.role)");
+    expect(homeSource).toContain("role-badge role-${user.role}");
+    expect(rolesSource).toContain('"My dashboard"');
+    expect(rolesSource).toContain('"Staff dashboard"');
+    expect(rolesSource).toContain('"Admin dashboard"');
     expect(dashboardSource).toContain('user.role === "admin"');
     expect(dashboardSource).toContain("Administrator account");
   });

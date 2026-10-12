@@ -295,3 +295,10 @@ h1 em,h2 em { font-family:'Playfair Display',serif; font-weight:500; }
 .auth-links a, .auth-switch a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .auth-note { margin: 1.1rem 0 0; color: var(--muted); font-size: .78rem; line-height: 1.6; text-align: center; }
 @media (max-width: 600px) { .auth-page { padding: 1.25rem 0 3rem; } .auth-card { padding: 1.35rem; } .auth-links { display: grid; justify-content: stretch; } }
+
+/* Role badges: applicant (green), staff (blue), admin (gold) so account types are easy to tell apart. */
+.role-badge, .account-profile .role-badge { display: inline-flex; align-items: center; gap: .3rem; width: fit-content; padding: .18rem .55rem; border-radius: 100px; border: 1px solid transparent; font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; line-height: 1.3; white-space: nowrap; }
+.role-user { color: #1f5549; background: #dfe9e1; border-color: #bfd3c6; }
+.role-staff { color: #1d4f91; background: #e3edfa; border-color: #b9d0ef; }
+.role-admin { color: #6b4a00; background: #fbecc0; border-color: #efc65d; }
+.nav-dashboard .role-badge { margin-right: .15rem; }
