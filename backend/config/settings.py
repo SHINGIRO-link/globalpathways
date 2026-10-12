@@ -86,7 +86,7 @@ RESEND_FROM_EMAIL = os.getenv("RESEND_FROM_EMAIL", DEFAULT_FROM_EMAIL).strip()
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [o.strip() for o in os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", "").split(",") if o.strip()]
 DJANGO_CSRF_TRUSTED_ORIGINS = os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "")
-CSRF_TRUSTED_ORIGINS = list(dict.fromkeys([o.strip() for o in DJANGO_CSRF_TRUSTED_ORIGINS.split(",") if o.strip()] + ["https://globalopportunityconnect.com", "https://www.globalopportunityconnect.com"]))
+CSRF_TRUSTED_ORIGINS = list(dict.fromkeys([o.strip() for o in DJANGO_CSRF_TRUSTED_ORIGINS.split(",") if o.strip()] + ["https://globalopportunityconnect.com", "https://www.globalopportunityconnect.com", "https://globalpathways.globalopportunityconnect.workers.dev"]))
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],

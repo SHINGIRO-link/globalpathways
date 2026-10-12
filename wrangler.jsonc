@@ -1,8 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "globalpathways",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-10-06",
   "observability": { "enabled": true },
+  // Django runs on Render; the Worker proxies backend paths to it.
+  "vars": { "BACKEND_ORIGIN": "https://globalpathways-gglc.onrender.com" },
   // Vite is built with base "/static/frontend/", so lay the assets out at that
   // path and keep index.html at the root for SPA routing.
   "build": {
@@ -10,6 +13,11 @@
   },
   "assets": {
     "directory": "./dist/cf",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    // Everything Django owns goes to the Worker (and on to Render); all else is static assets / SPA.
+    "run_worker_first": [
+      "/api/*", "/admin/*", "/static/admin/*", "/static/rest_framework/*",
+      "/manus-storage/*", "/robots.txt", "/sitemap.xml"
+    ]
   }
 }
